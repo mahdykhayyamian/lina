@@ -1,4 +1,4 @@
-package lina.sketch;
+package lina.board;
 
 import java.io.IOException;
 

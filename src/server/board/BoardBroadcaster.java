@@ -1,4 +1,4 @@
-package lina.sketch;
+package lina.board;
 
 import java.io.IOException;
 
@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.HashSet;
 
 @ServerEndpoint("/broadcast")
-public class SketchBoardBroadcaster {
+public class BoardBroadcaster {
 
 	private static Set<Session> peers = Collections.synchronizedSet(new HashSet<Session>());
 

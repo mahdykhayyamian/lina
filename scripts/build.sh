@@ -10,8 +10,8 @@ function createDeployDirectoryStructure {
 	mkdir WEB-INF
 	cd WEB-INF
 	mkdir classes
-	cd ..
-	mkdir lib
+	cd ${LINA_ROOT}
+	mkdir temp
 }
 
 function clearDeployDirectory {
@@ -20,19 +20,31 @@ function clearDeployDirectory {
 	rm -rf deploy
 }
 
+function clearTempDirectory {
+	echoGreen "clearing deploy directory"
+	cd ${LINA_ROOT}
+	rm -rf temp
+}
+
 function compileJavaFiles {
 	echoGreen "compiling java files"
-	javac -cp "${LINA_ROOT}/WEB-INF/lib/*" -d "${LINA_ROOT}/deploy/WEB-INF/classes" ${LINA_ROOT}/src/lina/sketch/*.java
+	find ${LINA_ROOT}/src/server -name *.java > ${LINA_ROOT}/temp/java-files.txt
+	javac -cp "${LINA_ROOT}/java-libs/*:${CATALINA_HOME}/lib/*" -d "${LINA_ROOT}/deploy/WEB-INF/classes" @${LINA_ROOT}/temp/java-files.txt
 }
 
 function copyLibs {
 	cd ${LINA_ROOT}
-	cp -r ${LINA_ROOT}/WEB-INF/lib ${LINA_ROOT}/deploy/WEB-INF/lib
+	cp -r ${LINA_ROOT}/java-libs ${LINA_ROOT}/deploy/WEB-INF/lib
+}
+
+function addJSBundle {
+	webpack
+	cp ${LINA_ROOT}/temp/bundle.js  ${LINA_ROOT}/deploy
 }
 
 function copyWebContent {
 	cd ${LINA_ROOT}
-	cp -r ${LINA_ROOT}/WebContent/* ${LINA_ROOT}/deploy
+	cp -r ${LINA_ROOT}/src/client/* ${LINA_ROOT}/deploy
 }
 
 function deployToTomcat {
@@ -78,11 +90,19 @@ function isTomcatRunning {
 	return 1
 }
 
+function createWarFile {
+	cd ${LINA_ROOT}/deploy
+	jar -cvf ../${LINA_APP_NAME}.war *
+}
+
 clearDeployDirectory
+clearTempDirectory
 createDeployDirectoryStructure
 copyLibs
 compileJavaFiles
 copyWebContent
+addJSBundle
 deployToTomcat
+createWarFile
 startTomcat
 tailTomcatLogs

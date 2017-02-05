@@ -1,13 +1,13 @@
-const createWebSocket = function() {
+const createBoardWebSocket = () => {
 
-	const wsUri = "ws://localhost:8080/lina/broadcast";
+	const wsUri = 'ws://' + window.location.host + '/lina/broadcast';
+
 	const websocket = new WebSocket(wsUri);
 
 	websocket.onerror = function(evt) { onError(evt) };
 	websocket.onopen = function(evt) { onOpen(evt) };
 
-
-	var canvas = document.getElementById("messageBoard");
+	let canvas = document.getElementById("messageBoard");
 
 	function onError(evt) {
 	    writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
@@ -22,5 +22,6 @@ const createWebSocket = function() {
 	}
 
 	return websocket;
-
 };
+
+export {createBoardWebSocket};
