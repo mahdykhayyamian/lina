@@ -11,9 +11,9 @@ const Pencil = (function() {
 		self.totalWidth = 100;
 		self.pencilColor = 'green';
 
-		self.svg = document.getElementById(self.id);
-		self.svg.setAttribute('width', self.totalWidth);
-		self.svg.setAttribute('height', self.totalHeight);
+		self.svg = document.createElement("svg");
+		self.svg.setAttribute('width', self.totalWidth + 'px');
+		self.svg.setAttribute('height', self.totalHeight + 'px');
 		self.svg.style.position = "absolute";
 
 		self.tipSideLength = 10;

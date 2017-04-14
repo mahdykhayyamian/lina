@@ -9,11 +9,6 @@
 	<title>Lina Online WhiteBoard</title>
 </head>
 <body>
-	<div id="messageBoard"></div>
-	<div id="toolBox">
-		<svg id='lina.tools.pencil'></svg>
-	</div>
-
-	<div id="lina.board"></div>
+	<div id="lina.app"></div>
 </body>
 </html>

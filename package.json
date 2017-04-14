@@ -6,12 +6,17 @@
   "dependencies": {
     "babel": "^6.5.2",
     "babel-loader": "^6.2.10",
+    "phosphor-dockpanel": "^0.9.7",
+    "phosphor-messaging": "^1.0.6",
+    "phosphor-widget": "^1.0.0-rc.1",
     "webpack": "^2.2.1"
   },
   "devDependencies": {
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
     "babel-preset-es2015": "^6.22.0",
+    "css-loader": "^0.26.1",
+    "style-loader": "^0.13.1",
     "webpack": "^2.2.1"
   },
   "scripts": {

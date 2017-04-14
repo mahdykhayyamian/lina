@@ -10,15 +10,11 @@ const createBoardWebSocket = () => {
 	let canvas = document.getElementById("messageBoard");
 
 	function onError(evt) {
-	    writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+	    console.error(evt.data);
 	}
 
 	function onOpen() {
-	    writeToScreen("Connected to " + wsUri);
-	}
-
-	function writeToScreen(message) {
-	    canvas.innerHTML += message + "<br>";
+	    console.log("Connected to " + wsUri);
 	}
 
 	return websocket;

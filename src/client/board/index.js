@@ -1,4 +1,3 @@
-import {Pencil} from "../toolbox/pencil.js";
 
 export const Board = (function() {
 
@@ -18,9 +17,6 @@ export const Board = (function() {
 		setupNodeEventHandlers();
 
 		clearTo(fillColor || "#ddd");
-
-		self.pencil = new Pencil();
-		self.pencil.draw();
 	};
 
 	function fillCircle (x, y, radius, fillColor) {
