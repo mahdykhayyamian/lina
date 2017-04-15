@@ -153,9 +153,6 @@ const Widget = (function() {
 	}
 
 	function addTabClickEventHandling(tabIndex) {
-
-		console.log(self.tabs[tabIndex]);
-
 		self.tabs[tabIndex].tabNode.addEventListener("click", function( event ) {
 			const clickedElement = document.elementFromPoint(event.offsetX, event.offsetY);
 			

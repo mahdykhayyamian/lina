@@ -20,7 +20,7 @@
 
 .tabs-outline {
 	stroke: black;
-	stroke-width: 0px;
+	stroke-width: 0.2px;
 	fill: lightgrey;
 }
 
