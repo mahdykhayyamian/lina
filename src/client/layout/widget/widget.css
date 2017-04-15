@@ -1,0 +1,35 @@
+.widget {
+	position: absolute;
+	margin: 10px;
+	padding: 5px;
+}
+
+.widget-content {
+	position: absolute;
+    display: table;
+}
+
+.widget-content-border {
+	display: table-cell;
+    vertical-align: middle;
+    text-align:center;
+    border:solid;
+    border-color:#efefef;
+    border-width: 3px;
+}
+
+.tabs-outline {
+	stroke: black;
+	stroke-width: 0px;
+	fill: lightgrey;
+}
+
+.tabs-outline.selected {
+	fill: #efefef;
+	stroke-width: 0.3px;
+}
+
+.widget-tabs text {
+	font-size: 10px;
+	font-family: monospace;
+}
