@@ -84,10 +84,12 @@ const Widget = (function() {
 		var textNode = document.createTextNode(self.tabs[tabIndex].title);
 		tabText.appendChild(textNode);
 
-		self.tabsSVG.appendChild(tab);
-		self.tabs[tabIndex].pathNode = tab;
+		const tabNode = document.createElementNS('http://www.w3.org/2000/svg','g');
+		tabNode.appendChild(tab);
+		tabNode.appendChild(tabText);
+		self.tabsSVG.appendChild(tabNode);
+		self.tabs[tabIndex].tabNode = tabNode;
 
-		self.tabsSVG.appendChild(tabText);
 		addTabClickEventHandling(tabIndex);	
 	}
 
@@ -122,10 +124,11 @@ const Widget = (function() {
 		var textNode = document.createTextNode(self.tabs[tabIndex].title);
 		tabText.appendChild(textNode);
 
-		self.tabsSVG.appendChild(tab);
-		self.tabs[tabIndex].pathNode = tab;
-
-		self.tabsSVG.appendChild(tabText);
+		const tabNode = document.createElementNS('http://www.w3.org/2000/svg','g');
+		tabNode.appendChild(tab);
+		tabNode.appendChild(tabText);
+		self.tabsSVG.appendChild(tabNode);
+		self.tabs[tabIndex].tabNode = tabNode;
 		
 		addTabClickEventHandling(tabIndex);
 	}
@@ -153,17 +156,13 @@ const Widget = (function() {
 
 		console.log(self.tabs[tabIndex]);
 
-		self.node.addEventListener("click", function( event ) {
+		self.tabs[tabIndex].tabNode.addEventListener("click", function( event ) {
 			const clickedElement = document.elementFromPoint(event.offsetX, event.offsetY);
 			
 			var pathString = getTabClickableAreaSVGPath(tabIndex);
 			var clicked = pointInSvgPolygon.isInside([event.offsetX, event.offsetY], pathString);
-
-			console.log([event.offsetX, event.offsetY]);
 			
 			if (clicked) {
-				console.log("tab #" + tabIndex + " was clicked");
-
 				updateSelectedTabTo(tabIndex);
 			}
 
@@ -171,9 +170,12 @@ const Widget = (function() {
 	}
 
 	function updateSelectedTabTo(tabIndex) {
-		// self.tabs[self.selectedTabIndex].pathNode.setAttribute('class', 'tabs-outline');
-		// self.selectedTabIndex = tabIndex;
-		//drawSelectedTab(self.selectedTabIndex);
+		self.tabs[self.selectedTabIndex].tabNode.remove();
+		self.tabs[tabIndex].tabNode.remove();
+
+		drawNotSelectedTab(self.selectedTabIndex);
+		self.selectedTabIndex = tabIndex;
+		drawSelectedTab(self.selectedTabIndex);
 	}
 
 	function drawTabs() {
