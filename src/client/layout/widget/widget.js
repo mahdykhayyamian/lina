@@ -54,15 +54,18 @@ const Widget = (function() {
 		self.contentBorderDiv.setAttribute("class", "widget-content-border");
 		self.contentDiv.appendChild(self.contentBorderDiv);
 
+		addMouseMoveEventHandling();
+
 		drawTabs();
 	};
 
 	function drawNotSelectedTab(tabIndex) {
+
 		const tab = document.createElementNS('http://www.w3.org/2000/svg','path');
 		const maxTabSize = 100;
 		const tabSize = Math.min(self.width/self.tabs.length, maxTabSize);
 
-		const p1 = [tabIndex * (tabSize - TAB_OVERLAP) , TAB_HEIGHT];
+		const p1 = [tabIndex * (tabSize - TAB_OVERLAP)  , TAB_HEIGHT];
 		const p2 = [tabIndex * (tabSize - TAB_OVERLAP) + TAB_HORIZONTAL_SIDE_LENGTH, 0];
 		const p3 = [tabIndex * (tabSize - TAB_OVERLAP) + tabSize - TAB_HORIZONTAL_SIDE_LENGTH, 0];
 		const p4 = [tabIndex * (tabSize - TAB_OVERLAP) + tabSize, TAB_HEIGHT];
@@ -90,7 +93,7 @@ const Widget = (function() {
 		self.tabsSVG.appendChild(tabNode);
 		self.tabs[tabIndex].tabNode = tabNode;
 
-		addTabClickEventHandling(tabIndex);	
+		addEventHandlers(tabIndex);
 	}
 
 	function drawSelectedTab(tabIndex) {
@@ -130,7 +133,18 @@ const Widget = (function() {
 		self.tabsSVG.appendChild(tabNode);
 		self.tabs[tabIndex].tabNode = tabNode;
 		
+		addEventHandlers(tabIndex);
+	}
+
+	function addEventHandlers(tabIndex) {
 		addTabClickEventHandling(tabIndex);
+		addMouseUpEventHandling(tabIndex);
+		addMouseDownEventHandling(tabIndex);
+	}
+
+
+	function dragTabTo(x, y) {
+		console.log('x = ' + x, ', y = ' + y);
 	}
 
 	function getTabClickableAreaSVGPath(tabIndex) {
@@ -161,6 +175,46 @@ const Widget = (function() {
 			
 			if (clicked) {
 				updateSelectedTabTo(tabIndex);
+			}
+
+		}, false);
+	}
+
+	function addMouseUpEventHandling(tabIndex) {
+		self.tabs[tabIndex].tabNode.addEventListener("mouseup", function( event ) {
+			
+			console.log('mouse up on tab# :' + tabIndex);
+
+			if (self.draggingTabIndex) {
+				console.log("drag end on tab #" + self.draggingTabIndex);
+				self.draggingTabIndex = undefined;
+			}
+
+		}, false);
+	}
+
+	function addMouseDownEventHandling(tabIndex) {
+		self.tabs[tabIndex].tabNode.addEventListener("mousedown", function( event ) {
+			
+			console.log('drag started on tab #' + tabIndex);
+			self.draggingTabIndex = tabIndex;
+			self.tabs[tabIndex].drag = {
+				startX: event.x,
+				startY: event.y
+			}
+
+		}, false);
+	}
+
+	function addMouseMoveEventHandling() {
+		self.tabsSVG.addEventListener("mousemove", function( event ) {
+
+			if (self.draggingTabIndex !== undefined) {
+				dragTabTo(event.x, event.y);
+				self.tabs[self.draggingTabIndex].drag = {
+					startX: event.x,
+					startY: event.y
+				}
 			}
 
 		}, false);
