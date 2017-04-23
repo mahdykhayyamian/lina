@@ -57,18 +57,24 @@ const Widget = (function() {
 		addMouseMoveEventHandling();
 
 		drawTabs();
+
+
+		// self.circle = document.createElementNS('http://www.w3.org/2000/svg','circle');	
+		// self.circle.setAttribute('cx', 200);
+		// self.circle.setAttribute('cy', 200);
+		// self.circle.setAttribute('r', 10);
+		// self.tabsSVG.appendChild(self.circle);
 	};
 
-	function drawNotSelectedTab(tabIndex) {
+	function drawNotSelectedTab(tabIndex, startX) {
 
 		const tab = document.createElementNS('http://www.w3.org/2000/svg','path');
-		const maxTabSize = 100;
-		const tabSize = Math.min(self.width/self.tabs.length, maxTabSize);
+		const tabSize = getDynamicTabSize();
 
-		const p1 = [tabIndex * (tabSize - TAB_OVERLAP)  , TAB_HEIGHT];
-		const p2 = [tabIndex * (tabSize - TAB_OVERLAP) + TAB_HORIZONTAL_SIDE_LENGTH, 0];
-		const p3 = [tabIndex * (tabSize - TAB_OVERLAP) + tabSize - TAB_HORIZONTAL_SIDE_LENGTH, 0];
-		const p4 = [tabIndex * (tabSize - TAB_OVERLAP) + tabSize, TAB_HEIGHT];
+		const p1 = [startX, TAB_HEIGHT];
+		const p2 = [startX + TAB_HORIZONTAL_SIDE_LENGTH, 0];
+		const p3 = [startX + tabSize - TAB_HORIZONTAL_SIDE_LENGTH, 0];
+		const p4 = [startX + tabSize, TAB_HEIGHT];
 
 		let tabData = 
 							'M ' + p1[0] + ' ' + p1[1] + 
@@ -79,33 +85,29 @@ const Widget = (function() {
 		tab.setAttribute('d', tabData);
 		tab.setAttribute('class', 'tabs-outline');
 
-		const tabText = document.createElementNS('http://www.w3.org/2000/svg','text');
-
 		const leftPadding = 5;
-		tabText.setAttribute('x', p2[0] + leftPadding);
-		tabText.setAttribute('y', (p2[1] + p4[1])/2);
-		var textNode = document.createTextNode(self.tabs[tabIndex].title);
-		tabText.appendChild(textNode);
+		const tabText = createTebText(tabIndex, p2[0] + leftPadding,(p2[1] + p4[1])/2);
 
 		const tabNode = document.createElementNS('http://www.w3.org/2000/svg','g');
 		tabNode.appendChild(tab);
 		tabNode.appendChild(tabText);
 		self.tabsSVG.appendChild(tabNode);
 		self.tabs[tabIndex].tabNode = tabNode;
+		self.tabs[tabIndex].startX = startX;
 
 		addEventHandlers(tabIndex);
 	}
 
-	function drawSelectedTab(tabIndex) {
+	function drawSelectedTab(tabIndex, startX) {
 		const tab = document.createElementNS('http://www.w3.org/2000/svg','path');
-		const maxTabSize = 100;
-		const tabSize = Math.min(self.width/self.tabs.length, maxTabSize);
+
+		const tabSize = getDynamicTabSize();
 
 		const p1 = [0 , TAB_HEIGHT];
-		const p2 = [tabIndex * (tabSize - TAB_OVERLAP) , TAB_HEIGHT];
-		const p3 = [tabIndex * (tabSize - TAB_OVERLAP) + TAB_HORIZONTAL_SIDE_LENGTH, 0];
-		const p4 = [tabIndex * (tabSize - TAB_OVERLAP) + tabSize - TAB_HORIZONTAL_SIDE_LENGTH, 0];
-		const p5 = [tabIndex * (tabSize - TAB_OVERLAP) + tabSize, TAB_HEIGHT];
+		const p2 = [startX , TAB_HEIGHT];
+		const p3 = [startX + TAB_HORIZONTAL_SIDE_LENGTH, 0];
+		const p4 = [startX + tabSize - TAB_HORIZONTAL_SIDE_LENGTH, 0];
+		const p5 = [startX + tabSize, TAB_HEIGHT];
 		const p6 = [self.width, TAB_HEIGHT];
 
 		const tabData = 
@@ -119,32 +121,38 @@ const Widget = (function() {
 		tab.setAttribute('d', tabData);
 		tab.setAttribute('class', 'tabs-outline selected');
 		
-		const tabText = document.createElementNS('http://www.w3.org/2000/svg','text');
-
 		const leftPadding = 5;
-		tabText.setAttribute('x', p3[0] + leftPadding);
-		tabText.setAttribute('y', (p3[1] + p5[1])/2);
-		var textNode = document.createTextNode(self.tabs[tabIndex].title);
-		tabText.appendChild(textNode);
+		const tabText = createTebText(tabIndex, p3[0] + leftPadding, (p3[1] + p5[1])/2 )
 
 		const tabNode = document.createElementNS('http://www.w3.org/2000/svg','g');
 		tabNode.appendChild(tab);
 		tabNode.appendChild(tabText);
 		self.tabsSVG.appendChild(tabNode);
 		self.tabs[tabIndex].tabNode = tabNode;
+		self.tabs[tabIndex].startX = startX;
 		
 		addEventHandlers(tabIndex);
+	}
+
+	function getDynamicTabSize() {
+		const maxTabSize = 100;
+		const tabSize = Math.min(self.width/self.tabs.length, maxTabSize);
+		return tabSize;		
+	}
+
+	function createTebText(tabIndex, x, y) {
+		const tabText = document.createElementNS('http://www.w3.org/2000/svg','text');
+		tabText.setAttribute('x', x);
+		tabText.setAttribute('y', y);
+		var textNode = document.createTextNode(self.tabs[tabIndex].title);
+		tabText.appendChild(textNode);
+		return tabText;	
 	}
 
 	function addEventHandlers(tabIndex) {
 		addTabClickEventHandling(tabIndex);
 		addMouseUpEventHandling(tabIndex);
 		addMouseDownEventHandling(tabIndex);
-	}
-
-
-	function dragTabTo(x, y) {
-		console.log('x = ' + x, ', y = ' + y);
 	}
 
 	function getTabClickableAreaSVGPath(tabIndex) {
@@ -185,7 +193,8 @@ const Widget = (function() {
 			
 			console.log('mouse up on tab# :' + tabIndex);
 
-			if (self.draggingTabIndex) {
+			if (self.draggingTabIndex !== undefined) {
+				updateSelectedTabTo(self.draggingTabIndex);
 				console.log("drag end on tab #" + self.draggingTabIndex);
 				self.draggingTabIndex = undefined;
 			}
@@ -195,12 +204,10 @@ const Widget = (function() {
 
 	function addMouseDownEventHandling(tabIndex) {
 		self.tabs[tabIndex].tabNode.addEventListener("mousedown", function( event ) {
-			
 			console.log('drag started on tab #' + tabIndex);
 			self.draggingTabIndex = tabIndex;
 			self.tabs[tabIndex].drag = {
-				startX: event.x,
-				startY: event.y
+				mouseX: event.x 
 			}
 
 		}, false);
@@ -210,32 +217,66 @@ const Widget = (function() {
 		self.tabsSVG.addEventListener("mousemove", function( event ) {
 
 			if (self.draggingTabIndex !== undefined) {
+				console.log(self.draggingTabIndex);
 				dragTabTo(event.x, event.y);
-				self.tabs[self.draggingTabIndex].drag = {
-					startX: event.x,
-					startY: event.y
-				}
-			}
+				self.tabs[self.draggingTabIndex].startX += (event.x - self.tabs[self.draggingTabIndex].drag.mouseX);
+				self.tabs[self.draggingTabIndex].drag.mouseX = event.x;				
+			}	
 
 		}, false);
 	}
 
+	function dragTabTo(x, y) {
+		console.log('x = ' + x, ', y = ' + y);
+
+		console.log('self.draggingTabIndex:' + self.draggingTabIndex);
+
+		console.log(self.tabs[self.draggingTabIndex].tabNode);
+
+		self.tabs[self.draggingTabIndex].tabNode.remove();
+
+		if (self.draggingTabIndex === self.selectedTabIndex) {
+			console.log('drawing slected tab');
+			drawSelectedTab(self.draggingTabIndex, self.tabs[self.draggingTabIndex].startX);
+		} else {
+			console.log('drawing not slected tab');
+			drawNotSelectedTab(self.draggingTabIndex, self.tabs[self.draggingTabIndex].startX);			
+		}
+	}
+
 	function updateSelectedTabTo(tabIndex) {
+
+		if (tabIndex === self.selectedTabIndex) {
+			return;
+		}
+
+		console.log("selected tab index" + self.selectedTabIndex);
+		console.log(self.tabs[self.selectedTabIndex].tabNode);
+
 		self.tabs[self.selectedTabIndex].tabNode.remove();
+
+		console.log("new tab index" + tabIndex);
+		console.log(self.tabs[tabIndex].tabNode);
 		self.tabs[tabIndex].tabNode.remove();
 
-		drawNotSelectedTab(self.selectedTabIndex);
+		drawNotSelectedTab(self.selectedTabIndex, self.tabs[self.selectedTabIndex].startX);
+
 		self.selectedTabIndex = tabIndex;
-		drawSelectedTab(self.selectedTabIndex);
+		drawSelectedTab(self.selectedTabIndex, self.tabs[self.selectedTabIndex].startX);
 	}
 
 	function drawTabs() {
-		for (let i=0; i < self.tabs.length; i++) {
-			if (i !== self.selectedTabIndex) {
-				drawNotSelectedTab(i);
+		const tabSize = getDynamicTabSize();
+
+		for (let tabIndex=0; tabIndex < self.tabs.length; tabIndex++) {
+			if (tabIndex !== self.selectedTabIndex) {				
+				var startX = tabIndex * (tabSize - TAB_OVERLAP);
+				drawNotSelectedTab(tabIndex, startX);
 			}
 		}
-		drawSelectedTab(self.selectedTabIndex);
+
+		var startX = self.selectedTabIndex * (tabSize - TAB_OVERLAP);
+		drawSelectedTab(self.selectedTabIndex, startX);
 	}
 
 	Widget.prototype.addTab = function(title, content, position) {
