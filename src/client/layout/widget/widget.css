@@ -29,6 +29,10 @@
 	stroke-width: 0.3px;
 }
 
+.widget-tabs {
+	cursor: default;
+}
+
 .widget-tabs text {
 	font-size: 10px;
 	font-family: monospace;
