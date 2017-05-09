@@ -57,13 +57,6 @@ const Widget = (function() {
 		addMouseMoveEventHandling();
 
 		drawTabs();
-
-
-		// self.circle = document.createElementNS('http://www.w3.org/2000/svg','circle');	
-		// self.circle.setAttribute('cx', 200);
-		// self.circle.setAttribute('cy', 200);
-		// self.circle.setAttribute('r', 10);
-		// self.tabsSVG.appendChild(self.circle);
 	};
 
 	function drawNotSelectedTab(tabIndex, startX) {
@@ -220,10 +213,35 @@ const Widget = (function() {
 				console.log(self.draggingTabIndex);
 				dragTabTo(event.x, event.y);
 				self.tabs[self.draggingTabIndex].startX += (event.x - self.tabs[self.draggingTabIndex].drag.mouseX);
-				self.tabs[self.draggingTabIndex].drag.mouseX = event.x;				
+				self.tabs[self.draggingTabIndex].drag.mouseX = event.x;
+
+				let tabIndexToSwap = getTabIndexToSwap();
+				if (tabIndexToSwap !== undefined) {
+					console.log('Going to swap!!');
+
+					const temp = self.tabs[tabIndexToSwap];
+					self.tabs[tabIndexToSwap] = self.tabs[self.draggingTabIndex];
+					self.tabs[self.draggingTabIndex] = temp;
+
+					const tempIndex = tabIndexToSwap;
+					tabIndexToSwap = self.draggingTabIndex;
+					self.draggingTabIndex = tempIndex;
+
+					self.tabs[tabIndexToSwap].tabNode.remove();
+
+					const startX = getTabDefaultStartXPosition(tabIndexToSwap);
+					drawNotSelectedTab(tabIndexToSwap, startX);
+				}
+
 			}	
 
 		}, false);
+	}
+
+
+	function getTabDefaultStartXPosition(tabIndex) {
+		const tabSize = getDynamicTabSize();
+		return tabIndex * (tabSize - TAB_OVERLAP);
 	}
 
 	function dragTabTo(x, y) {
@@ -277,6 +295,49 @@ const Widget = (function() {
 
 		var startX = self.selectedTabIndex * (tabSize - TAB_OVERLAP);
 		drawSelectedTab(self.selectedTabIndex, startX);
+	}
+
+	function getTabIndexToSwap() {
+
+		console.log('in getTabIndexToSwap');
+
+		console.log('self.draggingTabIndex : ' + self.draggingTabIndex);
+
+		const preTabIndex = self.draggingTabIndex - 1;
+		const nextTabIndex = self.draggingTabIndex + 1;
+
+		// logs
+		console.log('self.tabs[self.draggingTabIndex].startX :' + self.tabs[self.draggingTabIndex].startX);
+
+		if (isValidTabIndex(preTabIndex)) {
+			console.log('preTabIndex: ' + preTabIndex);
+			console.log('getMiddleXOfTab(preTabIndex) : ' + getMiddleXOfTab(preTabIndex));
+		}
+
+		if (isValidTabIndex(nextTabIndex)) {
+			console.log('nextTabIndex: ' + nextTabIndex);
+			console.log('getMiddleXOfTab(nextTabIndex) : ' + getMiddleXOfTab(nextTabIndex));
+		}
+
+		if (isValidTabIndex(preTabIndex) && self.tabs[self.draggingTabIndex].startX < getMiddleXOfTab(preTabIndex)) {
+			return preTabIndex;
+		} else if (isValidTabIndex(nextTabIndex) && self.tabs[self.draggingTabIndex].startX > getMiddleXOfTab(nextTabIndex)) {
+			return nextTabIndex
+		} 
+
+		return undefined;
+	}
+
+	function isValidTabIndex(tabIndex) {
+		if (tabIndex >= 0 && tabIndex < self.tabs.length) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	function getMiddleXOfTab(tabIndex) {
+		return (self.tabs[tabIndex].startX + getDynamicTabSize()/2); 
 	}
 
 	Widget.prototype.addTab = function(title, content, position) {
