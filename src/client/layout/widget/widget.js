@@ -146,6 +146,7 @@ const Widget = (function() {
 		addTabClickEventHandling(tabIndex);
 		addMouseUpEventHandling(tabIndex);
 		addMouseDownEventHandling(tabIndex);
+		addMouseOutEventHandling(tabIndex);
 	}
 
 	function getTabClickableAreaSVGPath(tabIndex) {
@@ -184,11 +185,16 @@ const Widget = (function() {
 	function addMouseUpEventHandling(tabIndex) {
 		self.tabs[tabIndex].tabNode.addEventListener("mouseup", function( event ) {
 			
-			console.log('mouse up on tab# :' + tabIndex);
+			//console.log('mouse up on tab# :' + tabIndex);
 
 			if (self.draggingTabIndex !== undefined) {
+
+				self.tabs[self.draggingTabIndex].tabNode.remove();
+				const startX = getTabDefaultStartXPosition(self.draggingTabIndex);
+				drawSelectedTab(self.draggingTabIndex, startX);
+
 				updateSelectedTabTo(self.draggingTabIndex);
-				console.log("drag end on tab #" + self.draggingTabIndex);
+				//console.log("drag end on tab #" + self.draggingTabIndex);
 				self.draggingTabIndex = undefined;
 			}
 
@@ -196,18 +202,18 @@ const Widget = (function() {
 	}
 
 	function addMouseDownEventHandling(tabIndex) {
-		self.tabs[tabIndex].tabNode.addEventListener("mousedown", function( event ) {
+		self.tabs[tabIndex].tabNode.addEventListener("mousedown", function(event) {
 			console.log('drag started on tab #' + tabIndex);
 			self.draggingTabIndex = tabIndex;
 			self.tabs[tabIndex].drag = {
 				mouseX: event.x 
 			}
 
-		}, false);
+		}, true);
 	}
 
 	function addMouseMoveEventHandling() {
-		self.tabsSVG.addEventListener("mousemove", function( event ) {
+		self.tabsSVG.addEventListener("mousemove", function(event) {
 
 			if (self.draggingTabIndex !== undefined) {
 				console.log(self.draggingTabIndex);
@@ -218,19 +224,7 @@ const Widget = (function() {
 				let tabIndexToSwap = getTabIndexToSwap();
 				if (tabIndexToSwap !== undefined) {
 					console.log('Going to swap!!');
-
-					const temp = self.tabs[tabIndexToSwap];
-					self.tabs[tabIndexToSwap] = self.tabs[self.draggingTabIndex];
-					self.tabs[self.draggingTabIndex] = temp;
-
-					const tempIndex = tabIndexToSwap;
-					tabIndexToSwap = self.draggingTabIndex;
-					self.draggingTabIndex = tempIndex;
-
-					self.tabs[tabIndexToSwap].tabNode.remove();
-
-					const startX = getTabDefaultStartXPosition(tabIndexToSwap);
-					drawNotSelectedTab(tabIndexToSwap, startX);
+					swapTabs(tabIndexToSwap);
 				}
 
 			}	
@@ -238,6 +232,33 @@ const Widget = (function() {
 		}, false);
 	}
 
+	function addMouseOutEventHandling(tabIndex) {
+		// self.tabs[tabIndex].tabNode.addEventListener("mouseout", function(event) {
+		// 	console.log('mouse is out of tab # : ' + tabIndex);
+
+		// 	if (self.draggingTabIndex === tabIndex) {
+		// 		self.tabs[self.draggingTabIndex].tabNode.remove();
+		// 		const startX = getTabDefaultStartXPosition(self.draggingTabIndex);
+		// 		drawNotSelectedTab(self.draggingTabIndex, startX);				
+		// 	}
+
+		// }, false);
+	}
+
+	function swapTabs(tabIndexToSwap) {
+		const temp = self.tabs[tabIndexToSwap];
+		self.tabs[tabIndexToSwap] = self.tabs[self.draggingTabIndex];
+		self.tabs[self.draggingTabIndex] = temp;
+
+		const tempIndex = tabIndexToSwap;
+		tabIndexToSwap = self.draggingTabIndex;
+		self.draggingTabIndex = tempIndex;
+
+		self.tabs[tabIndexToSwap].tabNode.remove();
+
+		const startX = getTabDefaultStartXPosition(tabIndexToSwap);
+		drawNotSelectedTab(tabIndexToSwap, startX);
+	}
 
 	function getTabDefaultStartXPosition(tabIndex) {
 		const tabSize = getDynamicTabSize();
@@ -245,19 +266,19 @@ const Widget = (function() {
 	}
 
 	function dragTabTo(x, y) {
-		console.log('x = ' + x, ', y = ' + y);
+		// console.log('x = ' + x, ', y = ' + y);
 
-		console.log('self.draggingTabIndex:' + self.draggingTabIndex);
+		// console.log('self.draggingTabIndex:' + self.draggingTabIndex);
 
-		console.log(self.tabs[self.draggingTabIndex].tabNode);
+		// console.log(self.tabs[self.draggingTabIndex].tabNode);
 
 		self.tabs[self.draggingTabIndex].tabNode.remove();
 
 		if (self.draggingTabIndex === self.selectedTabIndex) {
-			console.log('drawing slected tab');
+			// console.log('drawing slected tab');
 			drawSelectedTab(self.draggingTabIndex, self.tabs[self.draggingTabIndex].startX);
 		} else {
-			console.log('drawing not slected tab');
+			// console.log('drawing not slected tab');
 			drawNotSelectedTab(self.draggingTabIndex, self.tabs[self.draggingTabIndex].startX);			
 		}
 	}
@@ -268,13 +289,13 @@ const Widget = (function() {
 			return;
 		}
 
-		console.log("selected tab index" + self.selectedTabIndex);
-		console.log(self.tabs[self.selectedTabIndex].tabNode);
+		// console.log("selected tab index" + self.selectedTabIndex);
+		// console.log(self.tabs[self.selectedTabIndex].tabNode);
 
 		self.tabs[self.selectedTabIndex].tabNode.remove();
 
-		console.log("new tab index" + tabIndex);
-		console.log(self.tabs[tabIndex].tabNode);
+		// console.log("new tab index" + tabIndex);
+		// console.log(self.tabs[tabIndex].tabNode);
 		self.tabs[tabIndex].tabNode.remove();
 
 		drawNotSelectedTab(self.selectedTabIndex, self.tabs[self.selectedTabIndex].startX);
@@ -299,25 +320,25 @@ const Widget = (function() {
 
 	function getTabIndexToSwap() {
 
-		console.log('in getTabIndexToSwap');
+		// console.log('in getTabIndexToSwap');
 
-		console.log('self.draggingTabIndex : ' + self.draggingTabIndex);
+		// console.log('self.draggingTabIndex : ' + self.draggingTabIndex);
 
 		const preTabIndex = self.draggingTabIndex - 1;
 		const nextTabIndex = self.draggingTabIndex + 1;
 
 		// logs
-		console.log('self.tabs[self.draggingTabIndex].startX :' + self.tabs[self.draggingTabIndex].startX);
+		// console.log('self.tabs[self.draggingTabIndex].startX :' + self.tabs[self.draggingTabIndex].startX);
 
-		if (isValidTabIndex(preTabIndex)) {
-			console.log('preTabIndex: ' + preTabIndex);
-			console.log('getMiddleXOfTab(preTabIndex) : ' + getMiddleXOfTab(preTabIndex));
-		}
+		// if (isValidTabIndex(preTabIndex)) {
+		// 	console.log('preTabIndex: ' + preTabIndex);
+		// 	console.log('getMiddleXOfTab(preTabIndex) : ' + getMiddleXOfTab(preTabIndex));
+		// }
 
-		if (isValidTabIndex(nextTabIndex)) {
-			console.log('nextTabIndex: ' + nextTabIndex);
-			console.log('getMiddleXOfTab(nextTabIndex) : ' + getMiddleXOfTab(nextTabIndex));
-		}
+		// if (isValidTabIndex(nextTabIndex)) {
+		// 	console.log('nextTabIndex: ' + nextTabIndex);
+		// 	console.log('getMiddleXOfTab(nextTabIndex) : ' + getMiddleXOfTab(nextTabIndex));
+		// }
 
 		if (isValidTabIndex(preTabIndex) && self.tabs[self.draggingTabIndex].startX < getMiddleXOfTab(preTabIndex)) {
 			return preTabIndex;
