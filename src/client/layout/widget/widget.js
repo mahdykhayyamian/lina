@@ -22,9 +22,9 @@ const Widget = (function() {
 		self.height = height;
 
 		self.tabs = [{
-			title: 'Judy/Nikki',
+			title: 'Judy',
 		}, {
-			title: 'Lina' 
+			title: 'Niki' 
 		}, {
 			title: 'Mahdy'
 		}];
@@ -192,8 +192,6 @@ const Widget = (function() {
 	function addMouseUpEventHandling(tabIndex) {
 		self.tabs[tabIndex].tabNode.addEventListener("mouseup", function( event ) {
 			
-			//console.log('mouse up on tab# :' + tabIndex);
-
 			if (self.draggingTabIndex !== undefined) {
 
 				self.tabs[self.draggingTabIndex].tabNode.remove();
@@ -201,7 +199,6 @@ const Widget = (function() {
 				drawSelectedTab(self.draggingTabIndex, startX);
 
 				updateSelectedTabTo(self.draggingTabIndex);
-				//console.log("drag end on tab #" + self.draggingTabIndex);
 				self.draggingTabIndex = undefined;
 			}
 
@@ -223,31 +220,40 @@ const Widget = (function() {
 		self.tabsSVG.addEventListener("mousemove", function(event) {
 
 			if (self.draggingTabIndex !== undefined) {
-				console.log(self.draggingTabIndex);
-				dragTabTo(event.x, event.y);
+
+				// apply new position
 				self.tabs[self.draggingTabIndex].startX += (event.x - self.tabs[self.draggingTabIndex].drag.mouseX);
 				self.tabs[self.draggingTabIndex].drag.mouseX = event.x;
 
-				let tabIndexToSwap = getTabIndexToSwap();
-				if (tabIndexToSwap !== undefined) {
-					console.log('Going to swap!!');
-					swapTabs(tabIndexToSwap);
+				// update dom
+				self.tabs[self.draggingTabIndex].tabNode.remove();
+				if (self.draggingTabIndex === self.selectedTabIndex) {
+					drawSelectedTab(self.draggingTabIndex, self.tabs[self.draggingTabIndex].startX);
+				} else {
+					drawNotSelectedTab(self.draggingTabIndex, self.tabs[self.draggingTabIndex].startX);			
 				}
 
+				//swap if necessary
+				let tabIndexToSwap = getTabIndexToSwap();
+				if (tabIndexToSwap !== undefined) {
+					swapTabs(tabIndexToSwap);
+				}
 			}	
-
 		}, false);
 	}
 
 	function addMouseMoveOnWidgetEventHandling() {
 		self.node.addEventListener("mousemove", function(event) {
 
-
 			const targetBoundingClientRect = event.target.getBoundingClientRect();
 			const rootBoundingClinetRect = self.node.getBoundingClientRect();
 
-			const leftOffsetFromRoot = targetBoundingClientRect.left - rootBoundingClinetRect.left;
-			const topOffsetFromRoot = targetBoundingClientRect.top - rootBoundingClinetRect.top;
+			const leftOffsetFromRoot = (targetBoundingClientRect.left - rootBoundingClinetRect.left) + event.offsetX;
+			const topOffsetFromRoot = (targetBoundingClientRect.top - rootBoundingClinetRect.top) + event.offsetY;
+
+			console.log('leftOffsetFromRoot : ' + leftOffsetFromRoot);
+
+			console.log('topOffsetFromRoot : ' + topOffsetFromRoot);
 
 			let outSideOfDraggingRegion = false;
 
@@ -297,19 +303,6 @@ const Widget = (function() {
 	function getTabDefaultStartXPosition(tabIndex) {
 		const tabSize = getDynamicTabSize();
 		return tabIndex * (tabSize - TAB_OVERLAP);
-	}
-
-	function dragTabTo() {
-
-		self.tabs[self.draggingTabIndex].tabNode.remove();
-
-		if (self.draggingTabIndex === self.selectedTabIndex) {
-			// console.log('drawing slected tab');
-			drawSelectedTab(self.draggingTabIndex, self.tabs[self.draggingTabIndex].startX);
-		} else {
-			// console.log('drawing not slected tab');
-			drawNotSelectedTab(self.draggingTabIndex, self.tabs[self.draggingTabIndex].startX);			
-		}
 	}
 
 	function updateSelectedTabTo(tabIndex) {
