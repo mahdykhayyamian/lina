@@ -1,8 +1,13 @@
+import {domUtils} from "../../utils/dom-utils.js";
+
 const Widget = (function() {
 
 	const TAB_HEIGHT = 25;
 	const TAB_OVERLAP = 5;
-	const TAB_HORIZONTAL_SIDE_LENGTH = 8; 
+	const TAB_HORIZONTAL_SIDE_LENGTH = 8;
+	const WIDGET_PADDING = 10;
+	const WIDGET_MARGIN = 10;
+
 	const pointInSvgPolygon = require("point-in-svg-polygon");
 
 	let self;
@@ -32,6 +37,8 @@ const Widget = (function() {
 		self.node.style.setProperty("left", self.left+"px");
 		self.node.style.setProperty("width", self.width+"px");
 		self.node.style.setProperty("height", self.height+"px");
+		self.node.style.setProperty("padding", WIDGET_PADDING + "px");
+		self.node.style.setProperty("margin", WIDGET_MARGIN + "px");
 
 		self.tabsDiv = document.createElement("div");
 		self.tabsDiv.setAttribute("class", "widget-tabs");
@@ -54,7 +61,8 @@ const Widget = (function() {
 		self.contentBorderDiv.setAttribute("class", "widget-content-border");
 		self.contentDiv.appendChild(self.contentBorderDiv);
 
-		addMouseMoveEventHandling();
+		addMouseMoveOnWidgetEventHandling();
+		addMouseMoveOnTabEventHandling();
 
 		drawTabs();
 	};
@@ -146,7 +154,6 @@ const Widget = (function() {
 		addTabClickEventHandling(tabIndex);
 		addMouseUpEventHandling(tabIndex);
 		addMouseDownEventHandling(tabIndex);
-		addMouseOutEventHandling(tabIndex);
 	}
 
 	function getTabClickableAreaSVGPath(tabIndex) {
@@ -212,7 +219,7 @@ const Widget = (function() {
 		}, true);
 	}
 
-	function addMouseMoveEventHandling() {
+	function addMouseMoveOnTabEventHandling() {
 		self.tabsSVG.addEventListener("mousemove", function(event) {
 
 			if (self.draggingTabIndex !== undefined) {
@@ -232,20 +239,35 @@ const Widget = (function() {
 		}, false);
 	}
 
-	function addMouseOutEventHandling(tabIndex) {
-		// self.tabs[tabIndex].tabNode.addEventListener("mouseout", function(event) {
-		// 	console.log('mouse is out of tab # : ' + tabIndex);
+	function addMouseMoveOnWidgetEventHandling() {
+		self.node.addEventListener("mousemove", function(event) {
 
-		// 	if (self.draggingTabIndex === tabIndex) {
-		// 		self.tabs[self.draggingTabIndex].tabNode.remove();
-		// 		const startX = getTabDefaultStartXPosition(self.draggingTabIndex);
-		// 		drawNotSelectedTab(self.draggingTabIndex, startX);				
-		// 	}
 
-		// }, false);
+			const targetBoundingClientRect = event.target.getBoundingClientRect();
+			const rootBoundingClinetRect = self.node.getBoundingClientRect();
+
+			const leftOffsetFromRoot = targetBoundingClientRect.left - rootBoundingClinetRect.left;
+			const topOffsetFromRoot = targetBoundingClientRect.top - rootBoundingClinetRect.top;
+
+			let outSideOfDraggingRegion = false;
+
+			if (topOffsetFromRoot > TAB_HEIGHT + TAB_OVERLAP) {
+				outSideOfDraggingRegion = true;
+			}
+
+			if (self.draggingTabIndex !== undefined && outSideOfDraggingRegion) {
+				console.log('inside here');
+				self.tabs[self.draggingTabIndex].tabNode.remove();
+				const startX = getTabDefaultStartXPosition(self.draggingTabIndex);
+		 		drawNotSelectedTab(self.draggingTabIndex, startX);
+		 		self.draggingTabIndex = undefined;		 		
+			}
+
+		}, false);
 	}
 
 	function swapTabs(tabIndexToSwap) {
+
 		const temp = self.tabs[tabIndexToSwap];
 		self.tabs[tabIndexToSwap] = self.tabs[self.draggingTabIndex];
 		self.tabs[self.draggingTabIndex] = temp;
@@ -254,10 +276,22 @@ const Widget = (function() {
 		tabIndexToSwap = self.draggingTabIndex;
 		self.draggingTabIndex = tempIndex;
 
-		self.tabs[tabIndexToSwap].tabNode.remove();
+		// update selected tab index if needed
+		if (self.selectedTabIndex === self.draggingTabIndex) {
+			self.selectedTabIndex = tabIndexToSwap;
+		} else if (self.selectedTabIndex == tabIndexToSwap) {
+			self.selectedTabIndex = self.draggingTabIndex;
+		}
 
+		// draw the swapped tab
+		self.tabs[tabIndexToSwap].tabNode.remove();
 		const startX = getTabDefaultStartXPosition(tabIndexToSwap);
-		drawNotSelectedTab(tabIndexToSwap, startX);
+
+		if (tabIndexToSwap === self.selectedTabIndex) {
+			drawSelectedTab(tabIndexToSwap, startX);
+		} else {
+			drawNotSelectedTab(tabIndexToSwap, startX);			
+		}
 	}
 
 	function getTabDefaultStartXPosition(tabIndex) {
@@ -265,12 +299,7 @@ const Widget = (function() {
 		return tabIndex * (tabSize - TAB_OVERLAP);
 	}
 
-	function dragTabTo(x, y) {
-		// console.log('x = ' + x, ', y = ' + y);
-
-		// console.log('self.draggingTabIndex:' + self.draggingTabIndex);
-
-		// console.log(self.tabs[self.draggingTabIndex].tabNode);
+	function dragTabTo() {
 
 		self.tabs[self.draggingTabIndex].tabNode.remove();
 
@@ -289,13 +318,8 @@ const Widget = (function() {
 			return;
 		}
 
-		// console.log("selected tab index" + self.selectedTabIndex);
-		// console.log(self.tabs[self.selectedTabIndex].tabNode);
-
 		self.tabs[self.selectedTabIndex].tabNode.remove();
 
-		// console.log("new tab index" + tabIndex);
-		// console.log(self.tabs[tabIndex].tabNode);
 		self.tabs[tabIndex].tabNode.remove();
 
 		drawNotSelectedTab(self.selectedTabIndex, self.tabs[self.selectedTabIndex].startX);
@@ -320,29 +344,14 @@ const Widget = (function() {
 
 	function getTabIndexToSwap() {
 
-		// console.log('in getTabIndexToSwap');
-
-		// console.log('self.draggingTabIndex : ' + self.draggingTabIndex);
-
 		const preTabIndex = self.draggingTabIndex - 1;
 		const nextTabIndex = self.draggingTabIndex + 1;
 
-		// logs
-		// console.log('self.tabs[self.draggingTabIndex].startX :' + self.tabs[self.draggingTabIndex].startX);
-
-		// if (isValidTabIndex(preTabIndex)) {
-		// 	console.log('preTabIndex: ' + preTabIndex);
-		// 	console.log('getMiddleXOfTab(preTabIndex) : ' + getMiddleXOfTab(preTabIndex));
-		// }
-
-		// if (isValidTabIndex(nextTabIndex)) {
-		// 	console.log('nextTabIndex: ' + nextTabIndex);
-		// 	console.log('getMiddleXOfTab(nextTabIndex) : ' + getMiddleXOfTab(nextTabIndex));
-		// }
+		const tabSize = getDynamicTabSize();
 
 		if (isValidTabIndex(preTabIndex) && self.tabs[self.draggingTabIndex].startX < getMiddleXOfTab(preTabIndex)) {
 			return preTabIndex;
-		} else if (isValidTabIndex(nextTabIndex) && self.tabs[self.draggingTabIndex].startX > getMiddleXOfTab(nextTabIndex)) {
+		} else if (isValidTabIndex(nextTabIndex) && self.tabs[self.draggingTabIndex].startX + tabSize > getMiddleXOfTab(nextTabIndex)) {
 			return nextTabIndex
 		} 
 
