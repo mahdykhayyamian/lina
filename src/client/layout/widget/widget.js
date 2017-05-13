@@ -62,7 +62,7 @@ const Widget = (function() {
 		self.contentDiv.appendChild(self.contentBorderDiv);
 
 		addMouseMoveOnWidgetEventHandling();
-		addMouseMoveOnTabEventHandling();
+		addMouseUpOnWidgetEventHandling();
 
 		drawTabs();
 	};
@@ -152,7 +152,6 @@ const Widget = (function() {
 
 	function addEventHandlers(tabIndex) {
 		addTabClickEventHandling(tabIndex);
-		addMouseUpEventHandling(tabIndex);
 		addMouseDownEventHandling(tabIndex);
 	}
 
@@ -189,22 +188,6 @@ const Widget = (function() {
 		}, false);
 	}
 
-	function addMouseUpEventHandling(tabIndex) {
-		self.tabs[tabIndex].tabNode.addEventListener("mouseup", function( event ) {
-			
-			if (self.draggingTabIndex !== undefined) {
-
-				self.tabs[self.draggingTabIndex].tabNode.remove();
-				const startX = getTabDefaultStartXPosition(self.draggingTabIndex);
-				drawSelectedTab(self.draggingTabIndex, startX);
-
-				updateSelectedTabTo(self.draggingTabIndex);
-				self.draggingTabIndex = undefined;
-			}
-
-		}, false);
-	}
-
 	function addMouseDownEventHandling(tabIndex) {
 		self.tabs[tabIndex].tabNode.addEventListener("mousedown", function(event) {
 			console.log('drag started on tab #' + tabIndex);
@@ -216,57 +199,46 @@ const Widget = (function() {
 		}, true);
 	}
 
-	function addMouseMoveOnTabEventHandling() {
-		self.tabsSVG.addEventListener("mousemove", function(event) {
-
-			if (self.draggingTabIndex !== undefined) {
-
-				// apply new position
-				self.tabs[self.draggingTabIndex].startX += (event.x - self.tabs[self.draggingTabIndex].drag.mouseX);
-				self.tabs[self.draggingTabIndex].drag.mouseX = event.x;
-
-				// update dom
-				self.tabs[self.draggingTabIndex].tabNode.remove();
-				if (self.draggingTabIndex === self.selectedTabIndex) {
-					drawSelectedTab(self.draggingTabIndex, self.tabs[self.draggingTabIndex].startX);
-				} else {
-					drawNotSelectedTab(self.draggingTabIndex, self.tabs[self.draggingTabIndex].startX);			
-				}
-
-				//swap if necessary
-				let tabIndexToSwap = getTabIndexToSwap();
-				if (tabIndexToSwap !== undefined) {
-					swapTabs(tabIndexToSwap);
-				}
-			}	
-		}, false);
-	}
-
 	function addMouseMoveOnWidgetEventHandling() {
 		self.node.addEventListener("mousemove", function(event) {
 
-			const targetBoundingClientRect = event.target.getBoundingClientRect();
-			const rootBoundingClinetRect = self.node.getBoundingClientRect();
-
-			const leftOffsetFromRoot = (targetBoundingClientRect.left - rootBoundingClinetRect.left) + event.offsetX;
-			const topOffsetFromRoot = (targetBoundingClientRect.top - rootBoundingClinetRect.top) + event.offsetY;
-
-			console.log('leftOffsetFromRoot : ' + leftOffsetFromRoot);
-
-			console.log('topOffsetFromRoot : ' + topOffsetFromRoot);
-
-			let outSideOfDraggingRegion = false;
-
-			if (topOffsetFromRoot > TAB_HEIGHT + TAB_OVERLAP) {
-				outSideOfDraggingRegion = true;
+			// return if no tab is being dragged
+			if (self.draggingTabIndex === undefined) {
+				return;
 			}
 
-			if (self.draggingTabIndex !== undefined && outSideOfDraggingRegion) {
-				console.log('inside here');
+			// apply new position
+			self.tabs[self.draggingTabIndex].startX += (event.x - self.tabs[self.draggingTabIndex].drag.mouseX);
+			self.tabs[self.draggingTabIndex].drag.mouseX = event.x;
+
+			// update dom
+			self.tabs[self.draggingTabIndex].tabNode.remove();
+			if (self.draggingTabIndex === self.selectedTabIndex) {
+				drawSelectedTab(self.draggingTabIndex, self.tabs[self.draggingTabIndex].startX);
+			} else {
+				drawNotSelectedTab(self.draggingTabIndex, self.tabs[self.draggingTabIndex].startX);			
+			}
+
+			//swap if necessary
+			let tabIndexToSwap = getTabIndexToSwap();
+			if (tabIndexToSwap !== undefined) {
+				swapTabs(tabIndexToSwap);
+			}
+
+		}, false);
+	}
+
+	function addMouseUpOnWidgetEventHandling() {
+		self.node.addEventListener("mouseup", function( event ) {
+			
+			if (self.draggingTabIndex !== undefined) {
+
 				self.tabs[self.draggingTabIndex].tabNode.remove();
 				const startX = getTabDefaultStartXPosition(self.draggingTabIndex);
-		 		drawNotSelectedTab(self.draggingTabIndex, startX);
-		 		self.draggingTabIndex = undefined;		 		
+				drawSelectedTab(self.draggingTabIndex, startX);
+
+				updateSelectedTabTo(self.draggingTabIndex);
+				self.draggingTabIndex = undefined;
 			}
 
 		}, false);
