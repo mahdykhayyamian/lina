@@ -11,7 +11,7 @@ const Pencil = (function() {
 		self.totalWidth = 100;
 		self.pencilColor = 'green';
 
-		self.svg = document.createElement("svg");
+		self.svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
 		self.svg.setAttribute('width', self.totalWidth + 'px');
 		self.svg.setAttribute('height', self.totalHeight + 'px');
 		self.svg.style.position = "absolute";
@@ -215,7 +215,7 @@ const Pencil = (function() {
 		self.svg.appendChild(eraser);
 	}
 
-	Pencil.prototype.draw = function() {
+	Pencil.prototype.render = function() {
 		drawLead();
 		drawWood();
 		drawBody();

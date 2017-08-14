@@ -1,0 +1,20 @@
+
+{
+	type: 'node',
+	direction: 'horizontal'
+	splits : []
+	children: []
+}
+
+{
+	type: 'node',
+	direction: 'horizontal'
+	splits : [1]
+	children: [{
+		type: 'leaf',
+		widget: $menu
+	}]
+}
+
+
+
