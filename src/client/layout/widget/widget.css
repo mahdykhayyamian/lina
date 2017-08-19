@@ -2,6 +2,10 @@
 	position: absolute;
 }
 
+.widget-container {
+	position: absolute;
+}
+
 .widget-content {
 	position: absolute;
     display: table;

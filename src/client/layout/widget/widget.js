@@ -10,21 +10,15 @@ const Widget = (function() {
 
 	const pointInSvgPolygon = require("point-in-svg-polygon");
 	
-	function Widget(id, left, top, width, height) {
+	function Widget(id, left, top, width, height, tabs, widgetContainer) {
 		this.id = id;
 		this.top = top;
 		this.left = left
 		this.width = width;
 		this.height = height;
-
-		this.tabs = [{
-			title: 'Judy',
-		}, {
-			title: 'Niki' 
-		}, {
-			title: 'Mahdy'
-		}];
-		this.selectedTabIndex = 1;		
+		this.tabs = tabs;
+		this.selectedTabIndex = 0;
+		this.widgetContainer = widgetContainer;	
 	};
 
 	Widget.prototype.render = function(parent) {
@@ -78,6 +72,10 @@ const Widget = (function() {
 		console.log(parent);
 
 		parent.appendChild(this.node);
+	}
+
+	Widget.prototype.remove = function(parent) {
+		this.node.remove();
 	}
 
 	function drawNotSelectedTab(self, tabIndex, startX) {
