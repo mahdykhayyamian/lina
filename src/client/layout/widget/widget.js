@@ -78,6 +78,14 @@ const Widget = (function() {
 		this.node.remove();
 	}
 
+	Widget.prototype.onMouseDown = function (callback) {
+		this.tabs[tabIndex].tabNode.addEventListener("mousedown", callback, true);	
+	}
+
+	Widget.prototype.onMouseUp = function (callback) {
+		this.tabs[tabIndex].tabNode.addEventListener("mouseup", callback, true);	
+	}
+
 	function drawNotSelectedTab(self, tabIndex, startX) {
 
 		const tab = document.createElementNS('http://www.w3.org/2000/svg','path');
@@ -230,7 +238,7 @@ const Widget = (function() {
 				drawNotSelectedTab(self, self.draggingTabIndex, self.tabs[self.draggingTabIndex].startX);			
 			}
 
-			//swap if necessary
+			// swap if necessary
 			let tabIndexToSwap = getTabIndexToSwap(self);
 			if (tabIndexToSwap !== undefined) {
 				swapTabs(self, tabIndexToSwap);

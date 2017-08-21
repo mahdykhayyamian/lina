@@ -11,7 +11,7 @@ window.onload = function () {
 
 	appDiv.appendChild(pencil.svg);
 
-	const widgetA = new Widget("widgetA", 100, 100, 300, 400,
+	const widgetA = new Widget("widgetA", 0, 0, 800, 400,
 		[{
 			title: 'Judy',
 		}, {
@@ -21,28 +21,30 @@ window.onload = function () {
 		}]
 	);
 
-	const widgetB = new Widget("widgetB", 400, 100, 600, 200,
+
+	const widgetB = new Widget("widgetB", 0, 0, 400, 200,
 		[{
 			title: 'Lina',
 		}]
 	);
 
-	const widgetC = new Widget("widgetC", 400, 300, 600, 200, 
+	const widgetC = new Widget("widgetC", 0, 0, 400, 100, 
 		[{
 			title: 'Home',			
 	}]);
 
-	const widgetD = new Widget("widgetD", 600, 700, 600, 200, 
+	const widgetD = new Widget("widgetD", 0, 100, 400, 100, 
 		[{
 			title: 'Hashem',			
 	}]);
 
-	const layoutRoot = new WidgetContainer(0, 0, 900, 900, [widgetA, widgetB, widgetC], null);
-	widgetA.widgetContainer = layoutRoot;
-	widgetB.widgetContainer = layoutRoot;
-	widgetC.widgetContainer = layoutRoot;
+	const widgetContainer1 = new WidgetContainer(400, 0, 400, 200, [widgetC, widgetD], widgetContainer1);
 
-	layoutRoot.render(appDiv);
+	const widgetContainer2 = new WidgetContainer(0, 200, 800, 200, [widgetB, widgetContainer1], widgetContainer2);
 
-	layoutRoot.insertWidget(widgetD, 550, 140);
+	const widgetContainer3 = new WidgetContainer(80, 120, 800, 400, [widgetA, widgetContainer2], null);
+
+	widgetContainer3.render(appDiv);
+
+	// layoutRoot.insertWidget(widgetD, 550, 140);
 }
