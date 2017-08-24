@@ -11,7 +11,23 @@ window.onload = function () {
 
 	appDiv.appendChild(pencil.svg);
 
-	const widgetA = new Widget("widgetA", 0, 0, 800, 400,
+	let insertedWidgets = 0;
+
+	function mouseDownHandler(event, widget) {
+		const widgetBoundingRectangle = widget.contentDiv.getBoundingClientRect(); 
+
+		const x = event.clientX - widgetBoundingRectangle.left;
+		const y = event.clientY - widgetBoundingRectangle.top;
+		const inserteee = new Widget("inserteee" + insertedWidgets++, 0, 100, 400, 100, 
+			[{
+			title: 'Mooshzad' + insertedWidgets,			
+		}]);
+		inserteee.onMouseDown(mouseDownHandler);
+
+		widget.insertWidget(inserteee, x, y);
+	}
+
+	const widgetA = new Widget("widgetA", 0, 0, 800, 200,
 		[{
 			title: 'Judy',
 		}, {
@@ -20,23 +36,28 @@ window.onload = function () {
 			title: 'Mahdy'
 		}]
 	);
-
+	widgetA.onMouseDown(mouseDownHandler);
 
 	const widgetB = new Widget("widgetB", 0, 0, 400, 200,
 		[{
 			title: 'Lina',
 		}]
 	);
+	widgetB.onMouseDown(mouseDownHandler);
 
 	const widgetC = new Widget("widgetC", 0, 0, 400, 100, 
 		[{
 			title: 'Home',			
 	}]);
+	widgetC.onMouseDown(mouseDownHandler);
+
 
 	const widgetD = new Widget("widgetD", 0, 100, 400, 100, 
 		[{
 			title: 'Hashem',			
 	}]);
+	widgetD.onMouseDown(mouseDownHandler);
+
 
 	const widgetContainer1 = new WidgetContainer(400, 0, 400, 200, [widgetC, widgetD], widgetContainer1);
 
@@ -44,7 +65,10 @@ window.onload = function () {
 
 	const widgetContainer3 = new WidgetContainer(80, 120, 800, 400, [widgetA, widgetContainer2], null);
 
-	widgetContainer3.render(appDiv);
+	widgetA.widgetContainer = widgetContainer3;
+	widgetB.widgetContainer = widgetContainer2;
+	widgetC.widgetContainer = widgetContainer1;
+	widgetD.widgetContainer = widgetContainer1;
 
-	// layoutRoot.insertWidget(widgetD, 550, 140);
+	widgetContainer3.render(appDiv);
 }

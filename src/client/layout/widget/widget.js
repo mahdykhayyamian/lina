@@ -1,5 +1,7 @@
 import {domUtils} from "../../utils/dom-utils.js";
 
+import {WidgetContainer} from "../widget-container.js";
+
 const Widget = (function() {
 
 	const TAB_HEIGHT = 25;
@@ -7,6 +9,11 @@ const Widget = (function() {
 	const TAB_HORIZONTAL_SIDE_LENGTH = 8;
 	const WIDGET_PADDING = 10;
 	const WIDGET_MARGIN = 10;
+
+	const DIRECTION_TOP = "DIRECTION_TOP";
+	const DIRECTION_RIGHT = "DIRECTION_RIGHT";
+	const DIRECTION_BOTTOM = "DIRECTION_BOTTOM";
+	const DIRECTION_LEFT = "DIRECTION_LEFT";
 
 	const pointInSvgPolygon = require("point-in-svg-polygon");
 	
@@ -19,17 +26,11 @@ const Widget = (function() {
 		this.tabs = tabs;
 		this.selectedTabIndex = 0;
 		this.widgetContainer = widgetContainer;	
+
+		this.node = document.createElement("div");
 	};
 
 	Widget.prototype.render = function(parent) {
-
-		console.log("parent");
-		console.log(parent);
-
-		this.node = document.createElement("div");
-
-		console.log("id");
-		console.log(this.id);
 
 		this.node.setAttribute("id", this.id);
 		this.node.setAttribute("class", "widget");
@@ -65,26 +66,160 @@ const Widget = (function() {
 		addMouseUpOnWidgetEventHandling(this);
 		drawTabs(this);
 
-		console.log("this.node");
-		console.log(this.node);
-
-		console.log("parent");
-		console.log(parent);
-
 		parent.appendChild(this.node);
 	}
 
 	Widget.prototype.remove = function(parent) {
+		while (this.node.firstChild) {
+    		this.node.removeChild(this.node.firstChild);
+		}
 		this.node.remove();
 	}
 
 	Widget.prototype.onMouseDown = function (callback) {
-		this.tabs[tabIndex].tabNode.addEventListener("mousedown", callback, true);	
+		this.node.addEventListener("mousedown", (event) => {
+			callback(event, this);
+		}, true);	
 	}
 
 	Widget.prototype.onMouseUp = function (callback) {
-		this.tabs[tabIndex].tabNode.addEventListener("mouseup", callback, true);	
+		this.node.addEventListener("mouseup", (event) => {
+			callback(event, this);
+		}, true);	
 	}
+
+	Widget.prototype.insertWidget = function (widgetToInsert, x, y) {
+
+		const targetWidget = this;
+		if (targetWidget === null) {
+			return;
+		}
+
+		const direction = determineDirectonToInsert(targetWidget, x, y);
+
+		console.log(direction);
+
+		let childIndex, containerNode, targetWidgetContainer;
+
+	    childIndex = findMyChildIndex(targetWidget);
+	    targetWidgetContainer = targetWidget.widgetContainer;
+
+		switch (direction) {
+
+			case DIRECTION_TOP:
+	            containerNode = new WidgetContainer(targetWidget.left, targetWidget.top, targetWidget.width, targetWidget.height, [widgetToInsert, targetWidget], targetWidget.widgetContainer);
+
+	            widgetToInsert.left = 0;
+	            widgetToInsert.top = 0;
+	            widgetToInsert.width = containerNode.width;
+	            widgetToInsert.height = containerNode.height/2;            
+
+	            targetWidget.left = 0;
+	            targetWidget.top = containerNode.height/2;
+	            targetWidget.width = containerNode.width;
+	            targetWidget.height = containerNode.height/2;
+
+				break;
+			case DIRECTION_RIGHT:
+	            containerNode = new WidgetContainer(targetWidget.left, targetWidget.top, targetWidget.width, targetWidget.height, [targetWidget, widgetToInsert], targetWidget.widgetContainer);
+
+	            widgetToInsert.left = containerNode.width/2;
+	            widgetToInsert.top = 0;
+	            widgetToInsert.width = containerNode.width/2;
+	            widgetToInsert.height = containerNode.height;            
+
+	            targetWidget.left = 0;
+	            targetWidget.top = 0;
+	            targetWidget.width = containerNode.width/2;
+	            targetWidget.height = containerNode.height;
+
+				break;
+			case DIRECTION_BOTTOM:
+	            containerNode = new WidgetContainer(targetWidget.left, targetWidget.top, targetWidget.width, targetWidget.height, [targetWidget, widgetToInsert], targetWidget.widgetContainer);
+
+	            widgetToInsert.left = 0;
+	            widgetToInsert.top = containerNode.height/2;
+	            widgetToInsert.width = containerNode.width;
+	            widgetToInsert.height = containerNode.height/2;
+
+	            targetWidget.left = 0;
+	            targetWidget.top = 0;
+	            targetWidget.width = containerNode.width;
+	            targetWidget.height = containerNode.height/2;
+
+				break;
+			case DIRECTION_LEFT:
+	            containerNode = new WidgetContainer(targetWidget.left, targetWidget.top, targetWidget.width, targetWidget.height, [widgetToInsert, targetWidget], targetWidget.widgetContainer);
+
+	            widgetToInsert.left = 0;
+	            widgetToInsert.top = 0;
+	            widgetToInsert.width = containerNode.width / 2;
+	            widgetToInsert.height = containerNode.height;
+
+	            targetWidget.left = containerNode.width/2;
+	            targetWidget.top = 0;
+	            targetWidget.width = containerNode.width/2;
+	            targetWidget.height = containerNode.height;
+
+				break;
+			default:
+				return;
+		}
+
+		console.log(targetWidget.node);
+
+		targetWidget.remove();
+		targetWidget.widgetContainer = containerNode;
+		widgetToInsert.widgetContainer = containerNode;
+		targetWidgetContainer.children[childIndex] = containerNode;
+		containerNode.render(targetWidgetContainer.rootDiv);
+	};
+
+	function determineDirectonToInsert(widget, x, y) {
+		console.log("x = " + x + ", y=" + y);
+		const distToLeft = Math.abs(x);
+		const distToRight = Math.abs(widget.width - x);
+		const distToTop = Math.abs(y);
+		const distToBottom = Math.abs(widget.height - y);
+
+		const distances = [distToLeft, distToRight, distToTop, distToBottom];
+
+		const min = Math.min.apply(Math, distances);
+
+		switch(min) {
+			case(distToTop) : 
+				return DIRECTION_TOP;
+			case(distToRight):
+				return DIRECTION_RIGHT;
+			case(distToBottom):
+				return DIRECTION_BOTTOM;
+			case(distToLeft):
+				return DIRECTION_LEFT;
+			default:
+				return null;
+		}
+	}
+
+
+	function findMyChildIndex(widget) {
+
+		if (!widget.widgetContainer) {
+			return null;
+		}
+
+		const children = widget.widgetContainer.children;
+
+		if (Array.isArray(children)) {
+			for (let i=0; i<children.length; i++) {
+				if (children[i] === widget) {
+					return i;
+				}
+			}			
+		}
+
+		return null;
+	}
+
 
 	function drawNotSelectedTab(self, tabIndex, startX) {
 
