@@ -22,7 +22,7 @@ window.onload = function () {
 			[{
 			title: 'Mooshzad' + insertedWidgets,			
 		}]);
-		inserteee.onMouseDown(mouseDownHandler);
+		inserteee.onContentMouseDown(mouseDownHandler);
 
 		widget.insertWidget(inserteee, x, y);
 	}
@@ -36,27 +36,27 @@ window.onload = function () {
 			title: 'Mahdy'
 		}]
 	);
-	widgetA.onMouseDown(mouseDownHandler);
+	widgetA.onContentMouseDown(mouseDownHandler);
 
 	const widgetB = new Widget("widgetB", 0, 0, 400, 200,
 		[{
 			title: 'Lina',
 		}]
 	);
-	widgetB.onMouseDown(mouseDownHandler);
+	widgetB.onContentMouseDown(mouseDownHandler);
 
 	const widgetC = new Widget("widgetC", 0, 0, 400, 100, 
 		[{
 			title: 'Home',			
 	}]);
-	widgetC.onMouseDown(mouseDownHandler);
+	widgetC.onContentMouseDown(mouseDownHandler);
 
 
 	const widgetD = new Widget("widgetD", 0, 100, 400, 100, 
 		[{
 			title: 'Hashem',			
 	}]);
-	widgetD.onMouseDown(mouseDownHandler);
+	widgetD.onContentMouseDown(mouseDownHandler);
 
 
 	const widgetContainer1 = new WidgetContainer(400, 0, 400, 200, [widgetC, widgetD], widgetContainer1);

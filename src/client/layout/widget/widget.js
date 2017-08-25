@@ -28,6 +28,8 @@ const Widget = (function() {
 		this.widgetContainer = widgetContainer;	
 
 		this.node = document.createElement("div");
+		this.contentDiv = document.createElement("div");
+
 	};
 
 	Widget.prototype.render = function(parent) {
@@ -52,7 +54,6 @@ const Widget = (function() {
 		this.tabsDiv.appendChild(this.tabsSVG);
 		this.node.appendChild(this.tabsDiv);
 
-		this.contentDiv = document.createElement("div");
 		this.contentDiv.setAttribute("class", "widget-content");
 		this.contentDiv.style.setProperty("width", this.width+"px");
 		this.contentDiv.style.setProperty("height", this.height - TAB_HEIGHT+"px");
@@ -70,14 +71,20 @@ const Widget = (function() {
 	}
 
 	Widget.prototype.remove = function(parent) {
+		
+		while (this.contentDiv.firstChild) {
+    		this.contentDiv.removeChild(this.contentDiv.firstChild);
+		}
+		this.contentDiv.remove();
+
 		while (this.node.firstChild) {
     		this.node.removeChild(this.node.firstChild);
 		}
 		this.node.remove();
 	}
 
-	Widget.prototype.onMouseDown = function (callback) {
-		this.node.addEventListener("mousedown", (event) => {
+	Widget.prototype.onContentMouseDown = function (callback) {
+		this.contentDiv.addEventListener("mousedown", (event) => {
 			callback(event, this);
 		}, true);	
 	}
