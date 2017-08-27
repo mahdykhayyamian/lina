@@ -6,10 +6,6 @@ window.onload = function () {
 
 	const appDiv = document.getElementById("lina.app");
 
-	const pencil = new Pencil();
-	pencil.render();
-
-	appDiv.appendChild(pencil.svg);
 
 	let insertedWidgets = 0;
 
@@ -18,22 +14,38 @@ window.onload = function () {
 
 		const x = event.clientX - widgetBoundingRectangle.left;
 		const y = event.clientY - widgetBoundingRectangle.top;
+
+		const pencil = new Pencil();
+		pencil.render();
+
 		const inserteee = new Widget("inserteee" + insertedWidgets++, 0, 100, 400, 100, 
 			[{
-			title: 'Mooshzad' + insertedWidgets,			
+			title: 'Pencil' + insertedWidgets,
+			contentNode: pencil.svg
 		}]);
 		inserteee.onContentMouseDown(mouseDownHandler);
 
 		widget.insertWidget(inserteee, x, y);
 	}
 
+	function createTextDiv(text) {
+		const div = document.createElement("div");
+		div.textContent = text;
+		div.style["font-size"] = "12px";
+
+		return div;
+	}
+
 	const widgetA = new Widget("widgetA", 0, 0, 800, 200,
 		[{
 			title: 'Judy',
+			contentNode: createTextDiv('Jon Jon Jon')
 		}, {
-			title: 'Niki' 
+			title: 'Niki',
+			contentNode: createTextDiv('mish mish mikh mikh mahan!') 
 		}, {
-			title: 'Mahdy'
+			title: 'Mahdy',
+			contentNode: createTextDiv('Pake paghan!')
 		}]
 	);
 	widgetA.onContentMouseDown(mouseDownHandler);
@@ -41,13 +53,14 @@ window.onload = function () {
 	const widgetB = new Widget("widgetB", 0, 0, 400, 200,
 		[{
 			title: 'Lina',
+			contentNode: createTextDiv('Hashem!')
 		}]
 	);
 	widgetB.onContentMouseDown(mouseDownHandler);
 
 	const widgetC = new Widget("widgetC", 0, 0, 400, 100, 
 		[{
-			title: 'Home',			
+			title: 'Home',
 	}]);
 	widgetC.onContentMouseDown(mouseDownHandler);
 

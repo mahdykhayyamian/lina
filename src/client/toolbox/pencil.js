@@ -15,6 +15,8 @@ const Pencil = (function() {
 		self.svg.setAttribute('width', self.totalWidth + 'px');
 		self.svg.setAttribute('height', self.totalHeight + 'px');
 		self.svg.style.position = "absolute";
+		self.svg.style.top = 0;
+		self.svg.style.left = 0;
 
 		self.tipSideLength = 10;
 		self.tipAngle = Math.PI/4;

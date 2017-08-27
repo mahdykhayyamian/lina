@@ -29,7 +29,6 @@ const Widget = (function() {
 
 		this.node = document.createElement("div");
 		this.contentDiv = document.createElement("div");
-
 	};
 
 	Widget.prototype.render = function(parent) {
@@ -103,8 +102,6 @@ const Widget = (function() {
 		}
 
 		const direction = determineDirectonToInsert(targetWidget, x, y);
-
-		console.log(direction);
 
 		let childIndex, containerNode, targetWidgetContainer;
 
@@ -292,7 +289,12 @@ const Widget = (function() {
 		self.tabsSVG.appendChild(tabNode);
 		self.tabs[tabIndex].tabNode = tabNode;
 		self.tabs[tabIndex].startX = startX;
-		
+
+		// show content if available
+		if (self.tabs[tabIndex].contentNode) {
+			self.contentBorderDiv.appendChild(self.tabs[tabIndex].contentNode);
+		}		
+
 		addEventHandlers(self, tabIndex);
 	}
 
@@ -446,6 +448,10 @@ const Widget = (function() {
 
 		self.tabs[self.selectedTabIndex].tabNode.remove();
 		self.tabs[tabIndex].tabNode.remove();
+
+		while (self.contentBorderDiv.firstChild) {
+    		self.contentBorderDiv.removeChild(self.contentBorderDiv.firstChild);
+		}
 
 		drawNotSelectedTab(self, self.selectedTabIndex, self.tabs[self.selectedTabIndex].startX);
 
