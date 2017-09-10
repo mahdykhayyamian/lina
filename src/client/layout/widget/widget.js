@@ -62,12 +62,14 @@ const Widget = (function() {
 		this.contentBorderDiv.setAttribute("class", "widget-content-border");
 		this.contentDiv.appendChild(this.contentBorderDiv);
 
-		addMouseMoveOnWidgetEventHandling(this);
-		addMouseUpOnWidgetEventHandling(this);
+		this.onMouseUp(mouseUpEventHandler);
+
+		//this.onMouseMove(mouseMoveEventHandler);
+
 		drawTabs(this);
 
 		parent.appendChild(this.node);
-	}
+	};
 
 	Widget.prototype.remove = function(parent) {
 		
@@ -80,19 +82,35 @@ const Widget = (function() {
     		this.node.removeChild(this.node.firstChild);
 		}
 		this.node.remove();
-	}
+	};
 
 	Widget.prototype.onContentMouseDown = function (callback) {
 		this.contentDiv.addEventListener("mousedown", (event) => {
 			callback(event, this);
 		}, true);	
-	}
+	};
 
 	Widget.prototype.onMouseUp = function (callback) {
+		console.log("on widget mouseup");
 		this.node.addEventListener("mouseup", (event) => {
 			callback(event, this);
 		}, true);	
-	}
+	};
+
+	Widget.prototype.onMouseMove = function (callback) {
+		this.node.addEventListener("mousemove", (event) => {
+			callback(event, this);
+		}, true);	
+	};
+
+	Widget.prototype.onTabMouseDown = function (callback) {
+		console.log("onTabMouseDown here");
+		for (let i=0; i < this.tabs.length; i++) {
+			this.tabs[i].tabNode.addEventListener("mousedown", (event) => {
+				callback(event, this, i);
+			}, true);
+		}
+	};
 
 	Widget.prototype.insertWidget = function (widgetToInsert, x, y) {
 
@@ -179,6 +197,21 @@ const Widget = (function() {
 		containerNode.render(targetWidgetContainer.rootDiv);
 	};
 
+	Widget.prototype.removeTab = function (tabIndex) {
+
+		if (this.selectedTabIndex === this.tabs.length - 1) {
+			this.selectedTabIndex = this.selectedTabIndex - 1;
+		} 
+
+		this.tabs.splice(tabIndex, 1);
+
+		while (this.tabsSVG.firstChild) {
+    		this.tabsSVG.removeChild(this.tabsSVG.firstChild);
+		}
+
+		drawTabs(this);
+	};
+
 	function determineDirectonToInsert(widget, x, y) {
 		console.log("x = " + x + ", y=" + y);
 		const distToLeft = Math.abs(x);
@@ -203,7 +236,6 @@ const Widget = (function() {
 				return null;
 		}
 	}
-
 
 	function findMyChildIndex(widget) {
 
@@ -242,32 +274,39 @@ const Widget = (function() {
 		 					' L ' + p4[0] + ' ' + p4[1];
 		 					
 		tab.setAttribute('d', tabData);
-		tab.setAttribute('class', 'tabs-outline');
 
 		const leftPadding = 5;
 		const tabText = createTebText(self, tabIndex, p2[0] + leftPadding,(p2[1] + p4[1])/2);
 
 		const tabNode = document.createElementNS('http://www.w3.org/2000/svg','g');
+		tabNode.setAttribute('class', 'tabs-outline not-selected');
+
 		tabNode.appendChild(tab);
 		tabNode.appendChild(tabText);
 		self.tabsSVG.appendChild(tabNode);
 		self.tabs[tabIndex].tabNode = tabNode;
 		self.tabs[tabIndex].startX = startX;
+		self.tabs[tabIndex].startY = 0;
 
 		addEventHandlers(self, tabIndex);
 	}
 
-	function drawSelectedTab(self, tabIndex, startX) {
+	function drawSelectedTab(self, tabIndex, startX, startY) {
+
+		if (!startY && startY !== 0) {
+			debugger;
+		}
+
 		const tab = document.createElementNS('http://www.w3.org/2000/svg','path');
 
 		const tabSize = getDynamicTabSize(self);
 
-		const p1 = [0 , TAB_HEIGHT];
-		const p2 = [startX , TAB_HEIGHT];
-		const p3 = [startX + TAB_HORIZONTAL_SIDE_LENGTH, 0];
-		const p4 = [startX + tabSize - TAB_HORIZONTAL_SIDE_LENGTH, 0];
-		const p5 = [startX + tabSize, TAB_HEIGHT];
-		const p6 = [self.width, TAB_HEIGHT];
+		const p1 = [0 , TAB_HEIGHT + startY];
+		const p2 = [startX , TAB_HEIGHT + startY];
+		const p3 = [startX + TAB_HORIZONTAL_SIDE_LENGTH, startY];
+		const p4 = [startX + tabSize - TAB_HORIZONTAL_SIDE_LENGTH, startY];
+		const p5 = [startX + tabSize, TAB_HEIGHT + startY];
+		const p6 = [self.width, TAB_HEIGHT + startY];
 
 		const tabData = 
 							'M ' + p1[0] + ' ' + p1[1] + 
@@ -278,17 +317,19 @@ const Widget = (function() {
 		 					' L ' + p6[0] + ' ' + p6[1];
 		 					
 		tab.setAttribute('d', tabData);
-		tab.setAttribute('class', 'tabs-outline selected');
 		
 		const leftPadding = 5;
 		const tabText = createTebText(self, tabIndex, p3[0] + leftPadding, (p3[1] + p5[1])/2 )
 
 		const tabNode = document.createElementNS('http://www.w3.org/2000/svg','g');
+		tabNode.setAttribute('class', 'tabs-outline selected');
+
 		tabNode.appendChild(tab);
 		tabNode.appendChild(tabText);
 		self.tabsSVG.appendChild(tabNode);
 		self.tabs[tabIndex].tabNode = tabNode;
 		self.tabs[tabIndex].startX = startX;
+		self.tabs[tabIndex].startY = startY;
 
 		// show content if available
 		if (self.tabs[tabIndex].contentNode) {
@@ -315,7 +356,7 @@ const Widget = (function() {
 
 	function addEventHandlers(self, tabIndex) {
 		addTabClickEventHandling(self, tabIndex);
-		addMouseDownEventHandling(self, tabIndex);
+		addOnTabsMouseDownEventHandling(self, tabIndex);
 	}
 
 	function getTabClickableAreaSVGPath(self, tabIndex) {
@@ -351,60 +392,57 @@ const Widget = (function() {
 		}, false);
 	}
 
-	function addMouseDownEventHandling(self, tabIndex) {
+	function addOnTabsMouseDownEventHandling(self, tabIndex) {
 		self.tabs[tabIndex].tabNode.addEventListener("mousedown", function(event) {
 			console.log('drag started on tab #' + tabIndex);
 			self.draggingTabIndex = tabIndex;
 			self.tabs[tabIndex].drag = {
-				mouseX: event.x 
+				mouseX: event.x,
+				mouseY: event.y
 			}
 
 		}, true);
 	}
 
-	function addMouseMoveOnWidgetEventHandling(self) {
-		self.node.addEventListener("mousemove", function(event) {
+	function mouseMoveEventHandler(event, widget) {
 
-			// return if no tab is being dragged
-			if (self.draggingTabIndex === undefined) {
-				return;
-			}
+		// return if no tab is being dragged
+		if (widget.draggingTabIndex === undefined) {
+			return;
+		}
 
-			// apply new position
-			self.tabs[self.draggingTabIndex].startX += (event.x - self.tabs[self.draggingTabIndex].drag.mouseX);
-			self.tabs[self.draggingTabIndex].drag.mouseX = event.x;
+		// apply new position
+		widget.tabs[widget.draggingTabIndex].startX += (event.x - widget.tabs[widget.draggingTabIndex].drag.mouseX);
+		widget.tabs[widget.draggingTabIndex].drag.mouseX = event.x;
+		widget.tabs[widget.draggingTabIndex].startY += (event.y - widget.tabs[widget.draggingTabIndex].drag.mouseY);
+		widget.tabs[widget.draggingTabIndex].drag.mouseY = event.y;
 
-			// update dom
-			self.tabs[self.draggingTabIndex].tabNode.remove();
-			if (self.draggingTabIndex === self.selectedTabIndex) {
-				drawSelectedTab(self, self.draggingTabIndex, self.tabs[self.draggingTabIndex].startX);
-			} else {
-				drawNotSelectedTab(self, self.draggingTabIndex, self.tabs[self.draggingTabIndex].startX);			
-			}
+		// update dom
+		widget.tabs[widget.draggingTabIndex].tabNode.remove();
+		if (widget.draggingTabIndex === widget.selectedTabIndex) {
+			drawSelectedTab(widget, widget.draggingTabIndex, widget.tabs[widget.draggingTabIndex].startX, widget.tabs[widget.draggingTabIndex].startY);
+		} else {
+			drawNotSelectedTab(widget, widget.draggingTabIndex, widget.tabs[widget.draggingTabIndex].startX);			
+		}
 
-			// swap if necessary
-			let tabIndexToSwap = getTabIndexToSwap(self);
-			if (tabIndexToSwap !== undefined) {
-				swapTabs(self, tabIndexToSwap);
-			}
-
-		}, false);
+		// swap if necessary
+		let tabIndexToSwap = getTabIndexToSwap(widget);
+		if (tabIndexToSwap !== undefined) {
+			swapTabs(widget, tabIndexToSwap);
+		}
 	}
 
-	function addMouseUpOnWidgetEventHandling(self) {
-		self.node.addEventListener("mouseup", function( event ) {
-			
-			if (self.draggingTabIndex !== undefined) {
+	function mouseUpEventHandler(event, widget) {
 
-				self.tabs[self.draggingTabIndex].tabNode.remove();
-				const startX = getTabDefaultStartXPosition(self, self.draggingTabIndex);
-				drawSelectedTab(self, self.draggingTabIndex, startX);
+		if (widget.draggingTabIndex !== undefined) {
 
-				updateSelectedTabTo(self, self.draggingTabIndex);
-				self.draggingTabIndex = undefined;
-			}
+			widget.tabs[widget.draggingTabIndex].tabNode.remove();
+			const startX = getTabDefaultStartXPosition(widget, widget.draggingTabIndex);
+			drawSelectedTab(widget, widget.draggingTabIndex, startX, 0);
 
-		}, false);
+			updateSelectedTabTo(widget, widget.draggingTabIndex);
+			widget.draggingTabIndex = undefined;
+		}
 	}
 
 	function swapTabs(self, tabIndexToSwap) {
@@ -429,7 +467,7 @@ const Widget = (function() {
 		const startX = getTabDefaultStartXPosition(self, tabIndexToSwap);
 
 		if (tabIndexToSwap === self.selectedTabIndex) {
-			drawSelectedTab(self, tabIndexToSwap, startX);
+			drawSelectedTab(self, tabIndexToSwap, startX, 0);
 		} else {
 			drawNotSelectedTab(self, tabIndexToSwap, startX);			
 		}
@@ -456,7 +494,7 @@ const Widget = (function() {
 		drawNotSelectedTab(self, self.selectedTabIndex, self.tabs[self.selectedTabIndex].startX);
 
 		self.selectedTabIndex = tabIndex;
-		drawSelectedTab(self, self.selectedTabIndex, self.tabs[self.selectedTabIndex].startX);
+		drawSelectedTab(self, self.selectedTabIndex, self.tabs[self.selectedTabIndex].startX, self.tabs[self.selectedTabIndex].startY);
 	}
 
 	function drawTabs(self) {
@@ -470,7 +508,7 @@ const Widget = (function() {
 		}
 
 		var startX = self.selectedTabIndex * (tabSize - TAB_OVERLAP);
-		drawSelectedTab(self, self.selectedTabIndex, startX);
+		drawSelectedTab(self, self.selectedTabIndex, startX, 0);
 	}
 
 	function getTabIndexToSwap(self) {

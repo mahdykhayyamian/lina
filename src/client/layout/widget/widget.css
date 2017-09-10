@@ -20,13 +20,13 @@
     border-width: 3px;
 }
 
-.tabs-outline {
+.tabs-outline path {
 	stroke: black;
 	stroke-width: 0.2px;
 	fill: lightgrey;
 }
 
-.tabs-outline.selected {
+.tabs-outline.selected path {
 	fill: #efefef;
 	stroke-width: 0.3px;
 }

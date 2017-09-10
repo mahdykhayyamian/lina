@@ -1,11 +1,11 @@
 import {Widget} from "./layout/widget/widget.js";
 import {Pencil} from "./toolbox/pencil.js";
 import {WidgetContainer} from "./layout/widget-container.js";
+import {WidgetTabDragController} from "./layout/widget-tab-drag-controller.js";
 
 window.onload = function () {
 
 	const appDiv = document.getElementById("lina.app");
-
 
 	let insertedWidgets = 0;
 
@@ -48,7 +48,7 @@ window.onload = function () {
 			contentNode: createTextDiv('Pake paghan!')
 		}]
 	);
-	widgetA.onContentMouseDown(mouseDownHandler);
+	//widgetA.onContentMouseDown(mouseDownHandler);
 
 	const widgetB = new Widget("widgetB", 0, 0, 400, 200,
 		[{
@@ -56,21 +56,20 @@ window.onload = function () {
 			contentNode: createTextDiv('Hashem!')
 		}]
 	);
-	widgetB.onContentMouseDown(mouseDownHandler);
+	//widgetB.onContentMouseDown(mouseDownHandler);
 
 	const widgetC = new Widget("widgetC", 0, 0, 400, 100, 
 		[{
 			title: 'Home',
 	}]);
-	widgetC.onContentMouseDown(mouseDownHandler);
+	//widgetC.onContentMouseDown(mouseDownHandler);
 
 
 	const widgetD = new Widget("widgetD", 0, 100, 400, 100, 
 		[{
 			title: 'Hashem',			
 	}]);
-	widgetD.onContentMouseDown(mouseDownHandler);
-
+	//widgetD.onContentMouseDown(mouseDownHandler);
 
 	const widgetContainer1 = new WidgetContainer(400, 0, 400, 200, [widgetC, widgetD], widgetContainer1);
 
@@ -84,4 +83,6 @@ window.onload = function () {
 	widgetD.widgetContainer = widgetContainer1;
 
 	widgetContainer3.render(appDiv);
+
+	const widgetTabDragController = new WidgetTabDragController(widgetContainer3);
 }

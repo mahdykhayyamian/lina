@@ -37,9 +37,44 @@ WidgetContainer.prototype.remove = function(parent) {
 	this.rootDiv = document.createElement("div");
 }
 
-
 WidgetContainer.prototype.onMouseDown = function (callback) {
 	this.rootDiv.addEventListener("mousedown", callback, true);	
+}
+
+WidgetContainer.prototype.toWidgetArray = function() {
+
+	let widgets = [];
+
+	if (!this.children) {
+		return widgets;
+	}
+
+	for (let i=0; i<this.children.length; i++) {
+		console.log("children i");
+		console.log(this.children[i]);
+
+		if (Widget.prototype.isPrototypeOf(this.children[i])) {
+			widgets = widgets.concat(this.children[i]);	
+		} else {
+			widgets = widgets.concat(this.children[i].toWidgetArray());
+		}
+	}
+
+	return widgets;
+}
+
+WidgetContainer.prototype.getWidgetFromPoint = function(clientX, clientY) {
+
+	const widgets = this.toWidgetArray();
+	for (let i=0; i<widgets.length; i++) {
+		const widget = widgets[i];
+		const widgetBoundingRectangle = widget.node.getBoundingClientRect();
+		if ( (clientX >= widgetBoundingRectangle.left && clientX <= widgetBoundingRectangle.right)  && (clientY >= widgetBoundingRectangle.top && clientY <= widgetBoundingRectangle.bottom) ) {
+			return widget;
+		} 
+	}
+
+	return null;
 }
 
 function determineDirectonToInsert(widget, x, y) {
