@@ -23,7 +23,7 @@ window.onload = function () {
 			title: 'Pencil' + insertedWidgets,
 			contentNode: pencil.svg
 		}]);
-		inserteee.onContentMouseDown(mouseDownHandler);
+		inserteee.addMouseDownOnContentHandler(mouseDownHandler);
 
 		widget.insertWidget(inserteee, x, y);
 	}
@@ -48,7 +48,6 @@ window.onload = function () {
 			contentNode: createTextDiv('Pake paghan!')
 		}]
 	);
-	//widgetA.onContentMouseDown(mouseDownHandler);
 
 	const widgetB = new Widget("widgetB", 0, 0, 400, 200,
 		[{
@@ -56,20 +55,17 @@ window.onload = function () {
 			contentNode: createTextDiv('Hashem!')
 		}]
 	);
-	//widgetB.onContentMouseDown(mouseDownHandler);
 
 	const widgetC = new Widget("widgetC", 0, 0, 400, 100, 
 		[{
 			title: 'Home',
 	}]);
-	//widgetC.onContentMouseDown(mouseDownHandler);
 
 
 	const widgetD = new Widget("widgetD", 0, 100, 400, 100, 
 		[{
 			title: 'Hashem',			
 	}]);
-	//widgetD.onContentMouseDown(mouseDownHandler);
 
 	const widgetContainer1 = new WidgetContainer(400, 0, 400, 200, [widgetC, widgetD], widgetContainer1);
 

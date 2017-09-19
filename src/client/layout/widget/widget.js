@@ -29,6 +29,14 @@ const Widget = (function() {
 
 		this.node = document.createElement("div");
 		this.contentDiv = document.createElement("div");
+
+		this.eventHandlers = {
+			mouseDownOnContentHandlers: [],
+			mouseUpOnWidgetHandlers: [],
+			mouseMoveOnContentHandlers: [],
+			mouseMoveOnTabsHandlers: [],
+			mouseDownOnTabsHandlers: []
+		};
 	};
 
 	Widget.prototype.render = function(parent) {
@@ -62,9 +70,8 @@ const Widget = (function() {
 		this.contentBorderDiv.setAttribute("class", "widget-content-border");
 		this.contentDiv.appendChild(this.contentBorderDiv);
 
-		this.onMouseUp(mouseUpEventHandler);
-
-		//this.onMouseMove(mouseMoveEventHandler);
+		this.addMouseUpOnWidgetHandler(mouseUpEventHandler);
+		this.addMouseMoveOnTabsHandler(mouseMoveOnTabsEventHandler);
 
 		drawTabs(this);
 
@@ -84,27 +91,41 @@ const Widget = (function() {
 		this.node.remove();
 	};
 
-	Widget.prototype.onContentMouseDown = function (callback) {
+	Widget.prototype.addMouseDownOnContentHandler = function (callback) {
+		this.eventHandlers.mouseDownOnContentHandlers.push(callback);
 		this.contentDiv.addEventListener("mousedown", (event) => {
 			callback(event, this);
 		}, true);	
 	};
 
-	Widget.prototype.onMouseUp = function (callback) {
-		console.log("on widget mouseup");
+	Widget.prototype.addMouseUpOnWidgetHandler = function (callback) {
+		console.log("register widget mouseup");
+
+		this.eventHandlers.mouseUpOnWidgetHandlers.push(callback);
 		this.node.addEventListener("mouseup", (event) => {
+			console.log("mouse up this:");
+			console.log(this);
 			callback(event, this);
 		}, true);	
 	};
 
-	Widget.prototype.onMouseMove = function (callback) {
-		this.node.addEventListener("mousemove", (event) => {
+	Widget.prototype.addMouseMoveOnContentHandler = function (callback) {
+		this.eventHandlers.mouseMoveOnContentHandlers.push(callback);
+		this.contentDiv.addEventListener("mousemove", (event) => {
 			callback(event, this);
 		}, true);	
 	};
 
-	Widget.prototype.onTabMouseDown = function (callback) {
-		console.log("onTabMouseDown here");
+	Widget.prototype.addMouseMoveOnTabsHandler = function (callback) {
+		this.eventHandlers.mouseMoveOnTabsHandlers.push(callback);
+		this.tabsDiv.addEventListener("mousemove", (event) => {
+			callback(event, this);
+		}, true);	
+	};
+
+	Widget.prototype.addMouseDownOnTabsHandler = function (callback) {
+		console.log("addMouseDownOnTabsHandler");
+		this.eventHandlers.mouseDownOnTabsHandlers.push(callback);
 		for (let i=0; i < this.tabs.length; i++) {
 			this.tabs[i].tabNode.addEventListener("mousedown", (event) => {
 				callback(event, this, i);
@@ -209,6 +230,10 @@ const Widget = (function() {
     		this.tabsSVG.removeChild(this.tabsSVG.firstChild);
 		}
 
+		while (this.contentBorderDiv.firstChild) {
+    		this.contentBorderDiv.removeChild(this.contentBorderDiv.firstChild);
+		}
+
 		drawTabs(this);
 	};
 
@@ -291,22 +316,18 @@ const Widget = (function() {
 		addEventHandlers(self, tabIndex);
 	}
 
-	function drawSelectedTab(self, tabIndex, startX, startY) {
-
-		if (!startY && startY !== 0) {
-			debugger;
-		}
+	function drawSelectedTab(self, tabIndex, startX) {
 
 		const tab = document.createElementNS('http://www.w3.org/2000/svg','path');
 
 		const tabSize = getDynamicTabSize(self);
 
-		const p1 = [0 , TAB_HEIGHT + startY];
-		const p2 = [startX , TAB_HEIGHT + startY];
-		const p3 = [startX + TAB_HORIZONTAL_SIDE_LENGTH, startY];
-		const p4 = [startX + tabSize - TAB_HORIZONTAL_SIDE_LENGTH, startY];
-		const p5 = [startX + tabSize, TAB_HEIGHT + startY];
-		const p6 = [self.width, TAB_HEIGHT + startY];
+		const p1 = [0 , TAB_HEIGHT];
+		const p2 = [startX , TAB_HEIGHT];
+		const p3 = [startX + TAB_HORIZONTAL_SIDE_LENGTH, 0];
+		const p4 = [startX + tabSize - TAB_HORIZONTAL_SIDE_LENGTH, 0];
+		const p5 = [startX + tabSize, TAB_HEIGHT];
+		const p6 = [self.width, TAB_HEIGHT];
 
 		const tabData = 
 							'M ' + p1[0] + ' ' + p1[1] + 
@@ -329,7 +350,7 @@ const Widget = (function() {
 		self.tabsSVG.appendChild(tabNode);
 		self.tabs[tabIndex].tabNode = tabNode;
 		self.tabs[tabIndex].startX = startX;
-		self.tabs[tabIndex].startY = startY;
+		self.tabs[tabIndex].startY = 0;
 
 		// show content if available
 		if (self.tabs[tabIndex].contentNode) {
@@ -393,6 +414,8 @@ const Widget = (function() {
 	}
 
 	function addOnTabsMouseDownEventHandling(self, tabIndex) {
+
+		// internal handers
 		self.tabs[tabIndex].tabNode.addEventListener("mousedown", function(event) {
 			console.log('drag started on tab #' + tabIndex);
 			self.draggingTabIndex = tabIndex;
@@ -400,11 +423,19 @@ const Widget = (function() {
 				mouseX: event.x,
 				mouseY: event.y
 			}
+		}, true);
 
+		// passed in handlers
+		self.tabs[tabIndex].tabNode.addEventListener("mousedown", (event) => {
+			for (let i=0; i<self.eventHandlers.mouseDownOnTabsHandlers.length; i++) {
+				let callback = self.eventHandlers.mouseDownOnTabsHandlers[i];
+				console.log(callback);
+				callback(event, self, tabIndex);
+			}
 		}, true);
 	}
 
-	function mouseMoveEventHandler(event, widget) {
+	function mouseMoveOnTabsEventHandler(event, widget) {
 
 		// return if no tab is being dragged
 		if (widget.draggingTabIndex === undefined) {
@@ -433,6 +464,11 @@ const Widget = (function() {
 	}
 
 	function mouseUpEventHandler(event, widget) {
+
+		console.log("in widget mouseUpEventHandler");
+		console.log(widget);
+		console.log(widget.draggingTabIndex);
+		console.log("widget.draggingTabIndex : " + widget.draggingTabIndex);
 
 		if (widget.draggingTabIndex !== undefined) {
 
@@ -480,6 +516,8 @@ const Widget = (function() {
 
 	function updateSelectedTabTo(self, tabIndex) {
 
+		console.log("updateSelectedTabTo called");
+
 		if (tabIndex === self.selectedTabIndex) {
 			return;
 		}
@@ -498,6 +536,9 @@ const Widget = (function() {
 	}
 
 	function drawTabs(self) {
+
+		console.log("in drawTabs");
+
 		const tabSize = getDynamicTabSize(self);
 
 		for (let tabIndex=0; tabIndex < self.tabs.length; tabIndex++) {

@@ -1,4 +1,3 @@
-
 export const Board = (function() {
 
 	let self;
