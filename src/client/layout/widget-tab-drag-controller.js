@@ -92,11 +92,15 @@ function WidgetTabDragController(widgetContainer) {
 			const x = (event.clientX - widgetContainerBoundingRectangle.left) - controller.selectedTabDragPositionOffset.x;
 			const y = (event.clientY - widgetContainerBoundingRectangle.top) - controller.selectedTabDragPositionOffset.y;
 
-			if (controller.draggingTabNode) {
-				controller.draggingTabNode.style.setProperty("left", x+"px");
-				controller.draggingTabNode.style.setProperty("top", y+"px");
+			if (controller.clonedWidgetForTab) {
+				controller.clonedWidgetForTab.node.style.setProperty("left", x+"px");
+				controller.clonedWidgetForTab.node.style.setProperty("top", y+"px");
 			} else {
-				createDraggingTabNode(controller.draggingTabWidget);
+				controller.clonedWidgetForTab = controller.draggingTabWidget.createWidgetFromTab(controller.draggingTabIndex);
+				controller.clonedWidgetForTab.render(controller.widgetContainer.rootDiv);
+
+				console.log("after creation, clonedWidgetForTab.node.children.length : " + controller.clonedWidgetForTab.node.children.length);
+
 				console.log("removing dragging tab");
 				console.log(controller.draggingTabIndex);
 				controller.draggingTabWidget.removeTab(controller.draggingTabIndex);
@@ -110,7 +114,7 @@ function WidgetTabDragController(widgetContainer) {
 			
 			console.log("mouse up on widget container");
 
-			if (!controller.draggingTabNode) {
+			if (!controller.clonedWidgetForTab) {
 				return;
 			}
 
@@ -118,75 +122,23 @@ function WidgetTabDragController(widgetContainer) {
 
 			if (targetWidget) {
 
-				console.log("targetWidget");
-				console.log(targetWidget);
-
 				const targetWidgetBoundingRectangle = targetWidget.node.getBoundingClientRect(); 
 				const x = event.clientX - targetWidgetBoundingRectangle.left;
 				const y = event.clientY - targetWidgetBoundingRectangle.top;
 
-				const newWidget = createWidgetFromDraggingTabNode();
-				targetWidget.insertWidget(newWidget, x, y);
+				controller.clonedWidgetForTab.remove();
 
-				registerWidgetMouseEventHandlers(controller.draggingTabWidget);
+				targetWidget.insertWidget(controller.clonedWidgetForTab, x, y);
+
 				registerWidgetMouseEventHandlers(targetWidget);
-				registerWidgetMouseEventHandlers(newWidget);
 
-				controller.draggingTabNode.remove();
-				controller.draggingTabNode = null;
+				controller.clonedWidgetForTab = null;
 				controller.draggingTabWidget = null;
 				controller.draggingTabIndex = null;
 			}
 
 		}, true);	
 	}
-
-	function createWidgetFromDraggingTabNode() {
-
-		const tabTitle = controller.draggingTabNode.querySelectorAll(`.widget-tabs svg g text`)[0].textContent;
-		const tabContent = controller.draggingTabNode.querySelectorAll(`.widget-content .widget-content-border div`)[0];
-
-		const width = controller.draggingTabNode.style.width;
-		const height = controller.draggingTabNode.style.height;
-
-		const newWidget = new Widget("insertedWidget", 0, 0, width, height,
-			[{
-				title: tabTitle,
-				contentNode: tabContent
-			}]
-		);
-
-		return newWidget;
-	}
-
-	function createDraggingTabNode(selectedWidget) {
-
-		if (!selectedWidget) {
-			return;
-		}
-
-		if (controller.draggingTabNode) {
-			return;
-		}
-
-		console.log("selectedWidget");
-		console.log(selectedWidget);
-
-		console.log("controller.draggingTabIndex");
-		console.log(controller.draggingTabIndex);
-
-		controller.draggingTabNode = selectedWidget.node.cloneNode(true);
-
-		console.log("draggingTabNode");
-		console.log(controller.draggingTabNode);
-
-		controller.draggingTabNode.querySelectorAll(`.widget-tabs svg .not-selected`).forEach( n => {
-			n.remove();
-		});
-
-		controller.widgetContainer.rootDiv.append(controller.draggingTabNode);
-	}
-
 }
 
 export {WidgetTabDragController};
