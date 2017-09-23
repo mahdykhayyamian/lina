@@ -17,7 +17,7 @@ const Widget = (function() {
 
 	const pointInSvgPolygon = require("point-in-svg-polygon");
 	
-	function Widget(id, left, top, width, height, tabs, widgetContainer, attachHandlers) {
+	function Widget(id, left, top, width, height, tabs, widgetContainer) {
 		this.id = id;
 		this.top = top;
 		this.left = left
@@ -26,12 +26,6 @@ const Widget = (function() {
 		this.tabs = tabs;
 		this.selectedTabIndex = 0;
 		this.widgetContainer = widgetContainer;
-
-		if (attachHandlers !== undefined) {
-			this.attachHandlers = attachHandlers;
-		} else {
-			this.attachHandlers = true;
-		}
 
 		this.node = document.createElement("div");
 		this.contentDiv = document.createElement("div");
@@ -76,10 +70,8 @@ const Widget = (function() {
 		this.contentBorderDiv.setAttribute("class", "widget-content-border");
 		this.contentDiv.appendChild(this.contentBorderDiv);
 
-		if (this.attachHandlers === true) {
-			this.addMouseUpOnWidgetHandler(mouseUpEventHandler);
-			this.addMouseMoveOnTabsHandler(mouseMoveOnTabsEventHandler);			
-		}
+		this.addMouseUpOnWidgetHandler(mouseUpEventHandler);
+		this.addMouseMoveOnTabsHandler(mouseMoveOnTabsEventHandler);			
 
 		drawTabs(this);
 
@@ -252,8 +244,7 @@ const Widget = (function() {
 				title: this.tabs[tabIndex].title,
 				contentNode: this.tabs[tabIndex].contentNode.cloneNode(true)
 			}],
-			null,
-			false
+			null
 		);
 
 		return widgetOfTab;
@@ -335,9 +326,7 @@ const Widget = (function() {
 		self.tabs[tabIndex].startX = startX;
 		self.tabs[tabIndex].startY = 0;
 
-		if (self.attachHandlers === true) {
-			addEventHandlers(self, tabIndex);
-		}
+		addEventHandlers(self, tabIndex);
 	}
 
 	function drawSelectedTab(self, tabIndex, startX) {
@@ -381,9 +370,7 @@ const Widget = (function() {
 			self.contentBorderDiv.appendChild(self.tabs[tabIndex].contentNode);
 		}		
 
-		if (self.attachHandlers === true) {
-			addEventHandlers(self, tabIndex);
-		}
+		addEventHandlers(self, tabIndex);
 	}
 
 	function getDynamicTabSize(self) {
