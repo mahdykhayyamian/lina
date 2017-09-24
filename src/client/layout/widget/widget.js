@@ -17,7 +17,7 @@ const Widget = (function() {
 
 	const pointInSvgPolygon = require("point-in-svg-polygon");
 	
-	function Widget(id, left, top, width, height, tabs, widgetContainer) {
+	function Widget(id, left, top, width, height, tabs, widgetContainer, tabsBaseXOffset) {
 		this.id = id;
 		this.top = top;
 		this.left = left
@@ -26,6 +26,8 @@ const Widget = (function() {
 		this.tabs = tabs;
 		this.selectedTabIndex = 0;
 		this.widgetContainer = widgetContainer;
+
+		this.tabsBaseXOffset = tabsBaseXOffset !== undefined ? tabsBaseXOffset : 0;
 
 		this.node = document.createElement("div");
 		this.contentDiv = document.createElement("div");
@@ -214,6 +216,7 @@ const Widget = (function() {
 		targetWidget.remove();
 		targetWidget.widgetContainer = containerNode;
 		widgetToInsert.widgetContainer = containerNode;
+		widgetToInsert.tabsBaseXOffset = 0;
 		targetWidgetContainer.children[childIndex] = containerNode;
 		containerNode.render(targetWidgetContainer.rootDiv);
 	};
@@ -244,7 +247,8 @@ const Widget = (function() {
 				title: this.tabs[tabIndex].title,
 				contentNode: this.tabs[tabIndex].contentNode.cloneNode(true)
 			}],
-			null
+			null,
+			this.tabs[tabIndex].startX
 		);
 
 		return widgetOfTab;
@@ -548,21 +552,21 @@ const Widget = (function() {
 		drawSelectedTab(self, self.selectedTabIndex, self.tabs[self.selectedTabIndex].startX, self.tabs[self.selectedTabIndex].startY);
 	}
 
-	function drawTabs(self) {
+	function drawTabs(widget) {
 
 		console.log("in drawTabs");
 
-		const tabSize = getDynamicTabSize(self);
+		const tabSize = getDynamicTabSize(widget);
 
-		for (let tabIndex=0; tabIndex < self.tabs.length; tabIndex++) {
-			if (tabIndex !== self.selectedTabIndex) {				
-				var startX = tabIndex * (tabSize - TAB_OVERLAP);
-				drawNotSelectedTab(self, tabIndex, startX);
+		for (let tabIndex=0; tabIndex < widget.tabs.length; tabIndex++) {
+			if (tabIndex !== widget.selectedTabIndex) {
+				var startX = tabIndex * (tabSize - TAB_OVERLAP) + widget.tabsBaseXOffset;
+				drawNotSelectedTab(widget, tabIndex, startX);
 			}
 		}
 
-		var startX = self.selectedTabIndex * (tabSize - TAB_OVERLAP);
-		drawSelectedTab(self, self.selectedTabIndex, startX, 0);
+		var startX = widget.selectedTabIndex * (tabSize - TAB_OVERLAP) + widget.tabsBaseXOffset;
+		drawSelectedTab(widget, widget.selectedTabIndex, startX, 0);
 	}
 
 	function getTabIndexToSwap(self) {

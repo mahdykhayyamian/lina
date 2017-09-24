@@ -105,7 +105,6 @@ function WidgetTabDragController(widgetContainer) {
 				console.log(controller.draggingTabIndex);
 				controller.draggingTabWidget.removeTab(controller.draggingTabIndex);
 			}
-
 		}, true);	
 	}
 

@@ -43,9 +43,6 @@ window.onload = function () {
 		}, {
 			title: 'Niki',
 			contentNode: createTextDiv('mish mish mikh mikh mahan!') 
-		}, {
-			title: 'Mahdy',
-			contentNode: createTextDiv('Pake paghan!')
 		}]
 	);
 
@@ -59,8 +56,10 @@ window.onload = function () {
 	const widgetC = new Widget("widgetC", 0, 0, 400, 100, 
 		[{
 			title: 'Home',
-	}]);
-
+		},{
+			title: 'Mahdy',
+			contentNode: createTextDiv('Pake paghan!')
+		}]);
 
 	const widgetD = new Widget("widgetD", 0, 100, 400, 100, 
 		[{
