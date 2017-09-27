@@ -1,4 +1,5 @@
 import {domUtils} from "../../utils/dom-utils.js";
+import {CONSTANTS} from "../constants.js";
 
 import {WidgetContainer} from "../widget-container.js";
 
@@ -17,7 +18,7 @@ const Widget = (function() {
 
 	const pointInSvgPolygon = require("point-in-svg-polygon");
 	
-	function Widget(id, left, top, width, height, tabs, widgetContainer, tabsBaseXOffset) {
+	function Widget(id, tabs, widgetContainer, left, top, width, height, tabsBaseXOffset) {
 		this.id = id;
 		this.top = top;
 		this.left = left
@@ -152,60 +153,16 @@ const Widget = (function() {
 		switch (direction) {
 
 			case DIRECTION_TOP:
-	            containerNode = new WidgetContainer(targetWidget.left, targetWidget.top, targetWidget.width, targetWidget.height, [widgetToInsert, targetWidget], targetWidget.widgetContainer);
-
-	            widgetToInsert.left = 0;
-	            widgetToInsert.top = 0;
-	            widgetToInsert.width = containerNode.width;
-	            widgetToInsert.height = containerNode.height/2;            
-
-	            targetWidget.left = 0;
-	            targetWidget.top = containerNode.height/2;
-	            targetWidget.width = containerNode.width;
-	            targetWidget.height = containerNode.height/2;
-
+	            containerNode = new WidgetContainer([widgetToInsert, targetWidget], CONSTANTS.TOP_TO_BOTTOM, targetWidget.widgetContainer, targetWidget.left, targetWidget.top, targetWidget.width, targetWidget.height);
 				break;
 			case DIRECTION_RIGHT:
-	            containerNode = new WidgetContainer(targetWidget.left, targetWidget.top, targetWidget.width, targetWidget.height, [targetWidget, widgetToInsert], targetWidget.widgetContainer);
-
-	            widgetToInsert.left = containerNode.width/2;
-	            widgetToInsert.top = 0;
-	            widgetToInsert.width = containerNode.width/2;
-	            widgetToInsert.height = containerNode.height;            
-
-	            targetWidget.left = 0;
-	            targetWidget.top = 0;
-	            targetWidget.width = containerNode.width/2;
-	            targetWidget.height = containerNode.height;
-
+	            containerNode = new WidgetContainer([targetWidget, widgetToInsert], CONSTANTS.LEFT_TO_RIGHT, targetWidget.widgetContainer, targetWidget.left, targetWidget.top, targetWidget.width, targetWidget.height);
 				break;
 			case DIRECTION_BOTTOM:
-	            containerNode = new WidgetContainer(targetWidget.left, targetWidget.top, targetWidget.width, targetWidget.height, [targetWidget, widgetToInsert], targetWidget.widgetContainer);
-
-	            widgetToInsert.left = 0;
-	            widgetToInsert.top = containerNode.height/2;
-	            widgetToInsert.width = containerNode.width;
-	            widgetToInsert.height = containerNode.height/2;
-
-	            targetWidget.left = 0;
-	            targetWidget.top = 0;
-	            targetWidget.width = containerNode.width;
-	            targetWidget.height = containerNode.height/2;
-
+	            containerNode = new WidgetContainer([targetWidget, widgetToInsert], CONSTANTS.TOP_TO_BOTTOM, targetWidget.widgetContainer, targetWidget.left, targetWidget.top, targetWidget.width, targetWidget.height);
 				break;
 			case DIRECTION_LEFT:
-	            containerNode = new WidgetContainer(targetWidget.left, targetWidget.top, targetWidget.width, targetWidget.height, [widgetToInsert, targetWidget], targetWidget.widgetContainer);
-
-	            widgetToInsert.left = 0;
-	            widgetToInsert.top = 0;
-	            widgetToInsert.width = containerNode.width / 2;
-	            widgetToInsert.height = containerNode.height;
-
-	            targetWidget.left = containerNode.width/2;
-	            targetWidget.top = 0;
-	            targetWidget.width = containerNode.width/2;
-	            targetWidget.height = containerNode.height;
-
+	            containerNode = new WidgetContainer([widgetToInsert, targetWidget], CONSTANTS.LEFT_TO_RIGHT, targetWidget.widgetContainer, targetWidget.left, targetWidget.top, targetWidget.width, targetWidget.height);
 				break;
 			default:
 				return;
@@ -242,12 +199,16 @@ const Widget = (function() {
 
 	Widget.prototype.createWidgetFromTab = function(tabIndex) {
 		
-		const widgetOfTab = new Widget(this.id + "_tab_" + tabIndex, this.left, this.top, this.width, this.height,
+		const widgetOfTab = new Widget(this.id + "_tab_" + tabIndex,
 			[{
 				title: this.tabs[tabIndex].title,
 				contentNode: this.tabs[tabIndex].contentNode.cloneNode(true)
 			}],
 			null,
+			this.left,
+			this.top,
+			this.width,
+			this.height,
 			this.tabs[tabIndex].startX
 		);
 
@@ -300,7 +261,7 @@ const Widget = (function() {
 
 
 	function drawNotSelectedTab(self, tabIndex, startX) {
-
+		
 		const tab = document.createElementNS('http://www.w3.org/2000/svg','path');
 		const tabSize = getDynamicTabSize(self);
 
