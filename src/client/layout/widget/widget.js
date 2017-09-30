@@ -44,6 +44,9 @@ const Widget = (function() {
 
 	Widget.prototype.render = function(parent) {
 
+		// first clean up from dom to start fresh
+		this.remove();
+
 		this.node.setAttribute("id", this.id);
 		this.node.setAttribute("class", "widget");
 		this.node.style.setProperty("top", this.top+"px");
@@ -73,8 +76,10 @@ const Widget = (function() {
 		this.contentBorderDiv.setAttribute("class", "widget-content-border");
 		this.contentDiv.appendChild(this.contentBorderDiv);
 
+		// event handlers
 		this.addMouseUpOnWidgetHandler(mouseUpEventHandler);
-		this.addMouseMoveOnTabsHandler(mouseMoveOnTabsEventHandler);			
+		this.addMouseMoveOnTabsHandler(mouseMoveOnTabsEventHandler);
+		//attachMouseMoveOnContentEventHandlers(this);
 
 		drawTabs(this);
 
@@ -92,6 +97,9 @@ const Widget = (function() {
     		this.node.removeChild(this.node.firstChild);
 		}
 		this.node.remove();
+
+		this.node = document.createElement("div");
+		this.contentDiv = document.createElement("div");
 	};
 
 	Widget.prototype.addMouseDownOnContentHandler = function (callback) {
@@ -194,15 +202,18 @@ const Widget = (function() {
     		this.contentBorderDiv.removeChild(this.contentBorderDiv.firstChild);
 		}
 
-		drawTabs(this);
+		if (this.tabs.length > 0) {
+			drawTabs(this);
+		}
 	};
 
 	Widget.prototype.createWidgetFromTab = function(tabIndex) {
 		
+		console.log("create widget from tab, tabIndex: " + tabIndex);
+
 		const widgetOfTab = new Widget(this.id + "_tab_" + tabIndex,
 			[{
 				title: this.tabs[tabIndex].title,
-				contentNode: this.tabs[tabIndex].contentNode.cloneNode(true)
 			}],
 			null,
 			this.left,
@@ -211,6 +222,10 @@ const Widget = (function() {
 			this.height,
 			this.tabs[tabIndex].startX
 		);
+
+		if (this.tabs[tabIndex].contentNode) {
+			widgetOfTab.tabs[0].contentNode = this.tabs[tabIndex].contentNode.cloneNode(true);
+		}
 
 		return widgetOfTab;
 	};
@@ -355,7 +370,7 @@ const Widget = (function() {
 
 	function addEventHandlers(self, tabIndex) {
 		addTabClickEventHandling(self, tabIndex);
-		addOnTabsMouseDownEventHandling(self, tabIndex);
+		attachOnTabsMouseDownEventHandlers(self, tabIndex);
 	}
 
 	function getTabClickableAreaSVGPath(self, tabIndex) {
@@ -391,7 +406,7 @@ const Widget = (function() {
 		}, false);
 	}
 
-	function addOnTabsMouseDownEventHandling(self, tabIndex) {
+	function attachOnTabsMouseDownEventHandlers(self, tabIndex) {
 
 		// internal handers
 		self.tabs[tabIndex].tabNode.addEventListener("mousedown", function(event) {
@@ -407,11 +422,19 @@ const Widget = (function() {
 		self.tabs[tabIndex].tabNode.addEventListener("mousedown", (event) => {
 			for (let i=0; i<self.eventHandlers.mouseDownOnTabsHandlers.length; i++) {
 				let callback = self.eventHandlers.mouseDownOnTabsHandlers[i];
-				console.log(callback);
 				callback(event, self, tabIndex);
 			}
 		}, true);
 	}
+
+	// function attachMouseMoveOnContentEventHandlers(widget) {			
+	// 	widget.contentDiv.addEventListener("mousemove", (event) => {
+	// 		for (let i=0; i<widget.eventHandlers.mouseDownOnContentHandlers.length; i++) {
+	// 			let callback = widget.eventHandlers.mouseDownOnContentHandlers[i];
+	// 			callback(event, widget);
+	// 		}
+	// 	}, true);
+	// }
 
 	function mouseMoveOnTabsEventHandler(event, widget) {
 

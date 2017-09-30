@@ -32,11 +32,6 @@ function WidgetTabDragController(widgetContainer) {
 		console.log("widget :");
 		console.log(widget);
 
-		// don't allow dragging a widget with one tab (for now)
-		if (widget.tabs.length === 1) {
-			return;
-		}
-
 		if (widget.draggingTabIndex === undefined) {
 			return;
 		}
@@ -104,6 +99,23 @@ function WidgetTabDragController(widgetContainer) {
 				console.log("removing dragging tab");
 				console.log(controller.draggingTabIndex);
 				controller.draggingTabWidget.removeTab(controller.draggingTabIndex);
+
+				// if dragged tab is the only remainig tab, remove the whole widget and re-render parent
+				if (controller.draggingTabWidget.tabs.length == 0) {
+
+					for (let i=0; i<controller.draggingTabWidget.widgetContainer.children.length; i++) {
+						if (controller.draggingTabWidget.widgetContainer.children[i] == controller.draggingTabWidget) {
+							controller.draggingTabWidget.widgetContainer.children.splice(i,1);
+							break;
+						}
+					}
+
+					controller.draggingTabWidget.remove();
+					controller.draggingTabWidget.widgetContainer.remove();
+
+					controller.draggingTabWidget.widgetContainer.render(controller.draggingTabWidget.widgetContainer.parentWidgetContainer.rootDiv);	
+				}
+
 			}
 		}, true);	
 	}

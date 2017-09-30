@@ -36,7 +36,7 @@ WidgetContainer.prototype.render = function(parent) {
 }
 
 WidgetContainer.prototype.remove = function(parent) {
-	this.rootDive.remove();
+	this.rootDiv.remove();
 	this.rootDiv = document.createElement("div");
 }
 

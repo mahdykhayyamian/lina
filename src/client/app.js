@@ -60,6 +60,9 @@ window.onload = function () {
 	widgetC.widgetContainer = widgetContainer1;
 	widgetD.widgetContainer = widgetContainer1;
 
+	widgetContainer2.parentWidgetContainer = widgetContainer3;
+	widgetContainer1.parentWidgetContainer = widgetContainer2;
+
 	widgetContainer3.render(appDiv);
 
 	const widgetTabDragController = new WidgetTabDragController(widgetContainer3);
