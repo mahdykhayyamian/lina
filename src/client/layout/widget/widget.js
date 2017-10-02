@@ -110,12 +110,8 @@ const Widget = (function() {
 	};
 
 	Widget.prototype.addMouseUpOnWidgetHandler = function (callback) {
-		console.log("register widget mouseup");
-
 		this.eventHandlers.mouseUpOnWidgetHandlers.push(callback);
 		this.node.addEventListener("mouseup", (event) => {
-			console.log("mouse up this:");
-			console.log(this);
 			callback(event, this);
 		}, true);	
 	};
@@ -135,7 +131,6 @@ const Widget = (function() {
 	};
 
 	Widget.prototype.addMouseDownOnTabsHandler = function (callback) {
-		console.log("addMouseDownOnTabsHandler");
 		this.eventHandlers.mouseDownOnTabsHandlers.push(callback);
 		for (let i=0; i < this.tabs.length; i++) {
 			this.tabs[i].tabNode.addEventListener("mousedown", (event) => {
@@ -176,8 +171,6 @@ const Widget = (function() {
 				return;
 		}
 
-		console.log(targetWidget.node);
-
 		targetWidget.remove();
 		targetWidget.widgetContainer = containerNode;
 		widgetToInsert.widgetContainer = containerNode;
@@ -209,8 +202,6 @@ const Widget = (function() {
 
 	Widget.prototype.createWidgetFromTab = function(tabIndex) {
 		
-		console.log("create widget from tab, tabIndex: " + tabIndex);
-
 		const widgetOfTab = new Widget(this.id + "_tab_" + tabIndex,
 			[{
 				title: this.tabs[tabIndex].title,
@@ -227,11 +218,12 @@ const Widget = (function() {
 			widgetOfTab.tabs[0].contentNode = this.tabs[tabIndex].contentNode.cloneNode(true);
 		}
 
+		widgetOfTab.eventHandlers = this.eventHandlers;
+
 		return widgetOfTab;
 	};
 
 	function determineDirectonToInsert(widget, x, y) {
-		console.log("x = " + x + ", y=" + y);
 		const distToLeft = Math.abs(x);
 		const distToRight = Math.abs(widget.width - x);
 		const distToTop = Math.abs(y);
@@ -410,7 +402,6 @@ const Widget = (function() {
 
 		// internal handers
 		self.tabs[tabIndex].tabNode.addEventListener("mousedown", function(event) {
-			console.log('drag started on tab #' + tabIndex);
 			self.draggingTabIndex = tabIndex;
 			self.tabs[tabIndex].drag = {
 				mouseX: event.x,
@@ -466,11 +457,6 @@ const Widget = (function() {
 
 	function mouseUpEventHandler(event, widget) {
 
-		console.log("in widget mouseUpEventHandler");
-		console.log(widget);
-		console.log(widget.draggingTabIndex);
-		console.log("widget.draggingTabIndex : " + widget.draggingTabIndex);
-
 		if (widget.draggingTabIndex !== undefined) {
 
 			widget.tabs[widget.draggingTabIndex].tabNode.remove();
@@ -517,8 +503,6 @@ const Widget = (function() {
 
 	function updateSelectedTabTo(self, tabIndex) {
 
-		console.log("updateSelectedTabTo called");
-
 		if (tabIndex === self.selectedTabIndex) {
 			return;
 		}
@@ -537,8 +521,6 @@ const Widget = (function() {
 	}
 
 	function drawTabs(widget) {
-
-		console.log("in drawTabs");
 
 		const tabSize = getDynamicTabSize(widget);
 
@@ -569,16 +551,16 @@ const Widget = (function() {
 		return undefined;
 	}
 
-	function isValidTabIndex(self, tabIndex) {
-		if (tabIndex >= 0 && tabIndex < self.tabs.length) {
+	function isValidTabIndex(widget, tabIndex) {
+		if (tabIndex >= 0 && tabIndex < widget.tabs.length) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	function getMiddleXOfTab(self, tabIndex) {
-		return (self.tabs[tabIndex].startX + getDynamicTabSize(self)/2); 
+	function getMiddleXOfTab(widget, tabIndex) {
+		return (widget.tabs[tabIndex].startX + getDynamicTabSize(widget)/2); 
 	}
 
 	return Widget;

@@ -53,8 +53,6 @@ WidgetContainer.prototype.toWidgetArray = function() {
 	}
 
 	for (let i=0; i<this.children.length; i++) {
-		console.log("children i");
-		console.log(this.children[i]);
 
 		if (Widget.prototype.isPrototypeOf(this.children[i])) {
 			widgets = widgets.concat(this.children[i]);	
