@@ -79,7 +79,7 @@ const Widget = (function() {
 		// event handlers
 		this.addMouseUpOnWidgetHandler(mouseUpEventHandler);
 		this.addMouseMoveOnTabsHandler(mouseMoveOnTabsEventHandler);
-		//attachMouseMoveOnContentEventHandlers(this);
+		attachMouseMoveOnContentEventHandlers(this);
 
 		drawTabs(this);
 
@@ -418,14 +418,14 @@ const Widget = (function() {
 		}, true);
 	}
 
-	// function attachMouseMoveOnContentEventHandlers(widget) {			
-	// 	widget.contentDiv.addEventListener("mousemove", (event) => {
-	// 		for (let i=0; i<widget.eventHandlers.mouseDownOnContentHandlers.length; i++) {
-	// 			let callback = widget.eventHandlers.mouseDownOnContentHandlers[i];
-	// 			callback(event, widget);
-	// 		}
-	// 	}, true);
-	// }
+	function attachMouseMoveOnContentEventHandlers(widget) {			
+		widget.contentDiv.addEventListener("mousemove", (event) => {
+			for (let i=0; i<widget.eventHandlers.mouseMoveOnContentHandlers.length; i++) {
+				let callback = widget.eventHandlers.mouseMoveOnContentHandlers[i];
+				callback(event, widget);
+			}
+		}, true);
+	}
 
 	function mouseMoveOnTabsEventHandler(event, widget) {
 

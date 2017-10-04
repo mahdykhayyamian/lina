@@ -15,6 +15,7 @@ function WidgetTabDragController(widgetContainer) {
 	}
 
 	function onWidgetContentMouseMoveHandler(mouseEvent, widget) {
+		
 		if (widget.draggingTabIndex === undefined) {
 			return;
 		}
