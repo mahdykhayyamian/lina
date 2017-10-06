@@ -63,6 +63,7 @@ const Widget = (function() {
 
 		this.tabsSVG = document.createElementNS('http://www.w3.org/2000/svg','svg');
 		this.tabsSVG.style.setProperty("width", this.width+"px");
+		this.tabsSVG.style.setProperty("height", TAB_HEIGHT+"px");
 
 		this.tabsDiv.appendChild(this.tabsSVG);
 		this.node.appendChild(this.tabsDiv);
