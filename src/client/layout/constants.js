@@ -1,0 +1,6 @@
+const CONSTANTS = {
+    LEFT_TO_RIGHT: "LEFT_TO_RIGHT",
+    TOP_TO_BOTTOM: "TOP_TO_BOTTOM"
+}
+
+export { CONSTANTS };
