@@ -5,7 +5,7 @@ var PROD = JSON.parse(process.env.PROD_ENV || '0');
 module.exports = {
 	entry: "./src/client/app.js",
 	output: {
-		path: "./temp",
+		path: "/Users/khaymahd/workspace/pet/lina/temp",
 		filename: 'bundle.js'
 	},
 	module: {
