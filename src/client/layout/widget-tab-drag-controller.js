@@ -13,22 +13,33 @@ function WidgetTabDragController(widgetContainer) {
         controller.selectedWidget = undefined;
     }
 
-    function onWidgetContentMouseMoveHandler(mouseEvent, widget) {
+    function getDraggingTabInfo() {
 
-        if (widget.draggingTabIndex === undefined) {
-            return;
+        const widgets = controller.widgetContainer.toWidgetArray();
+
+        for (let i = 0; i < widgets.length; i++) {
+            const widget = widgets[i];
+
+            if (widget.draggingTabIndex !== undefined) {
+                return {
+                    "widget": widget,
+                    "tabIndex": widget.draggingTabIndex
+                }
+            }
         }
 
-        controller.draggingTabWidget = widget;
-        controller.draggingTabIndex = widget.draggingTabIndex;
-        widget.draggingTabIndex = undefined;
+        return null;
+    }
 
-        const widgetBoundingRectangle = controller.draggingTabWidget.node.getBoundingClientRect();
+    function isMouseOverWidgetTabs(widget, mouseEvent) {
+        const widgetTabsBoundingRectangle = widget.tabsDiv.getBoundingClientRect();
 
-        controller.selectedTabDragPositionOffset = {
-            x: event.x - widgetBoundingRectangle.left,
-            y: event.y - widgetBoundingRectangle.top
+        if (mouseEvent.x <= widgetTabsBoundingRectangle.right && mouseEvent.x >= widgetTabsBoundingRectangle.left &&
+            mouseEvent.y >= widgetTabsBoundingRectangle.top && mouseEvent.y <= widgetTabsBoundingRectangle.bottom) {
+            return true;
         }
+
+        return false;
     }
 
     function registerWidgetsMouseEventHandlers() {
@@ -43,48 +54,56 @@ function WidgetTabDragController(widgetContainer) {
 
     function registerWidgetMouseEventHandlers(widget) {
         widget.addMouseUpOnWidgetHandler(onMouseUpHandler);
-        widget.addMouseMoveOnContentHandler(onWidgetContentMouseMoveHandler);
     }
 
     function registerWidgetContainerMouseMoveHandler() {
         controller.widgetContainer.rootDiv.addEventListener("mousemove", (event) => {
 
-            if (!controller.draggingTabWidget) {
-                return;
-            }
-
-            const widgetContainerBoundingRectangle = controller.widgetContainer.rootDiv.getBoundingClientRect();
-
-            const x = (event.clientX - widgetContainerBoundingRectangle.left) - controller.selectedTabDragPositionOffset.x;
-            const y = (event.clientY - widgetContainerBoundingRectangle.top) - controller.selectedTabDragPositionOffset.y;
-
+            // if there is already a dragging widget for the dragged tab
             if (controller.clonedWidgetForTab) {
+                const widgetContainerBoundingRectangle = controller.widgetContainer.rootDiv.getBoundingClientRect();
+                const x = (event.clientX - widgetContainerBoundingRectangle.left) - controller.draggingStartPositionRelativeToWidget.x;
+                const y = (event.clientY - widgetContainerBoundingRectangle.top) - controller.draggingStartPositionRelativeToWidget.y;
+
                 controller.clonedWidgetForTab.node.style.setProperty("left", x + "px");
                 controller.clonedWidgetForTab.node.style.setProperty("top", y + "px");
             } else {
-                controller.clonedWidgetForTab = controller.draggingTabWidget.createWidgetFromTab(controller.draggingTabIndex);
-                controller.clonedWidgetForTab.render(controller.widgetContainer.rootDiv);
+                const draggingTabInfo = getDraggingTabInfo();
 
-                controller.draggingTabWidget.removeTab(controller.draggingTabIndex);
-
-                // if dragged tab is the only remainig tab, remove the whole widget and re-render parent
-                if (controller.draggingTabWidget.tabs.length == 0) {
-
-                    for (let i = 0; i < controller.draggingTabWidget.widgetContainer.children.length; i++) {
-                        if (controller.draggingTabWidget.widgetContainer.children[i] == controller.draggingTabWidget) {
-                            controller.draggingTabWidget.widgetContainer.children.splice(i, 1);
-                            break;
-                        }
-                    }
-
-                    controller.draggingTabWidget.remove();
-                    controller.draggingTabWidget.widgetContainer.remove();
-
-                    controller.draggingTabWidget.widgetContainer.render(controller.draggingTabWidget.widgetContainer.parentWidgetContainer.rootDiv);
+                if (draggingTabInfo == null) {
+                    return;
                 }
 
+                controller.draggingTabSourceWidget = draggingTabInfo.widget;
+                if (isMouseOverWidgetTabs(controller.draggingTabSourceWidget, event)) {
+                    console.log("dragging inside widget will be handled by widget itself, returning..");
+                    return;
+                }
+
+                controller.draggingStartPositionRelativeToWidget = draggingTabInfo.widget.draggingStartPositionRelativeToWidget;
+                controller.clonedWidgetForTab = controller.draggingTabSourceWidget.createWidgetFromTab(draggingTabInfo.tabIndex);
+                controller.clonedWidgetForTab.render(controller.widgetContainer.rootDiv);
+                controller.draggingTabSourceWidget.removeTab(draggingTabInfo.tabIndex);
+
+                // if dragged tab is the only remainig tab, remove the whole widget and re-render parent
+                if (controller.draggingTabSourceWidget.tabs.length == 0) {
+                    removeSourceWidget();
+                }
             }
         }, true);
+    }
+
+    function removeSourceWidget() {
+        for (let i = 0; i < controller.draggingTabSourceWidget.widgetContainer.children.length; i++) {
+            if (controller.draggingTabSourceWidget.widgetContainer.children[i] == controller.draggingTabSourceWidget) {
+                controller.draggingTabSourceWidget.widgetContainer.children.splice(i, 1);
+                break;
+            }
+        }
+
+        controller.draggingTabSourceWidget.remove();
+        controller.draggingTabSourceWidget.widgetContainer.remove();
+        controller.draggingTabSourceWidget.widgetContainer.render(controller.draggingTabSourceWidget.widgetContainer.parentWidgetContainer.rootDiv);
     }
 
     function registerWidgetContainerMouseUpHandler() {
@@ -109,8 +128,10 @@ function WidgetTabDragController(widgetContainer) {
                 registerWidgetMouseEventHandlers(targetWidget);
 
                 controller.clonedWidgetForTab = null;
-                controller.draggingTabWidget = null;
-                controller.draggingTabIndex = null;
+
+                if (controller.draggingTabSourceWidget) {
+                    controller.draggingTabSourceWidget.draggingTabIndex = undefined;
+                }
             }
 
         }, true);

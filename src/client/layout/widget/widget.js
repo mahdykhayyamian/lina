@@ -376,22 +376,29 @@ const Widget = (function() {
         return path;
     }
 
-    function attachOnTabsMouseDownEventHandlers(self, tabIndex) {
+    function attachOnTabsMouseDownEventHandlers(widget, tabIndex) {
 
         // internal handers
-        self.tabs[tabIndex].tabNode.addEventListener("mousedown", function(event) {
-            self.draggingTabIndex = tabIndex;
-            self.tabs[tabIndex].drag = {
+        widget.tabs[tabIndex].tabNode.addEventListener("mousedown", function(event) {
+            widget.draggingTabIndex = tabIndex;
+
+            const widgetBoundingRectangle = widget.node.getBoundingClientRect();
+            widget.draggingStartPositionRelativeToWidget = {
+                x: event.x - widgetBoundingRectangle.left,
+                y: event.y - widgetBoundingRectangle.top
+            }
+
+            widget.tabs[tabIndex].drag = {
                 mouseX: event.x,
                 mouseY: event.y
             }
         }, true);
 
         // passed in handlers
-        self.tabs[tabIndex].tabNode.addEventListener("mousedown", (event) => {
-            for (let i = 0; i < self.eventHandlers.mouseDownOnTabsHandlers.length; i++) {
-                let callback = self.eventHandlers.mouseDownOnTabsHandlers[i];
-                callback(event, self, tabIndex);
+        widget.tabs[tabIndex].tabNode.addEventListener("mousedown", (event) => {
+            for (let i = 0; i < widget.eventHandlers.mouseDownOnTabsHandlers.length; i++) {
+                let callback = widget.eventHandlers.mouseDownOnTabsHandlers[i];
+                callback(event, widget, tabIndex);
             }
         }, true);
     }
@@ -443,6 +450,7 @@ const Widget = (function() {
 
             updateSelectedTabTo(widget, widget.draggingTabIndex);
             widget.draggingTabIndex = undefined;
+            widget.draggingStartPositionRelativeToWidget = null;
         }
     }
 
