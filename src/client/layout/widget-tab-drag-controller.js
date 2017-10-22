@@ -138,7 +138,7 @@ function WidgetTabDragController(widgetContainer) {
 
             if (targetWidget) {
 
-                const targetWidgetBoundingRectangle = targetWidget.node.getBoundingClientRect();
+                const targetWidgetBoundingRectangle = targetWidget.contentDiv.getBoundingClientRect();
                 const x = event.clientX - targetWidgetBoundingRectangle.left;
                 const y = event.clientY - targetWidgetBoundingRectangle.top;
 
