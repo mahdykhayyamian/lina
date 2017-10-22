@@ -67,6 +67,18 @@ function WidgetTabDragController(widgetContainer) {
 
                 controller.clonedWidgetForTab.node.style.setProperty("left", x + "px");
                 controller.clonedWidgetForTab.node.style.setProperty("top", y + "px");
+
+                // add overlay to potential dragging target position
+                const targetWidget = controller.widgetContainer.getWidgetFromPoint(event.clientX, event.clientY);
+                removeAllWidgetsOverlays();
+                if (targetWidget) {
+                    const targetWidgetBoundingRectangle = targetWidget.node.getBoundingClientRect();
+                    const x = event.clientX - targetWidgetBoundingRectangle.left;
+                    const y = event.clientY - targetWidgetBoundingRectangle.top;
+
+                    const direction = targetWidget.determineDirectonToInsert(x, y);
+                    targetWidget.addOverlay(direction);
+                }
             } else {
                 const draggingTabInfo = getDraggingTabInfo();
 
@@ -92,6 +104,15 @@ function WidgetTabDragController(widgetContainer) {
             }
         }, true);
     }
+
+    function removeAllWidgetsOverlays() {
+        const widgets = controller.widgetContainer.toWidgetArray();
+        for (let i = 0; i < widgets.length; i++) {
+            const widget = widgets[i];
+            widget.removeOverlay();
+        }
+    }
+
 
     function removeSourceWidget() {
         for (let i = 0; i < controller.draggingTabSourceWidget.widgetContainer.children.length; i++) {

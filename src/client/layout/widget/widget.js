@@ -140,7 +140,7 @@ const Widget = (function() {
             return;
         }
 
-        const direction = determineDirectonToInsert(targetWidget, x, y);
+        const direction = targetWidget.determineDirectonToInsert(x, y);
 
         let childIndex, containerNode, targetWidgetContainer;
 
@@ -216,11 +216,84 @@ const Widget = (function() {
         return widgetOfTab;
     };
 
-    function determineDirectonToInsert(widget, x, y) {
+    Widget.prototype.addOverlay = function(direction) {
+
+        console.log("direction : " + direction);
+
+        const height = this.height - TAB_HEIGHT;
+        const width = this.width;
+        const left = this.left + WIDGET_PADDING
+        const top = TAB_HEIGHT + WIDGET_PADDING;
+
+        switch (direction) {
+            case (DIRECTION_TOP):
+                addOverlayTop(this);
+                break;
+            case (DIRECTION_RIGHT):
+                addOverlayRight(this);
+                break;
+            case (DIRECTION_BOTTOM):
+                addOverlayBottom(this);
+                break;
+            case (DIRECTION_LEFT):
+                addOverlayLeft(this);
+                break;
+        }
+
+        this.overlayDiv.setAttribute("class", "drag-target-widget-overlay");
+        this.contentDiv.parentNode.appendChild(this.overlayDiv);
+
+        function addOverlayTop(widget) {
+            console.log("in addOverlayTop");
+            widget.overlayDiv = document.createElement("div");
+            widget.overlayDiv.style.setProperty("width", width + "px");
+            widget.overlayDiv.style.setProperty("height", (height / 2) + "px");
+            widget.overlayDiv.style.setProperty("left", left + "px");
+            widget.overlayDiv.style.setProperty("top", top + "px");
+        }
+
+        function addOverlayRight(widget) {
+            console.log("in addOverlayRight");
+            widget.overlayDiv = document.createElement("div");
+            widget.overlayDiv.style.setProperty("width", (width / 2) + "px");
+            widget.overlayDiv.style.setProperty("height", height + "px");
+            widget.overlayDiv.style.setProperty("left", (left + (width / 2)) + "px");
+            widget.overlayDiv.style.setProperty("top", top + "px");
+        }
+
+        function addOverlayBottom(widget) {
+            console.log("in addOverlayBottom");
+            widget.overlayDiv = document.createElement("div");
+            widget.overlayDiv.style.setProperty("width", width + "px");
+            widget.overlayDiv.style.setProperty("height", (height / 2) + "px");
+            widget.overlayDiv.style.setProperty("left", left + "px");
+            widget.overlayDiv.style.setProperty("top", top + (height / 2) + "px");
+            console.log(widget.overlayDiv);
+        }
+
+        function addOverlayLeft(widget) {
+            console.log("in addOverlayLeft");
+            widget.overlayDiv = document.createElement("div");
+            widget.overlayDiv.style.setProperty("width", (width / 2) + "px");
+            widget.overlayDiv.style.setProperty("height", height + "px");
+            widget.overlayDiv.style.setProperty("left", left + "px");
+            widget.overlayDiv.style.setProperty("top", top + "px");
+        }
+    };
+
+    Widget.prototype.removeOverlay = function() {
+        if (this.overlayDiv) {
+            this.overlayDiv.remove();
+            this.overlayDiv = undefined;
+        }
+    };
+
+    Widget.prototype.determineDirectonToInsert = function(x, y) {
+
         const distToLeft = Math.abs(x);
-        const distToRight = Math.abs(widget.width - x);
+        const distToRight = Math.abs(this.width - x);
         const distToTop = Math.abs(y);
-        const distToBottom = Math.abs(widget.height - y);
+        const distToBottom = Math.abs(this.height - y);
 
         const distances = [distToLeft, distToRight, distToTop, distToBottom];
 
@@ -238,7 +311,7 @@ const Widget = (function() {
             default:
                 return null;
         }
-    }
+    };
 
     function findMyChildIndex(widget) {
 
