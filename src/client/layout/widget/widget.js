@@ -5,7 +5,7 @@ import { WidgetContainer } from "../widget-container.js";
 
 const Widget = (function() {
 
-    const TAB_HEIGHT = 23;
+    const TAB_HEIGHT = 22;
     const TAB_OVERLAP = 5;
     const TAB_HORIZONTAL_SIDE_LENGTH = 8;
     const WIDGET_MARGIN = 10;
