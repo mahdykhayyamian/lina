@@ -24,6 +24,12 @@ window.onload = function () {
 		}, {
 			title: 'Niki',
 			contentNode: createTextDiv('mish mish mikh mikh mahan!') 
+		},{
+			title: 'Lina',
+			contentNode: createTextDiv('Hashem!')
+		},{
+			title: 'Mashmash',
+			contentNode: createTextDiv('Mashmash!')
 		}]
 	);
 
@@ -31,8 +37,10 @@ window.onload = function () {
 		[{
 			title: 'Lina',
 			contentNode: createTextDiv('Hashem!')
-		}]
-	);
+		},{
+			title: 'Mehrkish',
+			contentNode: createTextDiv('Mehrkish!')
+		}]);
 
 	const widgetC = new Widget("widgetC", 
 		[{

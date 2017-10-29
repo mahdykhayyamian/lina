@@ -16,8 +16,8 @@
     vertical-align: middle;
     text-align: center;
     border: solid;
-    border-color: #efefef;
-    border-width: 3px;
+    border-color: #f2f2f2;
+    border-width: 2px;
 }
 
 .tabs-outline path {
@@ -33,6 +33,7 @@
 
 .widget-tabs {
     cursor: default;
+    background-color: #f2f2f2;
 }
 
 .widget-tabs text {

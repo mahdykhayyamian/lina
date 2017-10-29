@@ -70,6 +70,7 @@ WidgetContainer.prototype.getWidgetFromPoint = function(clientX, clientY) {
     for (let i = 0; i < widgets.length; i++) {
         const widget = widgets[i];
         const widgetBoundingRectangle = widget.node.getBoundingClientRect();
+
         if ((clientX >= widgetBoundingRectangle.left && clientX <= widgetBoundingRectangle.right) && (clientY >= widgetBoundingRectangle.top && clientY <= widgetBoundingRectangle.bottom)) {
             return widget;
         }
@@ -77,7 +78,6 @@ WidgetContainer.prototype.getWidgetFromPoint = function(clientX, clientY) {
 
     return null;
 }
-
 
 function sizeAndPositionChildren(widgetContainer) {
 

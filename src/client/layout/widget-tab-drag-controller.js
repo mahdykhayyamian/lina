@@ -151,6 +151,7 @@ function WidgetTabDragController(widgetContainer) {
             }
 
             const targetWidget = controller.widgetContainer.getWidgetFromPoint(event.clientX, event.clientY);
+
             if (targetWidget) {
 
                 const targetWidgetBoundingRectangle = targetWidget.contentDiv.getBoundingClientRect();
@@ -160,7 +161,6 @@ function WidgetTabDragController(widgetContainer) {
                 controller.clonedWidgetForTab.remove();
 
                 if (isMouseOverWidgetTabs(targetWidget, event)) {
-                    console.log("dragging to the tabs part of the widget....");
                     targetWidget.removeOverlay();
                     targetWidget.insertTab(controller.clonedWidgetForTab.tabs[0], x);
                 } else {

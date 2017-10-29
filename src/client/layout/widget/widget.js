@@ -5,10 +5,9 @@ import { WidgetContainer } from "../widget-container.js";
 
 const Widget = (function() {
 
-    const TAB_HEIGHT = 25;
+    const TAB_HEIGHT = 23;
     const TAB_OVERLAP = 5;
     const TAB_HORIZONTAL_SIDE_LENGTH = 8;
-    const WIDGET_PADDING = 10;
     const WIDGET_MARGIN = 10;
 
     const DIRECTION_TOP = "DIRECTION_TOP";
@@ -52,7 +51,6 @@ const Widget = (function() {
         this.node.style.setProperty("left", this.left + "px");
         this.node.style.setProperty("width", this.width + "px");
         this.node.style.setProperty("height", this.height + "px");
-        this.node.style.setProperty("padding", WIDGET_PADDING + "px");
         this.node.style.setProperty("margin", WIDGET_MARGIN + "px");
 
         this.tabsDiv = document.createElement("div");
@@ -220,8 +218,8 @@ const Widget = (function() {
 
         const height = this.height - TAB_HEIGHT;
         const width = this.width;
-        const left = this.left + WIDGET_PADDING
-        const top = TAB_HEIGHT + WIDGET_PADDING;
+        const left = this.left;
+        const top = TAB_HEIGHT;
 
         switch (overlayType) {
             case (DIRECTION_TOP):
