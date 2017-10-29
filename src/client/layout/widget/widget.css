@@ -1,51 +1,67 @@
 .widget {
-	position: absolute;
+    position: absolute;
 }
 
 .widget-container {
-	position: absolute;
+    position: absolute;
 }
 
 .widget-content {
-	position: absolute;
+    position: absolute;
     display: table;
 }
 
 .widget-content-border {
-	display: table-cell;
+    display: table-cell;
     vertical-align: middle;
-    text-align:center;
-    border:solid;
-    border-color:#efefef;
+    text-align: center;
+    border: solid;
+    border-color: #efefef;
     border-width: 3px;
 }
 
 .tabs-outline path {
-	stroke: black;
-	stroke-width: 0.2px;
-	fill: lightgrey;
+    stroke: black;
+    stroke-width: 0.2px;
+    fill: lightgrey;
 }
 
 .tabs-outline.selected path {
-	fill: #efefef;
-	stroke-width: 0.3px;
+    fill: #efefef;
+    stroke-width: 0.3px;
 }
 
 .widget-tabs {
-	cursor: default;
+    cursor: default;
 }
 
 .widget-tabs text {
-	font-size: 10px;
-	font-family: monospace;
+    font-size: 10px;
+    font-family: monospace;
 }
 
 .drag-target-widget-overlay {
-	background-color: green;
-	opacity: 0.5;
-	position:absolute;
-	display: table;
-	border-style: dashed;
-	border-width: 1px;
-	border-color: black;
+    background-color: green;
+    opacity: 0.4;
+    position: absolute;
+    display: table;
+    border-style: dashed;
+    border-width: 1px;
+    border-color: black;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
 }

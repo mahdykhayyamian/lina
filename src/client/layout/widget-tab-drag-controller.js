@@ -1,4 +1,5 @@
 import { Widget } from "../layout/widget/widget.js";
+import { CONSTANTS } from "./constants.js";
 
 function WidgetTabDragController(widgetContainer) {
 
@@ -69,16 +70,7 @@ function WidgetTabDragController(widgetContainer) {
                 controller.clonedWidgetForTab.node.style.setProperty("top", y + "px");
 
                 // add overlay to potential dragging target position
-                const targetWidget = controller.widgetContainer.getWidgetFromPoint(event.clientX, event.clientY);
-                removeAllWidgetsOverlays();
-                if (targetWidget) {
-                    const targetWidgetBoundingRectangle = targetWidget.node.getBoundingClientRect();
-                    const x = event.clientX - targetWidgetBoundingRectangle.left;
-                    const y = event.clientY - targetWidgetBoundingRectangle.top;
-
-                    const direction = targetWidget.determineDirectonToInsert(x, y);
-                    targetWidget.addOverlay(direction);
-                }
+                addOverLayToWidgetForPotentialDroppingPosition(event);
             } else {
                 const draggingTabInfo = getDraggingTabInfo();
 
@@ -105,14 +97,38 @@ function WidgetTabDragController(widgetContainer) {
         }, true);
     }
 
-    function removeAllWidgetsOverlays() {
-        const widgets = controller.widgetContainer.toWidgetArray();
-        for (let i = 0; i < widgets.length; i++) {
-            const widget = widgets[i];
-            widget.removeOverlay();
+    function addOverLayToWidgetForPotentialDroppingPosition(event) {
+
+        const x = event.clientX;
+        const y = event.clientY;
+
+        const targetWidget = controller.widgetContainer.getWidgetFromPoint(event.clientX, event.clientY);
+
+        removeAllWidgetsOverlays();
+
+        if (targetWidget) {
+            const targetWidgetBoundingRectangle = targetWidget.contentDiv.getBoundingClientRect();
+            const x = event.clientX - targetWidgetBoundingRectangle.left;
+            const y = event.clientY - targetWidgetBoundingRectangle.top;
+
+            let overlayType;
+            if (isMouseOverWidgetTabs(targetWidget, event)) {
+                overlayType = CONSTANTS.FULL_OVERLAY;
+            } else {
+                overlayType = targetWidget.determineDirectonToInsert(x, y);
+            }
+
+            targetWidget.addOverlay(overlayType);
+        }
+
+        function removeAllWidgetsOverlays() {
+            const widgets = controller.widgetContainer.toWidgetArray();
+            for (let i = 0; i < widgets.length; i++) {
+                const widget = widgets[i];
+                widget.removeOverlay();
+            }
         }
     }
-
 
     function removeSourceWidget() {
         for (let i = 0; i < controller.draggingTabSourceWidget.widgetContainer.children.length; i++) {
@@ -135,7 +151,6 @@ function WidgetTabDragController(widgetContainer) {
             }
 
             const targetWidget = controller.widgetContainer.getWidgetFromPoint(event.clientX, event.clientY);
-
             if (targetWidget) {
 
                 const targetWidgetBoundingRectangle = targetWidget.contentDiv.getBoundingClientRect();
@@ -144,10 +159,15 @@ function WidgetTabDragController(widgetContainer) {
 
                 controller.clonedWidgetForTab.remove();
 
-                targetWidget.insertWidget(controller.clonedWidgetForTab, x, y);
+                if (isMouseOverWidgetTabs(targetWidget, event)) {
+                    console.log("dragging to the tabs part of the widget....");
+                    targetWidget.removeOverlay();
+                    targetWidget.insertTab(controller.clonedWidgetForTab.tabs[0], x);
+                } else {
+                    targetWidget.insertWidget(controller.clonedWidgetForTab, x, y);
+                }
 
                 registerWidgetMouseEventHandlers(targetWidget);
-
                 controller.clonedWidgetForTab = null;
 
                 if (controller.draggingTabSourceWidget) {
