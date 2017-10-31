@@ -218,7 +218,7 @@ const Widget = (function() {
 
         const height = this.height - TAB_HEIGHT;
         const width = this.width;
-        const left = this.left;
+        const left = 0;
         const top = TAB_HEIGHT;
 
         switch (overlayType) {

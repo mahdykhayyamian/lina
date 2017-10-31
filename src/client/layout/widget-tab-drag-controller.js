@@ -107,6 +107,7 @@ function WidgetTabDragController(widgetContainer) {
         removeAllWidgetsOverlays();
 
         if (targetWidget) {
+
             const targetWidgetBoundingRectangle = targetWidget.contentDiv.getBoundingClientRect();
             const x = event.clientX - targetWidgetBoundingRectangle.left;
             const y = event.clientY - targetWidgetBoundingRectangle.top;

@@ -16,7 +16,7 @@
     vertical-align: middle;
     text-align: center;
     border: solid;
-    border-color: #f2f2f2;
+    border-color: #f2f4f5;
     border-width: 2px;
 }
 
@@ -33,7 +33,7 @@
 
 .widget-tabs {
     cursor: default;
-    background-color: #f2f2f2;
+    background-color: #f2f4f5 ;
 }
 
 .widget-tabs text {
