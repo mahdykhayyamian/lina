@@ -351,6 +351,14 @@ const Widget = (function() {
         updateSelectedTabTo(this, tabIndex);
     };
 
+    Widget.prototype.makeContentNonSelectable = function() {
+        this.contentDiv.classList.add("noselect");
+    };
+
+    Widget.prototype.makeContentSelectable = function() {
+        this.contentDiv.classList.remove("noselect");
+    };
+
     function findMyChildIndex(widget) {
 
         if (!widget.widgetContainer) {

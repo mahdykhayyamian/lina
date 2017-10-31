@@ -79,6 +79,14 @@ WidgetContainer.prototype.getWidgetFromPoint = function(clientX, clientY) {
     return null;
 }
 
+WidgetContainer.prototype.makeContentNonSelectable = function() {
+    this.toWidgetArray().map( widget => widget.makeContentNonSelectable());
+};
+
+WidgetContainer.prototype.makeContentSelectable = function() {
+    this.toWidgetArray().map( widget => widget.makeContentSelectable());
+};
+
 function sizeAndPositionChildren(widgetContainer) {
 
     if (widgetContainer.direction === CONSTANTS.LEFT_TO_RIGHT) {

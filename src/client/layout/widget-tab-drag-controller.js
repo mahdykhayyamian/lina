@@ -89,6 +89,9 @@ function WidgetTabDragController(widgetContainer) {
                 controller.clonedWidgetForTab.render(controller.widgetContainer.rootDiv);
                 controller.draggingTabSourceWidget.removeTab(draggingTabInfo.tabIndex);
 
+                // make content unselectable during dragging
+                controller.widgetContainer.makeContentNonSelectable();
+
                 // if dragged tab is the only remainig tab, remove the whole widget and re-render parent
                 if (controller.draggingTabSourceWidget.tabs.length == 0) {
                     removeSourceWidget();
@@ -174,6 +177,9 @@ function WidgetTabDragController(widgetContainer) {
                 if (controller.draggingTabSourceWidget) {
                     controller.draggingTabSourceWidget.draggingTabIndex = undefined;
                 }
+
+                // make content selectable again
+                controller.widgetContainer.makeContentSelectable();
             }
 
         }, true);
