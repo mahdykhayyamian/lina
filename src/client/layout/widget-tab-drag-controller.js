@@ -32,16 +32,25 @@ function WidgetTabDragController(widgetContainer) {
         return null;
     }
 
-    function isMouseOverWidgetTabs(widget, mouseEvent) {
-        const widgetTabsBoundingRectangle = widget.tabsDiv.getBoundingClientRect();
+    // function isMouseOverWidgetTabs(widget, mouseEvent) {
+    //     const widgetTabsBoundingRectangle = widget.tabsDiv.getBoundingClientRect();
 
-        if (mouseEvent.x <= widgetTabsBoundingRectangle.right && mouseEvent.x >= widgetTabsBoundingRectangle.left &&
-            mouseEvent.y >= widgetTabsBoundingRectangle.top && mouseEvent.y <= widgetTabsBoundingRectangle.bottom) {
-            return true;
-        }
+    //     if (mouseEvent.x <= widgetTabsBoundingRectangle.right && mouseEvent.x >= widgetTabsBoundingRectangle.left &&
+    //         mouseEvent.y >= widgetTabsBoundingRectangle.top && mouseEvent.y <= widgetTabsBoundingRectangle.bottom) {
+    //         return true;
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
+
+    // function isDraggingTabFullyInsideWidget(widget) {
+
+    //     if (widget.draggingTabIndex && widget.tabs[widget.draggingTabIndex].startX > 0 && widget.tabs[widget.draggingTabIndex].startX < widget.width) {
+    //         return true;
+    //     }
+
+    //     return false;
+    // }
 
     function registerWidgetsMouseEventHandlers() {
 
@@ -79,7 +88,7 @@ function WidgetTabDragController(widgetContainer) {
                 }
 
                 controller.draggingTabSourceWidget = draggingTabInfo.widget;
-                if (isMouseOverWidgetTabs(controller.draggingTabSourceWidget, event)) {
+                if (controller.draggingTabSourceWidget.isMouseOverWidgetTabs(event) && controller.draggingTabSourceWidget.isDraggingTabFullyInsideWidget()) {
                     console.log("dragging inside widget will be handled by widget itself, returning..");
                     return;
                 }
@@ -89,13 +98,13 @@ function WidgetTabDragController(widgetContainer) {
                 controller.clonedWidgetForTab.render(controller.widgetContainer.rootDiv);
                 controller.draggingTabSourceWidget.removeTab(draggingTabInfo.tabIndex);
 
-                // make content unselectable during dragging
-                controller.widgetContainer.makeContentNonSelectable();
-
                 // if dragged tab is the only remainig tab, remove the whole widget and re-render parent
                 if (controller.draggingTabSourceWidget.tabs.length == 0) {
                     removeSourceWidget();
                 }
+
+                // make content unselectable during dragging
+                controller.widgetContainer.makeContentNonSelectable();
             }
         }, true);
     }
@@ -116,7 +125,7 @@ function WidgetTabDragController(widgetContainer) {
             const y = event.clientY - targetWidgetBoundingRectangle.top;
 
             let overlayType;
-            if (isMouseOverWidgetTabs(targetWidget, event)) {
+            if (targetWidget.isMouseOverWidgetTabs(event)) {
                 overlayType = CONSTANTS.FULL_OVERLAY;
             } else {
                 overlayType = targetWidget.determineDirectonToInsert(x, y);
@@ -164,7 +173,7 @@ function WidgetTabDragController(widgetContainer) {
 
                 controller.clonedWidgetForTab.remove();
 
-                if (isMouseOverWidgetTabs(targetWidget, event)) {
+                if (targetWidget.isMouseOverWidgetTabs(event)) {
                     targetWidget.removeOverlay();
                     targetWidget.insertTab(controller.clonedWidgetForTab.tabs[0], x);
                 } else {

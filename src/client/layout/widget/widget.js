@@ -8,7 +8,6 @@ const Widget = (function() {
     const TAB_HEIGHT = 22;
     const TAB_OVERLAP = 5;
     const TAB_HORIZONTAL_SIDE_LENGTH = 8;
-    const WIDGET_MARGIN = 10;
 
     const DIRECTION_TOP = "DIRECTION_TOP";
     const DIRECTION_RIGHT = "DIRECTION_RIGHT";
@@ -51,7 +50,6 @@ const Widget = (function() {
         this.node.style.setProperty("left", this.left + "px");
         this.node.style.setProperty("width", this.width + "px");
         this.node.style.setProperty("height", this.height + "px");
-        this.node.style.setProperty("margin", WIDGET_MARGIN + "px");
 
         this.tabsDiv = document.createElement("div");
         this.tabsDiv.setAttribute("class", "widget-tabs");
@@ -359,6 +357,27 @@ const Widget = (function() {
         this.contentDiv.classList.remove("noselect");
     };
 
+    Widget.prototype.isDraggingTabFullyInsideWidget = function() {
+
+        if (this.draggingTabIndex && this.tabs[this.draggingTabIndex].startX > 0 && this.tabs[this.draggingTabIndex].startX < this.width) {
+            return true;
+        }
+
+        return false;
+    };
+
+    Widget.prototype.isMouseOverWidgetTabs = function(mouseEvent) {
+
+        const widgetTabsBoundingRectangle = this.tabsDiv.getBoundingClientRect();
+
+        if (mouseEvent.x <= widgetTabsBoundingRectangle.right && mouseEvent.x >= widgetTabsBoundingRectangle.left &&
+            mouseEvent.y >= widgetTabsBoundingRectangle.top && mouseEvent.y <= widgetTabsBoundingRectangle.bottom) {
+            return true;
+        }
+
+        return false;
+    }
+
     function findMyChildIndex(widget) {
 
         if (!widget.widgetContainer) {
@@ -506,7 +525,7 @@ const Widget = (function() {
             widget.draggingStartPositionRelativeToWidget = {
                 x: event.x - widgetBoundingRectangle.left,
                 y: event.y - widgetBoundingRectangle.top
-            }
+            };
 
             widget.tabs[tabIndex].drag = {
                 mouseX: event.x,
@@ -534,8 +553,8 @@ const Widget = (function() {
 
     function mouseMoveOnTabsEventHandler(event, widget) {
 
-        // return if no tab is being dragged
-        if (widget.draggingTabIndex === undefined) {
+        // return if mouse move is not relevant
+        if (widget.draggingTabIndex === undefined || !widget.isMouseOverWidgetTabs(event) || !widget.isDraggingTabFullyInsideWidget()) {
             return;
         }
 
