@@ -32,26 +32,6 @@ function WidgetTabDragController(widgetContainer) {
         return null;
     }
 
-    // function isMouseOverWidgetTabs(widget, mouseEvent) {
-    //     const widgetTabsBoundingRectangle = widget.tabsDiv.getBoundingClientRect();
-
-    //     if (mouseEvent.x <= widgetTabsBoundingRectangle.right && mouseEvent.x >= widgetTabsBoundingRectangle.left &&
-    //         mouseEvent.y >= widgetTabsBoundingRectangle.top && mouseEvent.y <= widgetTabsBoundingRectangle.bottom) {
-    //         return true;
-    //     }
-
-    //     return false;
-    // }
-
-    // function isDraggingTabFullyInsideWidget(widget) {
-
-    //     if (widget.draggingTabIndex && widget.tabs[widget.draggingTabIndex].startX > 0 && widget.tabs[widget.draggingTabIndex].startX < widget.width) {
-    //         return true;
-    //     }
-
-    //     return false;
-    // }
-
     function registerWidgetsMouseEventHandlers() {
 
         const widgets = controller.widgetContainer.toWidgetArray();

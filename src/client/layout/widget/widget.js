@@ -358,11 +358,10 @@ const Widget = (function() {
     };
 
     Widget.prototype.isDraggingTabFullyInsideWidget = function() {
-
-        if (this.draggingTabIndex && this.tabs[this.draggingTabIndex].startX > 0 && this.tabs[this.draggingTabIndex].startX < this.width) {
+        if (this.draggingTabIndex !== undefined && this.tabs[this.draggingTabIndex].startX >= 0 && this.tabs[this.draggingTabIndex].startX <= this.width) {
             return true;
         }
-
+        
         return false;
     };
 
