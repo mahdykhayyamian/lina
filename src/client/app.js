@@ -2,6 +2,7 @@ import {Widget} from "./layout/widget/widget.js";
 import {Pencil} from "./toolbox/pencil.js";
 import {WidgetContainer} from "./layout/widget-container.js";
 import {WidgetTabDragController} from "./layout/widget-tab-drag-controller.js";
+import {WidgetResizeController} from "./layout/widget-resize-controller.js";
 import {CONSTANTS} from "./layout/constants.js";
 
 window.onload = function () {
@@ -74,4 +75,5 @@ window.onload = function () {
 	widgetContainer3.render(appDiv);
 
 	const widgetTabDragController = new WidgetTabDragController(widgetContainer3);
+	const widgetResizeController = new WidgetResizeController(widgetContainer3);
 }
