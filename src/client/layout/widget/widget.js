@@ -377,6 +377,10 @@ const Widget = (function() {
         return false;
     }
 
+    Widget.prototype.getParent = function() {
+        return this.widgetContainer;
+    };
+
     function findMyChildIndex(widget) {
 
         if (!widget.widgetContainer) {

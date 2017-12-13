@@ -33,7 +33,7 @@ WidgetContainer.prototype.render = function(parent) {
             this.children[i].render(this.rootDiv);
         }
     }
-}
+};
 
 WidgetContainer.prototype.remove = function(parent) {
     this.rootDiv.remove();
@@ -45,9 +45,7 @@ WidgetContainer.prototype.onMouseDown = function(callback) {
 }
 
 WidgetContainer.prototype.toWidgetArray = function() {
-
     let widgets = [];
-
     if (!this.children) {
         return widgets;
     }
@@ -85,6 +83,10 @@ WidgetContainer.prototype.makeContentNonSelectable = function() {
 
 WidgetContainer.prototype.makeContentSelectable = function() {
     this.toWidgetArray().map( widget => widget.makeContentSelectable());
+};
+
+WidgetContainer.prototype.getParent = function() {
+    return this.parentWidgetContainer;
 };
 
 function sizeAndPositionChildren(widgetContainer) {
