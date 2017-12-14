@@ -8,6 +8,7 @@ function WidgetContainer(children, direction, parentWidgetContainer, left, top, 
     this.width = width;
     this.height = height;
     this.children = children;
+    this.childrenRatios = null;
     this.parentWidgetContainer = parentWidgetContainer;
     this.direction = direction;
 
@@ -91,30 +92,58 @@ WidgetContainer.prototype.getParent = function() {
 
 function sizeAndPositionChildren(widgetContainer) {
 
+    const childRatios = getChildrenRatios(widgetContainer);
+
     if (widgetContainer.direction === CONSTANTS.LEFT_TO_RIGHT) {
 
-        const childWidth = widgetContainer.width / widgetContainer.children.length;
         const childHeight = widgetContainer.height;
+        let sumWidth = 0;
 
         for (let i = 0; i < widgetContainer.children.length; i++) {
-            widgetContainer.children[i].left = i * childWidth;
+            widgetContainer.children[i].left = sumWidth;
             widgetContainer.children[i].top = 0;
-            widgetContainer.children[i].width = childWidth;
+            widgetContainer.children[i].width = widgetContainer.width * childRatios[i];
+            sumWidth += widgetContainer.children[i].width;
             widgetContainer.children[i].height = childHeight;
         }
     } else if (widgetContainer.direction === CONSTANTS.TOP_TO_BOTTOM) {
 
         const childWidth = widgetContainer.width;
-        const childHeight = widgetContainer.height / widgetContainer.children.length;
+        let sumHeight = 0;
 
         for (let i = 0; i < widgetContainer.children.length; i++) {
             widgetContainer.children[i].left = 0;
-            widgetContainer.children[i].top = i * childHeight;
+            widgetContainer.children[i].top = sumHeight;
             widgetContainer.children[i].width = childWidth;
-            widgetContainer.children[i].height = childHeight;
+            widgetContainer.children[i].height = widgetContainer.height * childRatios[i];
+            sumHeight += widgetContainer.children[i].height;
         }
     }
 }
 
+function getChildrenRatios(widgetContainer) {
+
+    const childrenRatios = [];
+    let sum = 0;
+    for (let i=0; i<widgetContainer.children.length; i++) {
+        const widthOrHeight = widgetContainer.direction === CONSTANTS.LEFT_TO_RIGHT ? widgetContainer.children[i].width : widgetContainer.children[i].height;
+        if (widthOrHeight) {
+            sum += widthOrHeight
+        }
+    }
+
+    if (sum !== 0) {
+        for (let i=0; i<widgetContainer.children.length; i++) {
+            const widthOrHeight = widgetContainer.direction === CONSTANTS.LEFT_TO_RIGHT ? widgetContainer.children[i].width : widgetContainer.children[i].height;
+            childrenRatios.push(widthOrHeight/sum);
+        }        
+    } else {
+        for (let i=0; i<widgetContainer.children.length; i++) {
+            childrenRatios.push(1/widgetContainer.children.length);
+        }                
+    }
+
+    return childrenRatios;
+}
 
 export { WidgetContainer };

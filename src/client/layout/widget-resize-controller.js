@@ -51,9 +51,27 @@ function WidgetResizeController(widgetContainer) {
 
                 controller.resizingSibling1.render(controller.resizingSibling1.getParent().rootDiv);
                 controller.resizingSibling2.render(controller.resizingSibling2.getParent().rootDiv);
+            } else {
+                updateCursorStyleIfResizing(mouseEvent);
             }
 
         });
+    }
+
+    function updateCursorStyleIfResizing(mouseEvent) {
+        const resizeInfo = getResizingInfo(mouseEvent);
+        if (resizeInfo != null) {            
+            if (resizeInfo.direction === CONSTANTS.HORIZONTAL_RESIZING) {
+                controller.direction = CONSTANTS.HORIZONTAL_RESIZING;
+                controller.widgetContainer.rootDiv.style.cursor = "col-resize";
+            } else if (resizeInfo.direction === CONSTANTS.VERTICAL_RESIZING) {
+                controller.direction = CONSTANTS.VERTICAL_RESIZING;
+                controller.widgetContainer.rootDiv.style.cursor = "row-resize";
+            }
+        } else {
+                controller.direction = null;
+                controller.widgetContainer.rootDiv.style.cursor = "default";            
+        }              
     }
 
     function handleMouseDown() {
@@ -118,9 +136,6 @@ function WidgetResizeController(widgetContainer) {
     }
 
     function getFirstSiblingAncestors(widget1, widget2) {
-
-        console.log("in getFirstSiblingAncestors");
-
         const parentList1 = [];
         let pointer = widget1;
         while (pointer !== null) {
