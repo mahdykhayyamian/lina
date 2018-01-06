@@ -147,15 +147,19 @@ const Widget = (function() {
 
             case DIRECTION_TOP:
                 containerNode = new WidgetContainer([widgetToInsert, targetWidget], CONSTANTS.TOP_TO_BOTTOM, targetWidget.widgetContainer, targetWidget.left, targetWidget.top, targetWidget.width, targetWidget.height);
+                widgetToInsert.height = targetWidget.height;
                 break;
             case DIRECTION_RIGHT:
                 containerNode = new WidgetContainer([targetWidget, widgetToInsert], CONSTANTS.LEFT_TO_RIGHT, targetWidget.widgetContainer, targetWidget.left, targetWidget.top, targetWidget.width, targetWidget.height);
+                widgetToInsert.width = targetWidget.width;
                 break;
             case DIRECTION_BOTTOM:
                 containerNode = new WidgetContainer([targetWidget, widgetToInsert], CONSTANTS.TOP_TO_BOTTOM, targetWidget.widgetContainer, targetWidget.left, targetWidget.top, targetWidget.width, targetWidget.height);
+                widgetToInsert.height = targetWidget.height;
                 break;
             case DIRECTION_LEFT:
                 containerNode = new WidgetContainer([widgetToInsert, targetWidget], CONSTANTS.LEFT_TO_RIGHT, targetWidget.widgetContainer, targetWidget.left, targetWidget.top, targetWidget.width, targetWidget.height);
+                widgetToInsert.width = targetWidget.width;
                 break;
             default:
                 return;

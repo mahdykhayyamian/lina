@@ -81,9 +81,9 @@ function WidgetResizeController(widgetContainer) {
 
                 controller.isResizing = true;
                 controller.previousMouseEvent = mouseEvent;
-                const firstSiblingAncestors = getFirstSiblingAncestors(resizeInfo.widget1, resizeInfo.widget2);
+                const firstSiblingAncestors = getSiblingAncestors(resizeInfo.widget1, resizeInfo.widget2);
 
-                console.log("getFirstSiblingAncestors");
+                console.log("getSiblingAncestors");
                 console.log(firstSiblingAncestors);
 
                 controller.resizingSibling1 = firstSiblingAncestors.parent1;
@@ -135,7 +135,7 @@ function WidgetResizeController(widgetContainer) {
         return null;
     }
 
-    function getFirstSiblingAncestors(widget1, widget2) {
+    function getSiblingAncestors(widget1, widget2) {
         const parentList1 = [];
         let pointer = widget1;
         while (pointer !== null) {

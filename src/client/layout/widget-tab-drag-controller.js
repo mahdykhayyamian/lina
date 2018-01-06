@@ -69,7 +69,6 @@ function WidgetTabDragController(widgetContainer) {
 
                 controller.draggingTabSourceWidget = draggingTabInfo.widget;
                 if (controller.draggingTabSourceWidget.isMouseOverWidgetTabs(event) && controller.draggingTabSourceWidget.isDraggingTabFullyInsideWidget()) {
-                    console.log("dragging inside widget will be handled by widget itself, returning..");
                     return;
                 }
 

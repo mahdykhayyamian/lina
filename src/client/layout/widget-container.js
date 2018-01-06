@@ -143,6 +143,7 @@ function getChildrenRatios(widgetContainer) {
         }                
     }
 
+
     return childrenRatios;
 }
 
