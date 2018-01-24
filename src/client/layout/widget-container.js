@@ -38,7 +38,6 @@ WidgetContainer.prototype.render = function(parent) {
 
 WidgetContainer.prototype.remove = function(parent) {
     this.rootDiv.remove();
-    this.rootDiv = document.createElement("div");
 }
 
 WidgetContainer.prototype.onMouseDown = function(callback) {

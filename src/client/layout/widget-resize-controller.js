@@ -18,22 +18,10 @@ function WidgetResizeController(widgetContainer) {
     function handleMouseMove() {
         controller.widgetContainer.rootDiv.addEventListener("mousemove", (mouseEvent) => {
 
-            console.log("mousemove");
-
             if (controller.isResizing === true) {
-
-                console.log("direction : " + controller.direction);
-
-                console.log("resizingSibling1 : ");
-                console.log(controller.resizingSibling1);
-
-                console.log("resizingSibling2 : ");
-                console.log(controller.resizingSibling2);
 
                 const deltaX = mouseEvent.clientX - controller.previousMouseEvent.clientX;
                 const deltaY = mouseEvent.clientY - controller.previousMouseEvent.clientY;
-
-                console.log("deltaX : " + deltaX + ", deltaY : " + deltaY);
 
                 if (controller.direction === CONSTANTS.HORIZONTAL_RESIZING) {
 
@@ -82,9 +70,6 @@ function WidgetResizeController(widgetContainer) {
                 controller.isResizing = true;
                 controller.previousMouseEvent = mouseEvent;
                 const firstSiblingAncestors = getSiblingAncestors(resizeInfo.widget1, resizeInfo.widget2);
-
-                console.log("getSiblingAncestors");
-                console.log(firstSiblingAncestors);
 
                 controller.resizingSibling1 = firstSiblingAncestors.parent1;
                 controller.resizingSibling2 = firstSiblingAncestors.parent2;

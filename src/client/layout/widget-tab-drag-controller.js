@@ -122,17 +122,40 @@ function WidgetTabDragController(widgetContainer) {
         }
     }
 
-    function removeSourceWidget() {
-        for (let i = 0; i < controller.draggingTabSourceWidget.widgetContainer.children.length; i++) {
-            if (controller.draggingTabSourceWidget.widgetContainer.children[i] == controller.draggingTabSourceWidget) {
-                controller.draggingTabSourceWidget.widgetContainer.children.splice(i, 1);
-                break;
-            }
-        }
 
-        controller.draggingTabSourceWidget.remove();
-        controller.draggingTabSourceWidget.widgetContainer.remove();
-        controller.draggingTabSourceWidget.widgetContainer.render(controller.draggingTabSourceWidget.widgetContainer.parentWidgetContainer.rootDiv);
+    function removeSourceWidget() {
+        let currentNode = controller.draggingTabSourceWidget;
+    
+        while (currentNode) {
+
+            let parentNode = currentNode.getParent();
+            currentNode.remove();
+
+            if (parentNode) {
+
+                for (let i = 0; i < parentNode.children.length; i++) {
+                    if (parentNode.children[i] === currentNode) {
+                        parentNode.children.splice(i, 1);
+                        break;
+                    }
+                }                    
+
+                if (currentNode.widgetContainer) {
+                    currentNode.widgetContainer = undefined;
+                }
+
+                if (currentNode.parentWidgetContainer) {
+                    currentNode.parentWidgetContainer = undefined;
+                }
+
+                if (parentNode.children.length === 0) {
+                    currentNode = parentNode;
+                } else {
+                    parentNode.render(parentNode.getParent().rootDiv);
+                    currentNode = undefined;
+                }
+            } 
+        }
     }
 
     function registerWidgetContainerMouseUpHandler() {

@@ -94,9 +94,6 @@ const Widget = (function() {
             this.node.removeChild(this.node.firstChild);
         }
         this.node.remove();
-
-        this.node = document.createElement("div");
-        this.contentDiv = document.createElement("div");
     };
 
     Widget.prototype.addMouseUpOnWidgetHandler = function(callback) {
