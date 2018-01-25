@@ -9,7 +9,6 @@ window.onload = function () {
 
 	const appDiv = document.getElementById("lina.app");
 
-
 	function createTextDiv(text) {
 		const div = document.createElement("div");
 		div.textContent = text;
@@ -25,12 +24,6 @@ window.onload = function () {
 		}, {
 			title: 'Niki',
 			contentNode: createTextDiv('mish mish mikh mikh mahan!') 
-		},{
-			title: 'Lina',
-			contentNode: createTextDiv('Hashem!')
-		},{
-			title: 'Mashmash',
-			contentNode: createTextDiv('Mashmash!')
 		}]
 	);
 

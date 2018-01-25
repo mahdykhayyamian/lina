@@ -11,11 +11,18 @@ function WidgetContainer(children, direction, parentWidgetContainer, left, top, 
     this.childrenRatios = null;
     this.parentWidgetContainer = parentWidgetContainer;
     this.direction = direction;
-
     this.rootDiv = document.createElement("div");
 }
 
-WidgetContainer.prototype.render = function(parent) {
+WidgetContainer.prototype.render = function(parentNode) {
+
+    if (parentNode) {
+        this.parentNode = parentNode;
+    }
+
+    if (!this.parentNode) {
+        return;
+    }
 
     this.rootDiv.setAttribute("class", "widget");
     this.rootDiv.style.setProperty("top", this.top + "px");
@@ -24,7 +31,7 @@ WidgetContainer.prototype.render = function(parent) {
     this.rootDiv.style.setProperty("height", this.height + "px");
     this.rootDiv.setAttribute("class", "widget-container");
 
-    parent.appendChild(this.rootDiv);
+    this.parentNode.appendChild(this.rootDiv);
 
     if (Widget.prototype.isPrototypeOf(this)) {
         this.render(this.rootDiv);
@@ -36,7 +43,7 @@ WidgetContainer.prototype.render = function(parent) {
     }
 };
 
-WidgetContainer.prototype.remove = function(parent) {
+WidgetContainer.prototype.remove = function() {
     this.rootDiv.remove();
 }
 
@@ -78,11 +85,11 @@ WidgetContainer.prototype.getWidgetFromPoint = function(clientX, clientY) {
 }
 
 WidgetContainer.prototype.makeContentNonSelectable = function() {
-    this.toWidgetArray().map( widget => widget.makeContentNonSelectable());
+    this.toWidgetArray().map(widget => widget.makeContentNonSelectable());
 };
 
 WidgetContainer.prototype.makeContentSelectable = function() {
-    this.toWidgetArray().map( widget => widget.makeContentSelectable());
+    this.toWidgetArray().map(widget => widget.makeContentSelectable());
 };
 
 WidgetContainer.prototype.getParent = function() {
@@ -124,7 +131,7 @@ function getChildrenRatios(widgetContainer) {
 
     const childrenRatios = [];
     let sum = 0;
-    for (let i=0; i<widgetContainer.children.length; i++) {
+    for (let i = 0; i < widgetContainer.children.length; i++) {
         const widthOrHeight = widgetContainer.direction === CONSTANTS.LEFT_TO_RIGHT ? widgetContainer.children[i].width : widgetContainer.children[i].height;
         if (widthOrHeight) {
             sum += widthOrHeight
@@ -132,14 +139,14 @@ function getChildrenRatios(widgetContainer) {
     }
 
     if (sum !== 0) {
-        for (let i=0; i<widgetContainer.children.length; i++) {
+        for (let i = 0; i < widgetContainer.children.length; i++) {
             const widthOrHeight = widgetContainer.direction === CONSTANTS.LEFT_TO_RIGHT ? widgetContainer.children[i].width : widgetContainer.children[i].height;
-            childrenRatios.push(widthOrHeight/sum);
-        }        
+            childrenRatios.push(widthOrHeight / sum);
+        }
     } else {
-        for (let i=0; i<widgetContainer.children.length; i++) {
-            childrenRatios.push(1/widgetContainer.children.length);
-        }                
+        for (let i = 0; i < widgetContainer.children.length; i++) {
+            childrenRatios.push(1 / widgetContainer.children.length);
+        }
     }
 
 

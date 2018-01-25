@@ -151,7 +151,7 @@ function WidgetTabDragController(widgetContainer) {
                 if (parentNode.children.length === 0) {
                     currentNode = parentNode;
                 } else {
-                    parentNode.render(parentNode.getParent().rootDiv);
+                    parentNode.render();
                     currentNode = undefined;
                 }
             } 

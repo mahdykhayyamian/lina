@@ -38,7 +38,15 @@ const Widget = (function() {
         };
     };
 
-    Widget.prototype.render = function(parent) {
+    Widget.prototype.render = function(parentNode) {
+
+        if (parentNode) {
+            this.parentNode = parentNode;
+        }
+
+        if (!this.parentNode) {
+            return;
+        }
 
         // first clean up from dom to start fresh
         this.remove();
@@ -80,7 +88,7 @@ const Widget = (function() {
 
         drawTabs(this);
 
-        parent.appendChild(this.node);
+        this.parentNode.appendChild(this.node);
     };
 
     Widget.prototype.remove = function(parent) {
