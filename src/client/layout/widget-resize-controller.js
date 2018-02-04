@@ -23,27 +23,65 @@ function WidgetResizeController(widgetContainer) {
                 const deltaX = mouseEvent.clientX - controller.previousMouseEvent.clientX;
                 const deltaY = mouseEvent.clientY - controller.previousMouseEvent.clientY;
 
-                if (controller.direction === CONSTANTS.HORIZONTAL_RESIZING) {
-
-                    controller.resizingSibling1.width += deltaX;
-                    controller.resizingSibling2.width -= deltaX;
-                    controller.resizingSibling2.left += deltaX;
-
-                } else if (controller.direction === CONSTANTS.VERTICAL_RESIZING) {
-                    controller.resizingSibling1.height += deltaY;
-                    controller.resizingSibling2.height -= deltaY;
-                    controller.resizingSibling2.top += deltaY;
-                }
-
                 controller.previousMouseEvent = mouseEvent;
 
-                controller.resizingSibling1.render(controller.resizingSibling1.getParent().rootDiv);
-                controller.resizingSibling2.render(controller.resizingSibling2.getParent().rootDiv);
+                if (validateRendering(deltaX, deltaY)) {
+
+                    if (controller.direction === CONSTANTS.HORIZONTAL_RESIZING) {
+                        controller.resizingSibling1.width += deltaX;
+                        controller.resizingSibling2.width -= deltaX;
+                        controller.resizingSibling2.left += deltaX;
+                    } else if (controller.direction === CONSTANTS.VERTICAL_RESIZING) {
+                        controller.resizingSibling1.height += deltaY;
+                        controller.resizingSibling2.height -= deltaY;
+                        controller.resizingSibling2.top += deltaY;
+                    }
+
+                    controller.resizingSibling1.render(controller.resizingSibling1.getParent().rootDiv);
+                    controller.resizingSibling2.render(controller.resizingSibling2.getParent().rootDiv);
+                } else {
+                    console.log("rendering is not valid any more");
+                    controller.isResizing = false;
+                    updateCursorStyleIfResizing(mouseEvent);
+                }
+
             } else {
                 updateCursorStyleIfResizing(mouseEvent);
             }
 
         });
+    }
+
+    function validateRendering(deltaX, deltaY) {
+
+        const renderingValues1 =  {
+            width: controller.resizingSibling1.width,
+            height: controller.resizingSibling1.height,
+            left: controller.resizingSibling1.left,
+            top: controller.resizingSibling1.top
+        };
+
+        const renderingValues2 =  {
+            width: controller.resizingSibling2.width,
+            height: controller.resizingSibling2.height,
+            left: controller.resizingSibling2.left,
+            top: controller.resizingSibling2.top
+        };
+
+        if (controller.direction === CONSTANTS.HORIZONTAL_RESIZING) {
+            renderingValues1.width += deltaX;
+            renderingValues2.width -= deltaX;
+            renderingValues2.left += deltaX;
+        } else if (controller.direction === CONSTANTS.VERTICAL_RESIZING) {
+            renderingValues1.height += deltaY;
+            renderingValues2.height -= deltaY;
+            renderingValues2.top += deltaY;
+        }
+
+        const validRendering1 = controller.resizingSibling1.validateRendering(renderingValues1);
+        const validRendering2 = controller.resizingSibling2.validateRendering(renderingValues2);
+
+        return validRendering1 && validRendering2;
     }
 
     function updateCursorStyleIfResizing(mouseEvent) {
@@ -63,8 +101,9 @@ function WidgetResizeController(widgetContainer) {
     }
 
     function handleMouseDown() {
-        controller.widgetContainer.rootDiv.addEventListener("mousedown", (mouseEvent) => {                    
+        controller.widgetContainer.rootDiv.addEventListener("mousedown", (mouseEvent) => {
             const resizeInfo = getResizingInfo(mouseEvent);
+
             if (resizeInfo != null) {
 
                 controller.isResizing = true;

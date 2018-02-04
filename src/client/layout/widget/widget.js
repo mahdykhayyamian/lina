@@ -91,6 +91,24 @@ const Widget = (function() {
         this.parentNode.appendChild(this.node);
     };
 
+    Widget.prototype.validateRendering = function(renderingValues) {
+        const minPossibleWidth = this.getMinPossibleWidth();
+
+        if (renderingValues.width < minPossibleWidth) {
+            console.log(`rendering width: ${renderingValues.width} cannot be less than widget min width : ${minPossibleWidth}`);
+            return false;
+        }
+
+        const minPossibleHeight = this.getMinPossibleHeight();
+
+        if (renderingValues.height < minPossibleHeight) {
+            console.log(`rendering height: ${renderingValues.height} cannot be less than minPossibleHeight : ${minPossibleHeight}`);
+            return false;
+        }
+
+        return true;
+    }
+
     Widget.prototype.remove = function(parent) {
 
         while (this.contentDiv.firstChild) {
@@ -390,6 +408,15 @@ const Widget = (function() {
         return this.widgetContainer;
     };
 
+    Widget.prototype.getMinPossibleWidth = function() {
+        return this.tabs.length * getDynamicTabSize(this);
+    };
+
+    Widget.prototype.getMinPossibleHeight = function() {
+        const minHeight = 50;
+        return minHeight;
+    };
+
     function findMyChildIndex(widget) {
 
         if (!widget.widgetContainer) {
@@ -489,9 +516,19 @@ const Widget = (function() {
     }
 
     function getDynamicTabSize(widget) {
-        const maxTabSize = 100;
-        const tabSize = Math.min(widget.width / widget.tabs.length, maxTabSize);
-        return tabSize;
+
+        const maxTabSize = 120;
+        const minTabSize = 80;
+
+        const tabSize = widget.width / widget.tabs.length;
+
+        if (tabSize > maxTabSize) {
+            return maxTabSize
+        } else if (tabSize < minTabSize) {
+            return minTabSize
+        } else {
+            return tabSize;
+        }
     }
 
     function createTabText(widget, tabIndex, x, y) {
