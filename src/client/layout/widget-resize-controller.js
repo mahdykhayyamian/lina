@@ -40,7 +40,6 @@ function WidgetResizeController(widgetContainer) {
                     controller.resizingSibling1.render(controller.resizingSibling1.getParent().rootDiv);
                     controller.resizingSibling2.render(controller.resizingSibling2.getParent().rootDiv);
                 } else {
-                    console.log("rendering is not valid any more");
                     controller.isResizing = false;
                     updateCursorStyleIfResizing(mouseEvent);
                 }

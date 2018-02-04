@@ -125,10 +125,11 @@ function WidgetTabDragController(widgetContainer) {
 
     function removeSourceWidget() {
         let currentNode = controller.draggingTabSourceWidget;
-    
+
         while (currentNode) {
 
             let parentNode = currentNode.getParent();
+
             currentNode.remove();
 
             if (parentNode) {

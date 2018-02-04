@@ -39,23 +39,12 @@ WidgetContainer.prototype.render = function(parentNode) {
     }
 
     if (!this.parentNode) {
+        console.log("no parent node, returning");
         return false;
     }
 
-    // check if rendering is valid
-    const renderingValues = {
-        width: this.width,
-        height: this.height,
-        left: this.left,
-        top: this.top
-    };
-
-    if (!this.validateRendering(renderingValues)) {
-        return;
-    }
-
     // render
-    renderWidgetContainer(this, parentNode);
+    renderWidgetContainer(this, this.parentNode);
 };
 
 
@@ -114,6 +103,7 @@ WidgetContainer.prototype.getParent = function() {
 
 function renderWidgetContainer(widgetContainer, parentNode) {
 
+    widgetContainer.parentNode = parentNode;
     parentNode.appendChild(widgetContainer.rootDiv);
 
     widgetContainer.rootDiv.setAttribute("class", "widget");
@@ -157,8 +147,6 @@ function sizeAndPositionChildren(widgetContainer) {
 }
 
 function getChildrenRenderingValues(widgetContainer, renderingValues) {
-
-    console.log(renderingValues);
 
     const childrenRenderingValues = [];
 
