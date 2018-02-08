@@ -230,6 +230,9 @@ const Widget = (function() {
             this.tabs[tabIndex].startX
         );
 
+        // making sure moving widget is on top
+        widgetOfTab.node.style.setProperty("z-index", "1");
+
         if (this.tabs[tabIndex].contentNode) {
             widgetOfTab.tabs[0].contentNode = this.tabs[tabIndex].contentNode.cloneNode(true);
         }
