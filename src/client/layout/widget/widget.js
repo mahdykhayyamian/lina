@@ -20,6 +20,7 @@ const Widget = (function() {
         this.left = left
         this.width = width;
         this.height = height;
+        this.contentHeight = this.height - TAB_HEIGHT;
         this.tabs = tabs;
         this.selectedTabIndex = 0;
         this.widgetContainer = widgetContainer;
@@ -59,6 +60,8 @@ const Widget = (function() {
         this.node.style.setProperty("width", this.width + "px");
         this.node.style.setProperty("height", this.height + "px");
 
+        this.contentHeight = this.height - TAB_HEIGHT;
+
         this.tabsDiv = document.createElement("div");
         this.tabsDiv.setAttribute("class", "widget-tabs");
         this.tabsDiv.style.setProperty("width", this.width + "px");
@@ -74,7 +77,7 @@ const Widget = (function() {
         this.contentDiv.setAttribute("class", "widget-content");
 
         this.contentDiv.style.setProperty("width", this.width + "px");
-        this.contentDiv.style.setProperty("height", this.height - TAB_HEIGHT + "px");
+        this.contentDiv.style.setProperty("height", this.contentHeight + "px");
         this.node.appendChild(this.contentDiv);
 
         this.contentBorderDiv = document.createElement("div");
@@ -89,6 +92,13 @@ const Widget = (function() {
         drawTabs(this);
 
         this.parentNode.appendChild(this.node);
+
+        for (let i=0; i<this.tabs.length; i++) {
+            if (this.tabs[i].onRenderCallback) {
+                this.tabs[i].onRenderCallback(this);
+            }
+        }
+
     };
 
     Widget.prototype.validateRendering = function(renderingValues) {
@@ -233,8 +243,14 @@ const Widget = (function() {
         // making sure moving widget is on top
         widgetOfTab.node.style.setProperty("z-index", "1");
 
+        // set content
         if (this.tabs[tabIndex].contentNode) {
-            widgetOfTab.tabs[0].contentNode = this.tabs[tabIndex].contentNode.cloneNode(true);
+            widgetOfTab.tabs[0].contentNode = this.tabs[tabIndex].contentNode;
+        }
+
+        // set onRenderCallback
+        if (this.tabs[tabIndex].onRenderCallback) {
+            widgetOfTab.tabs[0].onRenderCallback = this.tabs[tabIndex].onRenderCallback;
         }
 
         widgetOfTab.eventHandlers = this.eventHandlers;

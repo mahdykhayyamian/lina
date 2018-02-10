@@ -17,6 +17,12 @@ window.onload = function () {
 		return div;
 	}
 
+	function createImage(source) {
+		const image = document.createElement("img");
+		image.src = source;
+		return image;
+	}
+
 	const widgetA = new Widget("widgetA",
 		[{
 			title: 'Judy',
@@ -36,12 +42,19 @@ window.onload = function () {
 			contentNode: createTextDiv('Mehrkish!')
 		}]);
 
+	const mahdyImage = createImage("resources/images/mahdy.jpg");
+
 	const widgetC = new Widget("widgetC", 
 		[{
 			title: 'Home',
 		},{
 			title: 'Mahdy',
-			contentNode: createTextDiv('Pake paghan!')
+			contentNode: mahdyImage,
+			onRenderCallback: function(widget) {
+				console.log("on render, widget height : " + widget.height);
+				mahdyImage.style.setProperty("height", widget.contentHeight + "px");
+				mahdyImage.style.setProperty("max-width", widget.width + "px");
+			}
 		}
 	]);
 
