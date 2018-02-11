@@ -383,6 +383,8 @@ const Widget = (function() {
         // draw new tab and make it selected
         drawSelectedTab(this, tabIndex, newTabStartX);
         updateSelectedTabTo(this, tabIndex);
+
+        this.render();
     };
 
     Widget.prototype.makeContentNonSelectable = function() {
