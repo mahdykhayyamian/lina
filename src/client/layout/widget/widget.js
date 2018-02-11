@@ -361,19 +361,9 @@ const Widget = (function() {
 
     Widget.prototype.insertTab = function(tab, dropX) {
 
-        // find index for new tab
-        let tabIndex = 0;
-        let newTabStartX = 0;
-        if (this.tabs.length > 0) {
-            let i = 0;
-            let x = this.tabs[i].startX;
-            while (x < dropX && i < this.tabs.length - 1) {
-                i++;
-                x = this.tabs[i].startX;
-            }
-            tabIndex = i--;
-            newTabStartX = this.tabs[tabIndex].startX;
-        }
+        const location = findNewTabLocation(this, dropX);
+        const tabIndex = location.tabIndex;
+        const newTabStartX = location.newTabStartX;
 
         this.tabs.splice(tabIndex, 0, tab);
 
@@ -435,6 +425,34 @@ const Widget = (function() {
         const minHeight = 50;
         return minHeight;
     };
+
+    function findNewTabLocation(widget, dropX) {
+        let tabIndex = 0;
+        let newTabStartX = 0;
+        if (widget.tabs.length > 0) {
+            let i = 0;
+            let x = widget.tabs[i].startX;
+            while (x < dropX) {
+                i++;
+
+                if (i == widget.tabs.length) {
+                    return {
+                        tabIndex: i,
+                        newTabStartX: i * getDynamicTabSize(widget)
+                    }
+                }
+
+                x = widget.tabs[i].startX;
+            }
+            tabIndex = i-1;
+            newTabStartX = tabIndex * getDynamicTabSize(widget);
+        }
+
+        return {
+            tabIndex: tabIndex,
+            newTabStartX: newTabStartX
+        }
+    }
 
     function findMyChildIndex(widget) {
 

@@ -51,7 +51,6 @@ window.onload = function () {
 			title: 'Mahdy',
 			contentNode: mahdyImage,
 			onRenderCallback: function(widget) {
-				console.log("on render, widget height : " + widget.height);
 				mahdyImage.style.setProperty("height", (widget.contentHeight - 5) + "px");
 				mahdyImage.style.setProperty("max-width", widget.width + "px");
 			}
