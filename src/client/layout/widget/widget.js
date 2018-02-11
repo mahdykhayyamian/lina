@@ -427,25 +427,28 @@ const Widget = (function() {
     };
 
     function findNewTabLocation(widget, dropX) {
+
+        const tabWidth = getDynamicTabSize(widget);
+
         let tabIndex = 0;
         let newTabStartX = 0;
         if (widget.tabs.length > 0) {
             let i = 0;
             let x = widget.tabs[i].startX;
-            while (x < dropX) {
+            while (x < dropX && i < widget.tabs.length - 1) {
                 i++;
-
-                if (i == widget.tabs.length) {
-                    return {
-                        tabIndex: i,
-                        newTabStartX: i * getDynamicTabSize(widget)
-                    }
-                }
-
                 x = widget.tabs[i].startX;
             }
-            tabIndex = i-1;
-            newTabStartX = tabIndex * getDynamicTabSize(widget);
+
+            if (x >= dropX) {
+                tabIndex = i - 1;
+            } else if (i === widget.tabs.length - 1 && dropX <= widget.tabs.length * tabWidth) {
+                tabIndex = i;
+            } else {
+                tabIndex = i + 1;
+            }
+
+            newTabStartX = tabIndex * tabWidth;
         }
 
         return {
