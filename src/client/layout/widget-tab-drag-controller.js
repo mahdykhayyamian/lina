@@ -74,6 +74,8 @@ function WidgetTabDragController(widgetContainer) {
 
                 controller.draggingStartPositionRelativeToWidget = draggingTabInfo.widget.draggingStartPositionRelativeToWidget;
                 controller.clonedWidgetForTab = controller.draggingTabSourceWidget.createWidgetFromTab(draggingTabInfo.tabIndex);
+                controller.clonedWidgetForTab.setOpacity(0.75);
+
                 controller.clonedWidgetForTab.render(controller.widgetContainer.rootDiv);
                 controller.draggingTabSourceWidget.removeTab(draggingTabInfo.tabIndex);
 
@@ -174,6 +176,7 @@ function WidgetTabDragController(widgetContainer) {
                 const x = event.clientX - targetWidgetBoundingRectangle.left;
                 const y = event.clientY - targetWidgetBoundingRectangle.top;
 
+                controller.clonedWidgetForTab.setOpacity(1);
                 controller.clonedWidgetForTab.remove();
 
                 if (targetWidget.isMouseOverWidgetTabs(event)) {

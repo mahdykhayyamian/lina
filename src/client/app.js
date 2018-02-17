@@ -23,6 +23,15 @@ window.onload = function () {
 		return image;
 	}
 
+	const pencil = new Pencil();
+
+	function createPencilNode() {
+		const div = document.createElement("div");
+		pencil.render();
+		div.appendChild(pencil.svg);
+		return div;
+	}
+
 	const widgetA = new Widget("widgetA",
 		[{
 			title: 'Judy',
@@ -30,6 +39,9 @@ window.onload = function () {
 		}, {
 			title: 'Niki',
 			contentNode: createTextDiv('mish mish mikh mikh mahan!') 
+		},{
+			title: 'Pencil',
+			contentNode: createPencilNode()
 		}]
 	);
 
@@ -39,7 +51,7 @@ window.onload = function () {
 			contentNode: createTextDiv('Hashem!')
 		},{
 			title: 'Mehrkish',
-			contentNode: createTextDiv('Mehrkish!')
+			contentNode: createTextDiv('Mehrkish!'),
 		}]);
 
 	const mahdyImage = createImage("resources/images/mahdy.jpg");

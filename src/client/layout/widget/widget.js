@@ -428,6 +428,12 @@ const Widget = (function() {
         return minHeight;
     };
 
+
+    Widget.prototype.setOpacity = function(opacity) {
+        this.opacity = opacity;
+        this.node.style.setProperty("opacity", opacity);
+    };
+
     function findNewTabLocation(widget, dropX) {
 
         const tabWidth = getDynamicTabSize(widget);
