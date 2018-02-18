@@ -5,7 +5,9 @@ import { WidgetContainer } from "../widget-container.js";
 
 const Widget = (function() {
 
-    const TAB_HEIGHT = 22;
+    const TAB_HEIGHT = 20;
+    const TAB_HOLDER_HEIGHT = 22;
+
     const TAB_OVERLAP = 5;
     const TAB_HORIZONTAL_SIDE_LENGTH = 8;
 
@@ -20,7 +22,7 @@ const Widget = (function() {
         this.left = left
         this.width = width;
         this.height = height;
-        this.contentHeight = this.height - TAB_HEIGHT;
+        this.contentHeight = this.height - TAB_HOLDER_HEIGHT;
         this.tabs = tabs;
         this.selectedTabIndex = 0;
         this.widgetContainer = widgetContainer;
@@ -60,16 +62,18 @@ const Widget = (function() {
         this.node.style.setProperty("width", this.width + "px");
         this.node.style.setProperty("height", this.height + "px");
 
-        this.contentHeight = this.height - TAB_HEIGHT;
+        this.contentHeight = this.height - TAB_HOLDER_HEIGHT;
 
         this.tabsDiv = document.createElement("div");
         this.tabsDiv.setAttribute("class", "widget-tabs");
         this.tabsDiv.style.setProperty("width", this.width + "px");
-        this.tabsDiv.style.setProperty("height", TAB_HEIGHT + "px");
+        this.tabsDiv.style.setProperty("height", TAB_HOLDER_HEIGHT + "px");
 
         this.tabsSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        this.tabsSVG.style.setProperty("position", "absolute");
+        this.tabsSVG.style.setProperty("top", (TAB_HOLDER_HEIGHT - TAB_HEIGHT) + "px");
         this.tabsSVG.style.setProperty("width", this.width + "px");
-        this.tabsSVG.style.setProperty("height", TAB_HEIGHT + "px");
+        this.tabsSVG.style.setProperty("height", TAB_HOLDER_HEIGHT + "px");
 
         this.tabsDiv.appendChild(this.tabsSVG);
         this.node.appendChild(this.tabsDiv);
@@ -260,10 +264,10 @@ const Widget = (function() {
 
     Widget.prototype.addOverlay = function(overlayType) {
 
-        const height = this.height - TAB_HEIGHT;
+        const height = this.height - TAB_HOLDER_HEIGHT;
         const width = this.width;
         const left = 0;
-        const top = TAB_HEIGHT;
+        const top = TAB_HOLDER_HEIGHT;
 
         switch (overlayType) {
             case (DIRECTION_TOP):
