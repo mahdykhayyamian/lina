@@ -6,7 +6,7 @@ import { WidgetContainer } from "../widget-container.js";
 const Widget = (function() {
 
     const TAB_HEIGHT = 20;
-    const TAB_HOLDER_HEIGHT = 22;
+    const TAB_HOLDER_HEIGHT = 24;
 
     const TAB_OVERLAP = 5;
     const TAB_HORIZONTAL_SIDE_LENGTH = 8;
@@ -411,8 +411,8 @@ const Widget = (function() {
 
         const widgetTabsBoundingRectangle = this.tabsDiv.getBoundingClientRect();
 
-        if (mouseEvent.x <= widgetTabsBoundingRectangle.right && mouseEvent.x >= widgetTabsBoundingRectangle.left &&
-            mouseEvent.y >= widgetTabsBoundingRectangle.top && mouseEvent.y <= widgetTabsBoundingRectangle.bottom) {
+        if (mouseEvent.clientX <= widgetTabsBoundingRectangle.right && mouseEvent.clientX >= widgetTabsBoundingRectangle.left &&
+            mouseEvent.clientY >= widgetTabsBoundingRectangle.top && mouseEvent.clientY <= widgetTabsBoundingRectangle.bottom) {
             return true;
         }
 
@@ -597,25 +597,6 @@ const Widget = (function() {
         attachOnTabsMouseDownEventHandlers(widget, tabIndex);
     }
 
-    function getTabClickableAreaSVGPath(widget, tabIndex) {
-
-        const maxTabSize = 100;
-        const tabSize = Math.min(widget.width / widget.tabs.length, maxTabSize);
-
-        const p1 = [tabIndex * (tabSize - TAB_OVERLAP), TAB_HEIGHT];
-        const p2 = [tabIndex * (tabSize - TAB_OVERLAP) + TAB_HORIZONTAL_SIDE_LENGTH, 0];
-        const p3 = [tabIndex * (tabSize - TAB_OVERLAP) + tabSize - TAB_HORIZONTAL_SIDE_LENGTH, 0];
-        const p4 = [tabIndex * (tabSize - TAB_OVERLAP) + tabSize, TAB_HEIGHT];
-
-        const path = 'M ' + p1[0] + ' ' + p1[1] +
-            ' L ' + p2[0] + ' ' + p2[1] +
-            ' L ' + p3[0] + ' ' + p3[1] +
-            ' L ' + p4[0] + ' ' + p4[1] +
-            ' L' + p1[0] + ' ' + p1[1];
-
-        return path;
-    }
-
     function attachOnTabsMouseDownEventHandlers(widget, tabIndex) {
 
         // internal handers
@@ -624,13 +605,13 @@ const Widget = (function() {
 
             const widgetBoundingRectangle = widget.node.getBoundingClientRect();
             widget.draggingStartPositionRelativeToWidget = {
-                x: event.x - widgetBoundingRectangle.left,
-                y: event.y - widgetBoundingRectangle.top
+                x: event.clientX - widgetBoundingRectangle.left,
+                y: event.clientY - widgetBoundingRectangle.top
             };
 
             widget.tabs[tabIndex].drag = {
-                mouseX: event.x,
-                mouseY: event.y
+                mouseX: event.clientX,
+                mouseY: event.clientY
             }
         }, true);
 
@@ -660,10 +641,10 @@ const Widget = (function() {
         }
 
         // apply new position
-        widget.tabs[widget.draggingTabIndex].startX += (event.x - widget.tabs[widget.draggingTabIndex].drag.mouseX);
-        widget.tabs[widget.draggingTabIndex].drag.mouseX = event.x;
-        widget.tabs[widget.draggingTabIndex].startY += (event.y - widget.tabs[widget.draggingTabIndex].drag.mouseY);
-        widget.tabs[widget.draggingTabIndex].drag.mouseY = event.y;
+        widget.tabs[widget.draggingTabIndex].startX += (event.clientX - widget.tabs[widget.draggingTabIndex].drag.mouseX);
+        widget.tabs[widget.draggingTabIndex].drag.mouseX = event.clientX;
+        widget.tabs[widget.draggingTabIndex].startY += (event.clientY - widget.tabs[widget.draggingTabIndex].drag.mouseY);
+        widget.tabs[widget.draggingTabIndex].drag.mouseY = event.clientY;
 
         // update dom
         widget.tabs[widget.draggingTabIndex].tabNode.remove();
