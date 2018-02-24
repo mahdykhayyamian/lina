@@ -16,8 +16,10 @@
     vertical-align: middle;
     text-align: center;
     border: solid;
-    border-color: #f2f4f5;
-    border-width: 2px;
+    border-color: #efefef;
+    border-top-width: 5px;
+    border-left-width: 1px;
+    border-bottom-width: 1px;
 }
 
 .tabs-outline path {
@@ -43,7 +45,7 @@
 
 .drag-target-widget-overlay {
     background-color: green;
-    opacity: 0.4;
+    opacity: 0.5;
     position: absolute;
     display: table;
     border-style: dashed;
