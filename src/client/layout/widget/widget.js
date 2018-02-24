@@ -5,8 +5,8 @@ import { WidgetContainer } from "../widget-container.js";
 
 const Widget = (function() {
 
-    const TAB_HEIGHT = 20;
-    const TAB_HOLDER_HEIGHT = 24;
+    const TAB_HEIGHT = 32;
+    const TAB_HOLDER_HEIGHT = 36;
 
     const TAB_OVERLAP = 5;
     const TAB_HORIZONTAL_SIDE_LENGTH = 8;
@@ -561,8 +561,8 @@ const Widget = (function() {
 
     function getDynamicTabSize(widget) {
 
-        const maxTabSize = 120;
-        const minTabSize = 80;
+        const maxTabSize = 180;
+        const minTabSize = 120;
 
         const tabSize = widget.width / widget.tabs.length;
 

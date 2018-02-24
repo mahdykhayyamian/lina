@@ -8,6 +8,8 @@ import {CONSTANTS} from "./layout/constants.js";
 window.onload = function () {
 
 	const appDiv = document.getElementById("lina.app");
+	appDiv.style.setProperty("position", "absolute");
+	//appDiv.style.setProperty("margin", "10px");
 
 	function createTextDiv(text) {
 		const div = document.createElement("div");
@@ -79,7 +81,12 @@ window.onload = function () {
 
 	const widgetContainer2 = new WidgetContainer([widgetB, widgetContainer1], CONSTANTS.LEFT_TO_RIGHT);
 
-	const widgetContainer3 = new WidgetContainer([widgetA, widgetContainer2], CONSTANTS.TOP_TO_BOTTOM, null, 80, 120, 800, 400);
+	const width = window.innerWidth * 0.95;
+	const height = window.innerHeight * 0.95;
+	const left = window.innerWidth * 0.025;
+	const top = 0;
+
+	const widgetContainer3 = new WidgetContainer([widgetA, widgetContainer2], CONSTANTS.TOP_TO_BOTTOM, null, left, top, width, height);
 
 	widgetA.widgetContainer = widgetContainer3;
 	widgetB.widgetContainer = widgetContainer2;
