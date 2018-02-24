@@ -391,14 +391,6 @@ const Widget = (function() {
         this.render();
     };
 
-    Widget.prototype.makeContentNonSelectable = function() {
-        this.contentDiv.classList.add("noselect");
-    };
-
-    Widget.prototype.makeContentSelectable = function() {
-        this.contentDiv.classList.remove("noselect");
-    };
-
     Widget.prototype.isDraggingTabFullyInsideWidget = function() {
         if (this.draggingTabIndex !== undefined && this.tabs[this.draggingTabIndex].startX >= 0 && this.tabs[this.draggingTabIndex].startX <= this.width) {
             return true;

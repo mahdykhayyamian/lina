@@ -89,12 +89,12 @@ WidgetContainer.prototype.getWidgetFromPoint = function(clientX, clientY) {
     return null;
 }
 
-WidgetContainer.prototype.makeContentNonSelectable = function() {
-    this.toWidgetArray().map(widget => widget.makeContentNonSelectable());
+WidgetContainer.prototype.makeNonSelectable = function() {
+    this.rootDiv.classList.add("noselect");
 };
 
-WidgetContainer.prototype.makeContentSelectable = function() {
-    this.toWidgetArray().map(widget => widget.makeContentSelectable());
+WidgetContainer.prototype.makeSelectable = function() {
+    this.rootDiv.classList.remove("noselect");
 };
 
 WidgetContainer.prototype.getParent = function() {

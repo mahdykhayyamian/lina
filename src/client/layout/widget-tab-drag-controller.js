@@ -85,7 +85,7 @@ function WidgetTabDragController(widgetContainer) {
                 }
 
                 // make content unselectable during dragging
-                controller.widgetContainer.makeContentNonSelectable();
+                controller.widgetContainer.makeNonSelectable();
             }
         }, true);
     }
@@ -194,7 +194,7 @@ function WidgetTabDragController(widgetContainer) {
                 }
 
                 // make content selectable again
-                controller.widgetContainer.makeContentSelectable();
+                controller.widgetContainer.makeSelectable();
             }
 
         }, true);
