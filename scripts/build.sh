@@ -15,19 +15,19 @@ function createDeployDirectoryStructure {
 }
 
 function clearDeployDirectory {
-	echoGreen "clearing deploy directory"
+	echoGreen "clearing deploy directory..."
 	cd ${LINA_ROOT}
 	rm -rf deploy
 }
 
 function clearTempDirectory {
-	echoGreen "clearing deploy directory"
+	echoGreen "clearing deploy directory..."
 	cd ${LINA_ROOT}
 	rm -rf temp
 }
 
 function compileJavaFiles {
-	echoGreen "compiling java files"
+	echoGreen "compiling java files..."
 	find ${LINA_ROOT}/src/server -name *.java > ${LINA_ROOT}/temp/java-files.txt
 	javac -cp "${LINA_ROOT}/java-libs/*:${CATALINA_HOME}/lib/*" -d "${LINA_ROOT}/deploy/WEB-INF/classes" @${LINA_ROOT}/temp/java-files.txt
 }
@@ -48,7 +48,7 @@ function copyWebContent {
 }
 
 function deployToTomcat {
-	echoGreen "deploying to tomcat"
+	echoGreen "deploying to tomcat..."
 	cd ${CATALINA_HOME}/webapps
 	rm -rf ${LINA_APP_NAME}
 	cd ${LINA_ROOT}
@@ -63,7 +63,7 @@ function startTomcat {
 		return
 	fi
 
-	echoGreen "starting tomcat"
+	echoGreen "starting tomcat..."
 	cd ${CATALINA_HOME}/bin
 	./startup.sh
 }

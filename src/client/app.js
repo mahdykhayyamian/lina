@@ -60,14 +60,14 @@ window.onload = function () {
 
 	const widgetC = new Widget("widgetC", 
 		[{
-			title: 'Home',
-		},{
 			title: 'Mahdy',
 			contentNode: mahdyImage,
 			onRenderCallback: function(widget) {
 				mahdyImage.style.setProperty("height", (widget.contentHeight - 5) + "px");
 				mahdyImage.style.setProperty("max-width", widget.width + "px");
 			}
+		},{
+			title: 'Home',
 		}
 	]);
 
