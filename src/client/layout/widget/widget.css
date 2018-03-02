@@ -26,11 +26,14 @@
     stroke: black;
     stroke-width: 0.2px;
     fill: lightgrey;
+    stroke-width: 0.15px;
+    shape-rendering: geometricprecision;
 }
 
 .tabs-outline.selected path {
     fill: #efefef;
-    stroke-width: 0.3px;
+    stroke-width: 0.15px;
+    shape-rendering: geometricprecision;
 }
 
 .widget-tabs {
@@ -45,7 +48,7 @@
 
 .drag-target-widget-overlay {
     background-color: green;
-    opacity: 0.5;
+    opacity: 0.4;
     position: absolute;
     display: table;
     border-style: dashed;

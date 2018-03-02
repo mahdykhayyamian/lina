@@ -9,7 +9,6 @@ window.onload = function () {
 
 	const appDiv = document.getElementById("lina.app");
 	appDiv.style.setProperty("position", "absolute");
-	//appDiv.style.setProperty("margin", "10px");
 
 	function createTextDiv(text) {
 		const div = document.createElement("div");
@@ -34,11 +33,17 @@ window.onload = function () {
 		return div;
 	}
 
+	const mahdyImage = createImage("resources/images/mahdy.jpg");
+
 	const widgetA = new Widget("widgetA",
 		[{
-			title: 'Judy',
-			contentNode: createTextDiv('Jon Jon Jon')
-		}, {
+			title: 'Mahdy',
+			contentNode: mahdyImage,
+			onRenderCallback: function(widget) {
+				mahdyImage.style.setProperty("height", (widget.contentHeight - 5) + "px");
+				mahdyImage.style.setProperty("max-width", widget.width + "px");
+			}
+		},{
 			title: 'Niki',
 			contentNode: createTextDiv('mish mish mikh mikh mahan!') 
 		},{
@@ -56,16 +61,10 @@ window.onload = function () {
 			contentNode: createTextDiv('Mehrkish!'),
 		}]);
 
-	const mahdyImage = createImage("resources/images/mahdy.jpg");
-
 	const widgetC = new Widget("widgetC", 
 		[{
-			title: 'Mahdy',
-			contentNode: mahdyImage,
-			onRenderCallback: function(widget) {
-				mahdyImage.style.setProperty("height", (widget.contentHeight - 5) + "px");
-				mahdyImage.style.setProperty("max-width", widget.width + "px");
-			}
+			title: 'Judy',
+			contentNode: createTextDiv('Jon Jon Jon')
 		},{
 			title: 'Home',
 		}

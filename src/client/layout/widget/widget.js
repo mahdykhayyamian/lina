@@ -5,8 +5,8 @@ import { WidgetContainer } from "../widget-container.js";
 
 const Widget = (function() {
 
-    const TAB_HEIGHT = 30;
-    const TAB_HOLDER_HEIGHT = 34;
+    const TAB_HEIGHT = 26;
+    const TAB_HOLDER_HEIGHT = 30;
 
     const TAB_OVERLAP = 5;
     const TAB_HORIZONTAL_SIDE_LENGTH = 8;
@@ -631,6 +631,10 @@ const Widget = (function() {
         if (widget.draggingTabIndex === undefined || !widget.isMouseOverWidgetTabs(event) || !widget.isDraggingTabFullyInsideWidget()) {
             return;
         }
+
+        // update x start position of dragging if the tab is still being dragged on the tabs area
+        const widgetBoundingRectangle = widget.node.getBoundingClientRect();
+        widget.draggingStartPositionRelativeToWidget.x = event.clientX - widgetBoundingRectangle.left;
 
         // apply new position
         widget.tabs[widget.draggingTabIndex].startX += (event.clientX - widget.tabs[widget.draggingTabIndex].drag.mouseX);
