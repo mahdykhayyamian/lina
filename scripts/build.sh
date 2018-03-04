@@ -47,20 +47,10 @@ function copyWebContent {
 	cp -r ${LINA_ROOT}/src/client/* ${LINA_ROOT}/deploy
 }
 
-function deployToTomcat {
-	echoGreen "deploying to tomcat..."
-	cd ${CATALINA_HOME}/webapps
-	rm -rf ${LINA_APP_NAME}
-	cd ${LINA_ROOT}
-	cp -r ${LINA_ROOT}/deploy ${CATALINA_HOME}/webapps
-	cd ${CATALINA_HOME}/webapps
-	mv deploy ${LINA_APP_NAME}
-}
-
 function startTomcat {
 
 	if isTomcatRunning; then
-		return
+		shutDownTomcat
 	fi
 
 	echoGreen "starting tomcat..."
@@ -90,9 +80,26 @@ function isTomcatRunning {
 	return 1
 }
 
+function shutDownTomcat {
+	echoGreen "shutting down tomcat..."
+	cd ${CATALINA_HOME}/bin
+	./shutdown.sh
+}
+
 function createWarFile {
 	cd ${LINA_ROOT}/deploy
-	jar -cvf ../${LINA_APP_NAME}.war *
+	jar -cvf ./${LINA_APP_NAME}.war *
+}
+
+function createWarFile {
+	cd ${LINA_ROOT}/deploy
+	jar -cvf ROOT.war *
+}
+
+function copyWarFile {
+	cd ${CATALINA_HOME}/webapps
+	rm -rf ROOT
+	cp ${LINA_ROOT}/deploy/ROOT.war .
 }
 
 clearDeployDirectory
@@ -102,7 +109,7 @@ copyLibs
 compileJavaFiles
 copyWebContent
 addJSBundle
-deployToTomcat
 createWarFile
+copyWarFile
 startTomcat
 tailTomcatLogs

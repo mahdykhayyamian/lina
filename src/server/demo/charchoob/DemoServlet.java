@@ -1,4 +1,4 @@
-package lina.board;
+package lina.demo.charchoob;
 
 import java.io.IOException;
 
@@ -10,16 +10,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class HomeServlet
+ * Servlet implementation class DemoServlet
  */
-@WebServlet("/board")
-public class BoardServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/demo/charchoob"})
+public class DemoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BoardServlet() {
+    public DemoServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -28,8 +28,7 @@ public class BoardServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("app.jsp");
+		RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/app.jsp");
 		RequetsDispatcherObj.forward(request, response);
 	}
 
@@ -40,5 +39,4 @@ public class BoardServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-
 }

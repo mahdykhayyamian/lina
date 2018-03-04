@@ -33,7 +33,7 @@ window.onload = function () {
 		return div;
 	}
 
-	const mahdyImage = createImage("resources/images/mahdy.jpg");
+	const mahdyImage = createImage("/resources/images/mahdy.jpg");
 
 	const widgetA = new Widget("widgetA",
 		[{

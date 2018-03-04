@@ -4,9 +4,9 @@
 <html>
 <head>
 	
- <script src="bundle.js" type="text/javascript"></script>
+ <script src="/bundle.js" type="text/javascript"></script>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Lina Online WhiteBoard</title>
+	<title>Charchoob: Flexible Web Frames</title>
 </head>
 <body>
 	<div id="lina.app"></div>

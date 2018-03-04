@@ -2,7 +2,7 @@ cd /home/ec2-user/lina/tomcat
 echo "shutting down tomcat..."
 ./apache-tomcat-8.5.11/bin/shutdown.sh
 rm -rf *
-mv /tmp/tomcat.zip .
+cp /tmp/tomcat.zip .
 echo "unzipping tomcat..."
 unzip -q tomcat.zip
 mv ./Users/khaymahd/workspace/pet/apache-tomcat-8.5.11 .
