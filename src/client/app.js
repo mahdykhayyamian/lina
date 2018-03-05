@@ -37,7 +37,7 @@ window.onload = function () {
 
 	const widgetA = new Widget("widgetA",
 		[{
-			title: 'Mahdy',
+			title: 'Mahdy Khayyamian',
 			contentNode: mahdyImage,
 			onRenderCallback: function(widget) {
 				mahdyImage.style.setProperty("height", (widget.contentHeight - 5) + "px");

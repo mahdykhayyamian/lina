@@ -112,4 +112,6 @@ addJSBundle
 createWarFile
 copyWarFile
 startTomcat
+clearTempDirectory
+clearDeployDirectory
 tailTomcatLogs

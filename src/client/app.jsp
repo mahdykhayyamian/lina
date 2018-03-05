@@ -6,7 +6,7 @@
 	
  <script src="/bundle.js" type="text/javascript"></script>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Charchoob: Flexible Web Frames</title>
+	<title>Smartframes Demo</title>
 </head>
 <body>
 	<div id="lina.app"></div>
