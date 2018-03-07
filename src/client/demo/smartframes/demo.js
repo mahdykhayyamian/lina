@@ -1,9 +1,9 @@
-import {Widget} from "./layout/widget/widget.js";
-import {Pencil} from "./toolbox/pencil.js";
-import {WidgetContainer} from "./layout/widget-container.js";
-import {WidgetTabDragController} from "./layout/widget-tab-drag-controller.js";
-import {WidgetResizeController} from "./layout/widget-resize-controller.js";
-import {CONSTANTS} from "./layout/constants.js";
+import {Widget} from "layout/widget/widget.js";
+import {Pencil} from "toolbox/pencil.js";
+import {WidgetContainer} from "layout/widget-container.js";
+import {WidgetTabDragController} from "layout/widget-tab-drag-controller.js";
+import {WidgetResizeController} from "layout/widget-resize-controller.js";
+import {CONSTANTS} from "layout/constants.js";
 
 window.onload = function () {
 
@@ -37,7 +37,7 @@ window.onload = function () {
 
 	const widgetA = new Widget("widgetA",
 		[{
-			title: 'Mahdy Khayyamian',
+			title: 'Mahdy!',
 			contentNode: mahdyImage,
 			onRenderCallback: function(widget) {
 				mahdyImage.style.setProperty("height", (widget.contentHeight - 5) + "px");
@@ -83,7 +83,7 @@ window.onload = function () {
 	const width = window.innerWidth * 0.95;
 	const height = window.innerHeight * 0.95;
 	const left = window.innerWidth * 0.025;
-	const top = 0;
+	const top = 80;
 
 	const widgetContainer3 = new WidgetContainer([widgetA, widgetContainer2], CONSTANTS.TOP_TO_BOTTOM, null, left, top, width, height);
 

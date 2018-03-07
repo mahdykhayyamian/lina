@@ -1,9 +1,10 @@
 var webpack = require('webpack');
+var path = require('path');
 
 var PROD = JSON.parse(process.env.PROD_ENV || '0');
 
 module.exports = {
-	entry: "./src/client/app.js",
+	entry: "./src/client/demo/smartframes/demo.js",
 	output: {
 		path: "/Users/khaymahd/workspace/pet/lina/temp",
 		filename: 'bundle.js'
@@ -24,5 +25,8 @@ module.exports = {
 	    new webpack.optimize.UglifyJsPlugin({
 	      compress: { warnings: false }
 	    })
-	] : []
+	] : [],	
+	resolve: {
+		modules: [__dirname , 'client']
+	}
 };

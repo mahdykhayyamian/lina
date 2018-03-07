@@ -71,3 +71,10 @@
     /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
 }
+
+.description {
+    font-family: monospace;
+    left: 50px;
+    position: absolute;
+    font-size: 18px;
+}
