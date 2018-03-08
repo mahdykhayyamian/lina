@@ -14,7 +14,12 @@ window.onload = function () {
 		const div = document.createElement("div");
 		div.textContent = text;
 		div.style["font-size"] = "12px";
+		return div;
+	}
 
+	function createDiv(innerHtml) {
+		const div = document.createElement("div");
+		div.innerHTML = innerHtml;
 		return div;
 	}
 
@@ -37,7 +42,7 @@ window.onload = function () {
 
 	const widgetA = new Widget("widgetA",
 		[{
-			title: 'Mahdy!',
+			title: 'Mahdy',
 			contentNode: mahdyImage,
 			onRenderCallback: function(widget) {
 				mahdyImage.style.setProperty("height", (widget.contentHeight - 5) + "px");
@@ -52,10 +57,16 @@ window.onload = function () {
 		}]
 	);
 
+	const linaImage = createImage("/resources/images/lina.jpg");
+
 	const widgetB = new Widget("widgetB",
 		[{
 			title: 'Lina',
-			contentNode: createTextDiv('Hashem!')
+			contentNode: linaImage,
+			onRenderCallback: function(widget) {
+				linaImage.style.setProperty("height", (widget.contentHeight - 5) + "px");
+				linaImage.style.setProperty("max-width", widget.width + "px");
+			}
 		},{
 			title: 'Mehrkish',
 			contentNode: createTextDiv('Mehrkish!'),
@@ -72,31 +83,72 @@ window.onload = function () {
 
 	const widgetD = new Widget("widgetD", 
 		[{
-			title: 'Hashem',			
+			title: 'Hashem'		
+		}
+	]);
+
+	const smartFramesWidget = new Widget("smartFrames", 
+		[{
+			title: 'Smartframes',
+			contentNode: createDiv(`<div id="description"><span class="emphasize">Smartframes</span>
+					 is a javascript library that allows for flexible rendering of content on heavy web pages.
+					 As users tend to have larger screens, and single page application are getting more popular,
+					 there will be more need for better organization and consumption of content in such web applications.
+					 Smartframes renders various frames on the page, with each frame having several tabs.
+					 You can easily move tabs inside a frame or drag them from one frame to the other.
+					 The frames can also be easily resized to fit user needs. Try Smartframes down below, and let me know what you think!</div>`)	
+		}
+	]);
+
+	const screenSizeTrendImage = createImage("/resources/images/screen-size-trend.png");
+
+	const screenSizeWidget = new Widget("screenSizeWidget", 
+		[{
+			title: 'screen size trend',
+			contentNode: screenSizeTrendImage,
+			onRenderCallback: function(widget) {
+				screenSizeTrendImage.style.setProperty("height", (widget.contentHeight - 5) + "px");
+				screenSizeTrendImage.style.setProperty("max-width", widget.width + "px");
+			}		
 		}
 	]);
 
 	const widgetContainer1 = new WidgetContainer([widgetC, widgetD], CONSTANTS.TOP_TO_BOTTOM);
-
 	const widgetContainer2 = new WidgetContainer([widgetB, widgetContainer1], CONSTANTS.LEFT_TO_RIGHT);
+	const widgetContainer3 = new WidgetContainer([widgetA, widgetContainer2], CONSTANTS.LEFT_TO_RIGHT);
+	const widgetContainer4 = new WidgetContainer([smartFramesWidget, screenSizeWidget], CONSTANTS.LEFT_TO_RIGHT);
 
-	const width = window.innerWidth * 0.95;
-	const height = window.innerHeight * 0.95;
-	const left = window.innerWidth * 0.025;
-	const top = 80;
-
-	const widgetContainer3 = new WidgetContainer([widgetA, widgetContainer2], CONSTANTS.TOP_TO_BOTTOM, null, left, top, width, height);
+	const topLevelContainer = new WidgetContainer([widgetContainer4, widgetContainer3], CONSTANTS.TOP_TO_BOTTOM);
+	const widgetTabDragController = new WidgetTabDragController(topLevelContainer);
+	const widgetResizeController = new WidgetResizeController(topLevelContainer);
 
 	widgetA.widgetContainer = widgetContainer3;
 	widgetB.widgetContainer = widgetContainer2;
 	widgetC.widgetContainer = widgetContainer1;
 	widgetD.widgetContainer = widgetContainer1;
+	smartFramesWidget.widgetContainer = widgetContainer4;
+	screenSizeWidget.widgetContainer = widgetContainer4;
 
-	widgetContainer2.parentWidgetContainer = widgetContainer3;
 	widgetContainer1.parentWidgetContainer = widgetContainer2;
+	widgetContainer2.parentWidgetContainer = widgetContainer3;
+	widgetContainer3.parentWidgetContainer = topLevelContainer;
+	widgetContainer4.parentWidgetContainer = topLevelContainer;
+	topLevelContainer.parentWidgetContainer = null;
 
-	widgetContainer3.render(appDiv);
+	function onResize() {
+		const width = window.innerWidth  - 50;
+		const height = window.innerHeight - 50;
+		const left = 10;
+		const top = 10;
 
-	const widgetTabDragController = new WidgetTabDragController(widgetContainer3);
-	const widgetResizeController = new WidgetResizeController(widgetContainer3);
+		topLevelContainer.left = left;
+		topLevelContainer.top = top;
+		topLevelContainer.width = width;
+		topLevelContainer.height = height;
+
+		topLevelContainer.render(appDiv);
+	};
+
+	window.onresize = onResize;
+	onResize();
 }

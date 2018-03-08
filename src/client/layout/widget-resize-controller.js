@@ -159,6 +159,7 @@ function WidgetResizeController(widgetContainer) {
     }
 
     function getSiblingAncestors(widget1, widget2) {
+
         const parentList1 = [];
         let pointer = widget1;
         while (pointer !== null) {

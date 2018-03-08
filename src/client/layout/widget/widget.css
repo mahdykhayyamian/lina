@@ -69,12 +69,18 @@
     /* Internet Explorer/Edge */
     user-select: none;
     /* Non-prefixed version, currently
-                                  supported by Chrome and Opera */
+    supported by Chrome and Opera */
 }
 
-.description {
+#description {
     font-family: monospace;
-    left: 50px;
-    position: absolute;
     font-size: 18px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 16px
+}
+
+.emphasize {
+    font-size: 24px;
+    font-weight: bold;
 }
