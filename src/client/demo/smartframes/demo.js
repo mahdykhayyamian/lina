@@ -113,10 +113,25 @@ window.onload = function () {
 		}
 	]);
 
+
+	const singlePageApplicationWidget = new Widget("SinglePageAppWidget",
+		[{
+			title: 'SPA',
+			contentNode: createDiv(`<div id="description">A <span class="emphasize">single-page application (SPA)</span> is a web application or web site that interacts with the user
+			 by dynamically rewriting the current page rather than loading entire new pages from a server.
+			 This approach avoids interruption of the user experience between successive pages,
+			 making the application behave more like a desktop application. In an SPA, either all necessary code
+			 – HTML, JavaScript, and CSS – is retrieved with a single page load,[1] or the appropriate resources are dynamically loaded and added to the page as necessary,
+			 usually in response to user actions. The page does not reload at any point in the process, nor does control transfer to another page,
+			 although the location hash or the HTML5 History API can be used to provide the perception and navigability of separate logical pages in the application.
+			 [2] Interaction with the single page application often involves dynamic communication with the web server behind the scenes.</div>`)
+		}
+	]);
+
 	const widgetContainer1 = new WidgetContainer([widgetC, widgetD], CONSTANTS.TOP_TO_BOTTOM);
 	const widgetContainer2 = new WidgetContainer([widgetB, widgetContainer1], CONSTANTS.LEFT_TO_RIGHT);
 	const widgetContainer3 = new WidgetContainer([widgetA, widgetContainer2], CONSTANTS.LEFT_TO_RIGHT);
-	const widgetContainer4 = new WidgetContainer([smartFramesWidget, screenSizeWidget], CONSTANTS.LEFT_TO_RIGHT);
+	const widgetContainer4 = new WidgetContainer([smartFramesWidget, screenSizeWidget, singlePageApplicationWidget], CONSTANTS.LEFT_TO_RIGHT);
 
 	const topLevelContainer = new WidgetContainer([widgetContainer4, widgetContainer3], CONSTANTS.TOP_TO_BOTTOM);
 	const widgetTabDragController = new WidgetTabDragController(topLevelContainer);
@@ -128,6 +143,7 @@ window.onload = function () {
 	widgetD.widgetContainer = widgetContainer1;
 	smartFramesWidget.widgetContainer = widgetContainer4;
 	screenSizeWidget.widgetContainer = widgetContainer4;
+	singlePageApplicationWidget.widgetContainer = widgetContainer4;
 
 	widgetContainer1.parentWidgetContainer = widgetContainer2;
 	widgetContainer2.parentWidgetContainer = widgetContainer3;
