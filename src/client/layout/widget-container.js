@@ -127,8 +127,6 @@ function renderWidgetContainer(widgetContainer, parentNode) {
 
 function sizeAndPositionChildren(widgetContainer) {
 
-    const childRatios = getChildrenRatios(widgetContainer);
-
     const renderingValues = {
         width: widgetContainer.width,
         height: widgetContainer.height,
@@ -205,11 +203,14 @@ function getChildrenRatios(widgetContainer) {
             childrenRatios.push(widthOrHeight / sum);
         }
     } else {
-        for (let i = 0; i < widgetContainer.children.length; i++) {
-            childrenRatios.push(1 / widgetContainer.children.length);
+        if (widgetContainer.childrenRatios !== null) {
+            return widgetContainer.childrenRatios;
+        } else {
+            for (let i = 0; i < widgetContainer.children.length; i++) {
+                childrenRatios.push(1 / widgetContainer.children.length);
+            }
         }
     }
-
 
     return childrenRatios;
 }

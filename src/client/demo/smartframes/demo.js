@@ -72,18 +72,16 @@ window.onload = function () {
 			contentNode: createTextDiv('Mehrkish!'),
 		}]);
 
-	const widgetC = new Widget("widgetC", 
-		[{
-			title: 'Judy',
-			contentNode: createTextDiv('Jon Jon Jon')
-		},{
-			title: 'Home',
-		}
-	]);
 
-	const widgetD = new Widget("widgetD", 
+	const youtTubeWidget = new Widget("youTubeWidget",
 		[{
-			title: 'Hashem'		
+			title: 'SkyNews Live',
+			contentNode: createDiv(`<iframe id="ytplayer" width="560" height="315" src="https://www.youtube.com/embed/XOacA3RYrXk" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`),
+			onRenderCallback: function(widget) {
+				const ytplayer = document.getElementById("ytplayer");
+				ytplayer.style.setProperty("height", (widget.contentHeight - 5) + "px");
+				ytplayer.style.setProperty("max-width", widget.width + "px");
+			}
 		}
 	]);
 
@@ -128,10 +126,11 @@ window.onload = function () {
 		}
 	]);
 
-	const widgetContainer1 = new WidgetContainer([widgetC, widgetD], CONSTANTS.TOP_TO_BOTTOM);
+	const widgetContainer1 = new WidgetContainer([youtTubeWidget], CONSTANTS.TOP_TO_BOTTOM);
 	const widgetContainer2 = new WidgetContainer([widgetB, widgetContainer1], CONSTANTS.LEFT_TO_RIGHT);
 	const widgetContainer3 = new WidgetContainer([widgetA, widgetContainer2], CONSTANTS.LEFT_TO_RIGHT);
 	const widgetContainer4 = new WidgetContainer([smartFramesWidget, screenSizeWidget, singlePageApplicationWidget], CONSTANTS.LEFT_TO_RIGHT);
+	widgetContainer4.childrenRatios = [0.5, 0.25, 0.25];
 
 	const topLevelContainer = new WidgetContainer([widgetContainer4, widgetContainer3], CONSTANTS.TOP_TO_BOTTOM);
 	const widgetTabDragController = new WidgetTabDragController(topLevelContainer);
@@ -139,8 +138,7 @@ window.onload = function () {
 
 	widgetA.widgetContainer = widgetContainer3;
 	widgetB.widgetContainer = widgetContainer2;
-	widgetC.widgetContainer = widgetContainer1;
-	widgetD.widgetContainer = widgetContainer1;
+	youtTubeWidget.widgetContainer = widgetContainer1;
 	smartFramesWidget.widgetContainer = widgetContainer4;
 	screenSizeWidget.widgetContainer = widgetContainer4;
 	singlePageApplicationWidget.widgetContainer = widgetContainer4;
