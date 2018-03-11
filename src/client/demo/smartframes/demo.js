@@ -66,11 +66,11 @@ window.onload = function() {
 					 there will be more need for better organization and consumption of content in such web applications.
 					 Smartframes renders various frames on the page, with each frame having several tabs.
 					 You can easily move tabs inside a frame or drag them from one frame to the other.
-					 The frames can also be easily resized to fit user needs. Try Smartframes down below, and let me know what you think!</div>`),
+					 The frames can also be easily resized to fit user needs. Play around with it, and let me know what you think!</div>`),
         onRenderCallback: function(widget) {
             const sfDiv = document.getElementById("smartframes");
             if (sfDiv) {
-                sfDiv.style.setProperty("height", (widget.contentHeight - 5) + "px");
+                sfDiv.style.setProperty("height", widget.contentHeight + "px");
                 sfDiv.style.setProperty("max-width", widget.width + "px");
             }
         }
@@ -98,7 +98,7 @@ window.onload = function() {
         onRenderCallback: function(widget) {
             const spaDiv = document.getElementById("SPA");
             if (spaDiv) {
-                spaDiv.style.setProperty("height", (widget.contentHeight - 5) + "px");
+                spaDiv.style.setProperty("height", widget.contentHeight + "px");
                 spaDiv.style.setProperty("max-width", widget.width + "px");
             }
         }
