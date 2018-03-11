@@ -13,7 +13,6 @@
 
 .widget-content-border {
     display: table-cell;
-    vertical-align: middle;
     text-align: center;
     border: solid;
     border-color: #efefef;
@@ -72,16 +71,25 @@
     supported by Chrome and Opera */
 }
 
-#description {
+.spa-text {
     font-family: monospace;
-    font-size: 18px;
+    font-size: 16px;
     padding-left: 10px;
     padding-right: 10px;
-    font-size: 16px;
     text-align: justify;
+    overflow-y: scroll;
+}
+
+.smartframes-text {
+    font-family: monospace;
+    font-size: 24px;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: justify;
+    overflow-y: scroll;
 }
 
 .emphasize {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: bold;
 }

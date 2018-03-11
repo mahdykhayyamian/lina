@@ -721,6 +721,8 @@ const Widget = (function() {
 
         widget.selectedTabIndex = tabIndex;
         drawSelectedTab(widget, widget.selectedTabIndex, widget.tabs[widget.selectedTabIndex].startX, widget.tabs[widget.selectedTabIndex].startY);
+
+        widget.render();
     }
 
     function drawTabs(widget) {
