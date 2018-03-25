@@ -191,6 +191,7 @@ function WidgetTabDragController(widgetContainer) {
 
                 if (controller.draggingTabSourceWidget) {
                     controller.draggingTabSourceWidget.draggingTabIndex = undefined;
+                     controller.draggingTabSourceWidget.render();
                 }
 
                 // make content selectable again

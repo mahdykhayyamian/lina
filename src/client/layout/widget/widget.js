@@ -5,8 +5,8 @@ import { WidgetContainer } from "../widget-container.js";
 
 const Widget = (function() {
 
-    const TAB_HEIGHT = 26;
-    const TAB_HOLDER_HEIGHT = 30;
+    const TAB_HEIGHT = 28;
+    const TAB_HOLDER_HEIGHT = 32;
 
     const TAB_OVERLAP = 5;
     const TAB_HORIZONTAL_SIDE_LENGTH = 8;
@@ -97,7 +97,7 @@ const Widget = (function() {
 
         this.parentNode.appendChild(this.node);
 
-        for (let i=0; i<this.tabs.length; i++) {
+        for (let i = 0; i < this.tabs.length; i++) {
             if (this.tabs[i].onRenderCallback) {
                 this.tabs[i].onRenderCallback(this);
             }
@@ -395,7 +395,7 @@ const Widget = (function() {
         if (this.draggingTabIndex !== undefined && this.tabs[this.draggingTabIndex].startX >= 0 && this.tabs[this.draggingTabIndex].startX <= this.width) {
             return true;
         }
-        
+
         return false;
     };
 
@@ -424,10 +424,13 @@ const Widget = (function() {
         return minHeight;
     };
 
-
     Widget.prototype.setOpacity = function(opacity) {
         this.opacity = opacity;
         this.node.style.setProperty("opacity", opacity);
+    };
+
+    Widget.prototype.getTabSize = function() {
+        return getDynamicTabSize(this);
     };
 
     function findNewTabLocation(widget, dropX) {

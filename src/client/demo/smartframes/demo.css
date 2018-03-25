@@ -1,0 +1,71 @@
+.brace {
+    position: absolute;
+    left: 0px;
+}
+
+.shuffle-tabs-txt {
+    position: absolute;
+    top: 40px;
+    font-size: 14px;
+    font-family: monospace;
+    left: 100px;
+}
+
+.drag-down {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: -1px
+}
+
+.drag-tab-txt {
+    font-family: monospace;
+    position: absolute;
+    top: 50px;
+    font-size: 14px;
+}
+
+.resize-left {
+    position: absolute;
+    width: 35px;
+    right: 5px;
+}
+
+.resize-left-txt {
+    position: absolute;
+    font-family: monospace;
+    font-size: 14px;
+    right: 35px;
+}
+
+.resize-right {
+    position: absolute;
+    width: 35px;
+    left: 5px;
+}
+
+.resize-right-txt {
+    position: absolute;
+    font-family: monospace;
+    font-size: 14px;
+    left: 35px;
+}
+
+.orange {
+    background-color: orange;
+}
+
+.navy-blue {
+    background-color: #000080;
+}
+
+
+img {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    user-drag: none;
+    -webkit-touch-callout: none;
+}

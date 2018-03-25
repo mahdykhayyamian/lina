@@ -4,6 +4,7 @@ import { WidgetContainer } from "layout/widget-container.js";
 import { WidgetTabDragController } from "layout/widget-tab-drag-controller.js";
 import { WidgetResizeController } from "layout/widget-resize-controller.js";
 import { CONSTANTS } from "layout/constants.js";
+import { instructorWidget } from "demo/smartframes/instructor-widget.js";
 
 window.onload = function() {
 
@@ -105,28 +106,24 @@ window.onload = function() {
     }, ]);
 
 
-    const widgetPlaceholder1 = new Widget("widgetPlaceholder1", [{
-        title: 'widgetPlaceholder1'
-    }]);
-
     const widgetPlaceholder2 = new Widget("widgetPlaceholder2", [{
         title: 'widgetPlaceholder2'
     }]);
 
-    const widgetContainer5 = new WidgetContainer([widgetPlaceholder1], CONSTANTS.LEFT_TO_RIGHT);
+    const widgetContainer5 = new WidgetContainer([instructorWidget], CONSTANTS.LEFT_TO_RIGHT);
     const widgetContainer2 = new WidgetContainer([widgetB, widgetContainer5, widgetPlaceholder2], CONSTANTS.LEFT_TO_RIGHT);
-    widgetContainer2.childrenRatios = [0.25, 0.5, 0.25];
+    widgetContainer2.childrenRatios = [0.4, 0.4, 0.2];
 
     const widgetContainer3 = new WidgetContainer([widgetContainer2], CONSTANTS.LEFT_TO_RIGHT);
     const widgetContainer4 = new WidgetContainer([smartFramesWidget, screenSizeAndSPAWidget], CONSTANTS.LEFT_TO_RIGHT);
-    widgetContainer4.childrenRatios = [0.75, 0.25];
+    widgetContainer4.childrenRatios = [0.4, 0.6];
 
     const topLevelContainer = new WidgetContainer([widgetContainer4, widgetContainer3], CONSTANTS.TOP_TO_BOTTOM);
     const widgetTabDragController = new WidgetTabDragController(topLevelContainer);
     const widgetResizeController = new WidgetResizeController(topLevelContainer);
 
     widgetB.widgetContainer = widgetContainer2;
-    widgetPlaceholder1.widgetContainer = widgetContainer5;
+    instructorWidget.widgetContainer = widgetContainer5;
     widgetPlaceholder2.widgetContainer = widgetContainer2;
 
     smartFramesWidget.widgetContainer = widgetContainer4;
