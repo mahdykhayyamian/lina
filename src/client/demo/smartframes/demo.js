@@ -31,26 +31,6 @@ window.onload = function() {
         return image;
     }
 
-    const mahdyImage = createImage("/resources/images/mahdy.jpg");
-
-    const linaImage = createImage("/resources/images/lina.jpg");
-
-    const widgetB = new Widget("widgetB", [{
-        title: 'Lina',
-        contentNode: linaImage,
-        onRenderCallback: function(widget) {
-            linaImage.style.setProperty("height", (widget.contentHeight - 5) + "px");
-            linaImage.style.setProperty("max-width", widget.width + "px");
-        }
-    }, {
-        title: 'Mahdy',
-        contentNode: mahdyImage,
-        onRenderCallback: function(widget) {
-            mahdyImage.style.setProperty("height", (widget.contentHeight - 5) + "px");
-            mahdyImage.style.setProperty("max-width", widget.width + "px");
-        }
-    }]);
-
     const smartFramesWidget = new Widget("smartFrames", [{
         title: 'Smartframes',
         contentNode: createDiv(`<div id="smartframes" class="smartframes-text"><span class="emphasize">Smartframes</span>
@@ -72,13 +52,6 @@ window.onload = function() {
     const screenSizeTrendImage = createImage("/resources/images/screen-size-trend.png");
 
     const screenSizeAndSPAWidget = new Widget("screenSizeAndSPAWidget", [{
-        title: 'screen size trend',
-        contentNode: screenSizeTrendImage,
-        onRenderCallback: function(widget) {
-            screenSizeTrendImage.style.setProperty("height", (widget.contentHeight - 5) + "px");
-            screenSizeTrendImage.style.setProperty("max-width", widget.width + "px");
-        }
-    }, {
         title: 'SPA',
         contentNode: createDiv(`<div id="SPA" class="spa-text">A <span class="emphasize">single-page application (SPA)</span> is a web application or web site that interacts with the user
              by dynamically rewriting the current page rather than loading entire new pages from a server.
@@ -95,7 +68,14 @@ window.onload = function() {
                 spaDiv.style.setProperty("max-width", widget.width + "px");
             }
         }
-    }, ]);
+    },{
+        title: 'screen size trend',
+        contentNode: screenSizeTrendImage,
+        onRenderCallback: function(widget) {
+            screenSizeTrendImage.style.setProperty("height", (widget.contentHeight - 5) + "px");
+            screenSizeTrendImage.style.setProperty("max-width", widget.width + "px");
+        }
+    }]);
 
 
     const patternsWidget = new Widget("patternsWidget", [{
@@ -120,18 +100,48 @@ window.onload = function() {
         }
     }]);
 
-    const widgetContainer2 = new WidgetContainer([widgetB, patternsWidget], CONSTANTS.LEFT_TO_RIGHT);
-    widgetContainer2.childrenRatios = [0.3, 0.7];
+
+    const mahdyImage = createImage("/resources/images/mahdy.jpg");
+
+    const linaImage = createImage("/resources/images/lina.jpg");
+
+    const linaWidget = new Widget("lina", [{
+        title: 'Lina',
+        contentNode: linaImage,
+        onRenderCallback: function(widget) {
+            linaImage.style.setProperty("height", (widget.contentHeight - 5) + "px");
+            linaImage.style.setProperty("max-width", widget.width + "px");
+        }
+    }]);
+
+
+    const mahdyWidget = new Widget("mahdy", [{
+        title: 'Mahdy',
+        contentNode: mahdyImage,
+        onRenderCallback: function(widget) {
+            mahdyImage.style.setProperty("height", (widget.contentHeight - 5) + "px");
+            mahdyImage.style.setProperty("max-width", widget.width + "px");
+        }
+    }]);
+
+    const mahdyLinaWidgetContainer = new WidgetContainer([mahdyWidget, linaWidget], CONSTANTS.LEFT_TO_RIGHT);
+    mahdyWidget.widgetContainer = mahdyLinaWidgetContainer;
+    linaWidget.widgetContainer = mahdyLinaWidgetContainer;
+
+    const widgetContainer2 = new WidgetContainer([mahdyLinaWidgetContainer, patternsWidget], CONSTANTS.LEFT_TO_RIGHT);
+    widgetContainer2.childrenRatios = [0.30, 0.70];
 
     const widgetContainer3 = new WidgetContainer([widgetContainer2], CONSTANTS.LEFT_TO_RIGHT);
     const widgetContainer4 = new WidgetContainer([smartFramesWidget, instructorWidget, screenSizeAndSPAWidget], CONSTANTS.LEFT_TO_RIGHT);
     widgetContainer4.childrenRatios = [0.3, 0.3, 0.4];
 
     const topLevelContainer = new WidgetContainer([widgetContainer4, widgetContainer3], CONSTANTS.TOP_TO_BOTTOM);
+    topLevelContainer.childrenRatios = [0.7, 0.3];
+
     const widgetTabDragController = new WidgetTabDragController(topLevelContainer);
     const widgetResizeController = new WidgetResizeController(topLevelContainer);
 
-    widgetB.widgetContainer = widgetContainer2;
+    mahdyLinaWidgetContainer.widgetContainer = widgetContainer2;
     instructorWidget.widgetContainer = widgetContainer4;
     patternsWidget.widgetContainer = widgetContainer2;
 
