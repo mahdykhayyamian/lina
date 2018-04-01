@@ -141,7 +141,7 @@ window.onload = function() {
     const widgetTabDragController = new WidgetTabDragController(topLevelContainer);
     const widgetResizeController = new WidgetResizeController(topLevelContainer);
 
-    mahdyLinaWidgetContainer.widgetContainer = widgetContainer2;
+    mahdyLinaWidgetContainer.parentWidgetContainer = widgetContainer2;
     instructorWidget.widgetContainer = widgetContainer4;
     patternsWidget.widgetContainer = widgetContainer2;
 

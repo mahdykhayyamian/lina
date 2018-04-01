@@ -1,3 +1,23 @@
+.spa-text {
+    font-family: monospace;
+    font-size: 18px;
+    padding: 30px;
+    text-align: justify;
+    overflow-y: scroll;
+    box-sizing: border-box;
+    line-height: 28px
+}
+
+.smartframes-text {
+    font-family: monospace;
+    font-size: 20px;
+    padding: 30px;
+    text-align: justify;
+    overflow-y: scroll;
+    box-sizing: border-box;
+    line-height: 28px
+}
+
 .brace {
     position: absolute;
     left: 0px;

@@ -71,26 +71,6 @@
     supported by Chrome and Opera */
 }
 
-.spa-text {
-    font-family: monospace;
-    font-size: 16px;
-    padding: 30px;
-    text-align: justify;
-    overflow-y: scroll;
-    box-sizing: border-box;
-    line-height: 25px
-}
-
-.smartframes-text {
-    font-family: monospace;
-    font-size: 20px;
-    padding: 30px;
-    text-align: justify;
-    overflow-y: scroll;
-    box-sizing: border-box;
-    line-height: 28px
-}
-
 .emphasize {
     font-size: 28px;
     font-weight: bold;
