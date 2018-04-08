@@ -165,6 +165,12 @@ window.onload = function() {
         topLevelContainer.height = height;
 
         topLevelContainer.render(appDiv);
+
+        const disqusThread = document.getElementById("disqus_thread");
+        disqusThread.style.setProperty("width", width + "px");
+        const topDisqus = height + 30;
+        disqusThread.style.setProperty("top", topDisqus + "px");
+        disqusThread.style.setProperty("left", left + "px");
     };
 
     window.onresize = onResize;

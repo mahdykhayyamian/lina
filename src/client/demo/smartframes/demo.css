@@ -113,3 +113,7 @@ img {
     user-drag: none;
     -webkit-touch-callout: none;
 }
+
+#disqus_thread {
+    position: absolute;
+}
