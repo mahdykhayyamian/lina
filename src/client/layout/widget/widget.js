@@ -11,6 +11,11 @@ const Widget = (function() {
     const TAB_OVERLAP = 5;
     const TAB_HORIZONTAL_SIDE_LENGTH = 8;
 
+    const CONTENT_BORDER_TOP_WIDTH = 5;
+    const CONTENT_BORDER_BOTTOM_WIDTH = 2;
+    const CONTENT_BORDER_RIGHT_WIDTH = 2;
+    const CONTENT_BORDER_LEFT_WIDTH = 2;
+
     const DIRECTION_TOP = "DIRECTION_TOP";
     const DIRECTION_RIGHT = "DIRECTION_RIGHT";
     const DIRECTION_BOTTOM = "DIRECTION_BOTTOM";
@@ -22,7 +27,7 @@ const Widget = (function() {
         this.left = left
         this.width = width;
         this.height = height;
-        this.contentHeight = this.height - TAB_HOLDER_HEIGHT;
+        this.contentHeight = this.height - TAB_HOLDER_HEIGHT - CONTENT_BORDER_TOP_WIDTH - CONTENT_BORDER_BOTTOM_WIDTH;
         this.tabs = tabs;
         this.selectedTabIndex = 0;
         this.widgetContainer = widgetContainer;
@@ -62,7 +67,7 @@ const Widget = (function() {
         this.node.style.setProperty("width", this.width + "px");
         this.node.style.setProperty("height", this.height + "px");
 
-        this.contentHeight = this.height - TAB_HOLDER_HEIGHT;
+        this.contentHeight = this.height - TAB_HOLDER_HEIGHT - CONTENT_BORDER_TOP_WIDTH - CONTENT_BORDER_BOTTOM_WIDTH;
 
         this.tabsDiv = document.createElement("div");
         this.tabsDiv.setAttribute("class", "widget-tabs");
@@ -85,7 +90,8 @@ const Widget = (function() {
         this.node.appendChild(this.contentDiv);
 
         this.contentBorderDiv = document.createElement("div");
-        this.contentBorderDiv.setAttribute("class", "widget-content-border");
+        setContentBorderStyle(this);
+
         this.contentDiv.appendChild(this.contentBorderDiv);
 
         // event handlers
@@ -462,6 +468,19 @@ const Widget = (function() {
             tabIndex: tabIndex,
             newTabStartX: newTabStartX
         }
+    }
+
+    function setContentBorderStyle(widget) {
+        widget.contentBorderDiv.setAttribute("class", "widget-content-border");
+        widget.contentBorderDiv.style.setProperty("width", widget.width - CONTENT_BORDER_RIGHT_WIDTH - CONTENT_BORDER_LEFT_WIDTH + "px");
+        widget.contentBorderDiv.style.setProperty("height", widget.height - TAB_HOLDER_HEIGHT - CONTENT_BORDER_TOP_WIDTH - CONTENT_BORDER_BOTTOM_WIDTH + "px");
+
+        widget.contentBorderDiv.style.setProperty("border", "solid");
+        widget.contentBorderDiv.style.setProperty("border-color", "#efefef");
+        widget.contentBorderDiv.style.setProperty("border-top-width", CONTENT_BORDER_TOP_WIDTH + "px");
+        widget.contentBorderDiv.style.setProperty("border-right-width", CONTENT_BORDER_RIGHT_WIDTH + "px");
+        widget.contentBorderDiv.style.setProperty("border-bottom-width", CONTENT_BORDER_BOTTOM_WIDTH + "px");
+        widget.contentBorderDiv.style.setProperty("border-left-width", CONTENT_BORDER_LEFT_WIDTH + "px");
     }
 
     function findMyChildIndex(widget) {

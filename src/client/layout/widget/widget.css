@@ -13,12 +13,6 @@
 
 .widget-content-border {
     display: table-cell;
-    text-align: center;
-    border: solid;
-    border-color: #efefef;
-    border-top-width: 5px;
-    border-left-width: 1px;
-    border-bottom-width: 1px;
 }
 
 .tabs-outline path {
