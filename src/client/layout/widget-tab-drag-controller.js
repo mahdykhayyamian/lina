@@ -187,6 +187,10 @@ function WidgetTabDragController(widgetContainer) {
                 }
 
                 registerWidgetMouseEventHandlers(targetWidget);
+
+                // changing back the z-index to auto after widget is inserted.
+                controller.clonedWidgetForTab.node.style.setProperty("z-index", "auto");
+
                 controller.clonedWidgetForTab = null;
 
                 if (controller.draggingTabSourceWidget) {
