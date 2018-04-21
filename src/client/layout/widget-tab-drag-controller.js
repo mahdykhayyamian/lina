@@ -135,13 +135,12 @@ function WidgetTabDragController(widgetContainer) {
             currentNode.remove();
 
             if (parentNode) {
-
                 for (let i = 0; i < parentNode.children.length; i++) {
                     if (parentNode.children[i] === currentNode) {
                         parentNode.children.splice(i, 1);
                         break;
                     }
-                }                    
+                }
 
                 if (currentNode.widgetContainer) {
                     currentNode.widgetContainer = undefined;
@@ -157,8 +156,10 @@ function WidgetTabDragController(widgetContainer) {
                     parentNode.render();
                     currentNode = undefined;
                 }
-            } 
+            }
         }
+
+        controller.draggingTabSourceWidget = undefined;
     }
 
     function registerWidgetContainerMouseUpHandler() {
@@ -195,7 +196,7 @@ function WidgetTabDragController(widgetContainer) {
 
                 if (controller.draggingTabSourceWidget) {
                     controller.draggingTabSourceWidget.draggingTabIndex = undefined;
-                     controller.draggingTabSourceWidget.render();
+                    controller.draggingTabSourceWidget.render();
                 }
 
                 // make content selectable again
