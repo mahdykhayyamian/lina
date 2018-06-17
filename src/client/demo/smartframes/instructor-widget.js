@@ -1,4 +1,4 @@
-import { Widget } from "layout/widget/widget.js";
+import { Widget } from "smartframes";
 
 const instructorWidget = new Widget("instructorWidget", [{
     title: 'instructions',

@@ -18,6 +18,12 @@
     line-height: 28px
 }
 
+.github-link {
+    font-family: monospace;
+    font-size: 16px;
+    padding: 10px;
+}
+
 .brace {
     position: absolute;
     left: 0px;

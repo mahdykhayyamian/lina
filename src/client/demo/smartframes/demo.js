@@ -1,8 +1,8 @@
-import { Widget } from "layout/widget/widget.js";
-import { WidgetContainer } from "layout/widget-container.js";
-import { WidgetTabDragController } from "layout/widget-tab-drag-controller.js";
-import { WidgetResizeController } from "layout/widget-resize-controller.js";
-import { CONSTANTS } from "layout/constants.js";
+import { Widget } from "smartframes";
+import { WidgetContainer } from "smartframes";
+import { WidgetTabDragController } from "smartframes";
+import { WidgetResizeController } from "smartframes";
+import { CONSTANTS } from "smartframes";
 import { instructorWidget } from "demo/smartframes/instructor-widget.js";
 
 window.onload = function() {
@@ -47,6 +47,9 @@ window.onload = function() {
                 sfDiv.style.setProperty("max-width", widget.width + "px");
             }
         }
+    }, {
+        title: 'Github',
+        contentNode: createDiv(`<div class="github-link">https://github.com/mahdykhayyamian/smartframes</div>`)
     }]);
 
     const screenSizeTrendImage = createImage("/resources/images/screen-size-trend.png");

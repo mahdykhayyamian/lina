@@ -38,7 +38,7 @@ function copyLibs {
 }
 
 function addJSBundle {
-	webpack
+	node_modules/.bin/webpack
 	cp ${LINA_ROOT}/temp/bundle.js  ${LINA_ROOT}/deploy
 }
 
