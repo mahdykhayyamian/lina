@@ -37,9 +37,10 @@ function copyLibs {
 	cp -r ${LINA_ROOT}/java-libs ${LINA_ROOT}/deploy/WEB-INF/lib
 }
 
-function addJSBundle {
+function addJSBundles {
 	node_modules/.bin/webpack
-	cp ${LINA_ROOT}/temp/bundle.js  ${LINA_ROOT}/deploy
+	cp ${LINA_ROOT}/temp/smartframes.js  ${LINA_ROOT}/deploy
+	cp ${LINA_ROOT}/temp/whiteboard.js  ${LINA_ROOT}/deploy
 }
 
 function copyWebContent {
@@ -108,7 +109,7 @@ createDeployDirectoryStructure
 copyLibs
 compileJavaFiles
 copyWebContent
-addJSBundle
+addJSBundles
 createWarFile
 copyWarFile
 startTomcat

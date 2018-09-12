@@ -4,10 +4,13 @@ var path = require('path');
 var PROD = JSON.parse(process.env.PROD_ENV || '0');
 
 module.exports = {
-    entry: "./src/client/demo/smartframes/demo.js",
+    entry: {
+        smartframes: './src/client/demo/smartframes/demo.js',
+        whiteboard: './src/client/whiteboard/app.js'
+    },
     output: {
-        path: "/Users/khaymahd/workspace/pet/lina/temp",
-        filename: 'bundle.js'
+        filename: '[name].js',
+        path: __dirname + '/temp'
     },
     module: {
         rules: [{
@@ -27,6 +30,6 @@ module.exports = {
         })
     ] : [],
     resolve: {
-        modules: [__dirname, 'client','node_modules']
+        modules: [__dirname, 'client', 'node_modules']
     }
 };
