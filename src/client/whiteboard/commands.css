@@ -14,11 +14,11 @@
 
 .run-command.btn {
     position: absolute;
-    background-color: mediumseagreen;
+    background-color: lightseagreen;
     font-family: monospace;
     font-size: 18px;
     width: 180px;
-    border-color: chartreuse;
+    border-color: beige;
     margin-top: 5px;
     border-radius: 5px;
 }

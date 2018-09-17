@@ -4,7 +4,7 @@ import { WidgetTabDragController } from "smartframes";
 import { WidgetResizeController } from "smartframes";
 import { CONSTANTS } from "smartframes";
 import { commandsWidget } from "whiteboard/commands.js";
-
+import { boardsWidget } from "whiteboard/boards.js";
 
 window.onload = function() {
 
@@ -32,24 +32,19 @@ window.onload = function() {
         return image;
     }
 
-    const whiteboardWidget = new Widget("whiteboardWidget", [{
-        title: 'Whiteboard',
-        contentNode: createDiv(`<div id="whiteboard" class="spa-text"></div>`)
-    }]);
-
     const chatWidget = new Widget("chatWidget", [{
         title: 'Chat',
         contentNode: createDiv(`<div id="chat" class="spa-text"></div>`)
     }]);
 
-    const topLevelContainer = new WidgetContainer([commandsWidget, whiteboardWidget, chatWidget], CONSTANTS.LEFT_TO_RIGHT);
+    const topLevelContainer = new WidgetContainer([commandsWidget, boardsWidget, chatWidget], CONSTANTS.LEFT_TO_RIGHT);
     topLevelContainer.childrenRatios = [0.2, 0.6, 0.2];
     const widgetTabDragController = new WidgetTabDragController(topLevelContainer);
     const widgetResizeController = new WidgetResizeController(topLevelContainer);
     topLevelContainer.parentWidgetContainer = null;
 
     commandsWidget.widgetContainer = topLevelContainer;
-    whiteboardWidget.widgetContainer = topLevelContainer;
+    boardsWidget.widgetContainer = topLevelContainer;
     chatWidget.widgetContainer = topLevelContainer;
 
     function onResize() {
