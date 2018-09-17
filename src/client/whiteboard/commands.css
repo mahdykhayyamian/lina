@@ -1,13 +1,28 @@
 #commandsTextArea {
     position: absolute;
     border-style: ridge;
-    border-width:5px;
-    padding:10px;
+    border-width: 5px;
+    padding: 10px;
     box-sizing: border-box;
-    font-size:16px;
+    font-size: 16px;
     resize: none;
 }
 
-#commandsTextArea:focus{
-	outline: none;
+#commandsTextArea:focus {
+    outline: none;
+}
+
+.run-command.btn {
+    position: absolute;
+    background-color: mediumseagreen;
+    font-family: monospace;
+    font-size: 18px;
+    width: 180px;
+    border-color: chartreuse;
+    margin-top: 5px;
+    border-radius: 5px;
+}
+
+.run-command.btn:focus {
+    outline: none;
 }
