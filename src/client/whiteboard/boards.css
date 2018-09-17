@@ -1,0 +1,15 @@
+.add-board.btn {
+    position: absolute;
+    background-color: lightseagreen;
+    font-family: monospace;
+    font-size: 18px;
+    width: 150px;
+    border-color: beige;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-left: 4px;
+}
+
+.add-board.btn:focus {
+    outline: none;
+}
