@@ -3,6 +3,8 @@ import { WidgetContainer } from "smartframes";
 import { WidgetTabDragController } from "smartframes";
 import { WidgetResizeController } from "smartframes";
 import { CONSTANTS } from "smartframes";
+import { commandsWidget } from "whiteboard/commands.js";
+
 
 window.onload = function() {
 
@@ -29,14 +31,6 @@ window.onload = function() {
         image.src = source;
         return image;
     }
-
-    const commandsWidget = new Widget("commands", [{
-        title: 'Commands',
-        contentNode: createDiv(`<div></div>`)
-    }, {
-        title: 'Samples',
-        contentNode: createDiv(`<div></div>`)
-    }]);
 
     const whiteboardWidget = new Widget("whiteboardWidget", [{
         title: 'Whiteboard',

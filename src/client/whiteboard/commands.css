@@ -1,0 +1,13 @@
+#commandsTextArea {
+    position: absolute;
+    border-style: ridge;
+    border-width:5px;
+    padding:10px;
+    box-sizing: border-box;
+    font-size:16px;
+    resize: none;
+}
+
+#commandsTextArea:focus{
+	outline: none;
+}
