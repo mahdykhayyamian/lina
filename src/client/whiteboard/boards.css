@@ -1,15 +1,39 @@
 .add-board.btn {
     position: absolute;
     background-color: lightseagreen;
-    font-family: monospace;
+    background-color: #297be6;
     font-size: 18px;
     width: 150px;
     border-color: beige;
     border-radius: 5px;
-    margin-top: 10px;
+    margin-top: 4px;
     margin-left: 4px;
+    color:white;
+    left: 10px;
+    top : 10px;
 }
 
 .add-board.btn:focus {
     outline: none;
 }
+
+#whiteboard {
+    background-color: lightgrey;
+}
+
+#board-container {
+    display: inline-block;
+    text-align: center;
+    overflow: scroll;
+}
+
+.board {
+    width: 1000px;
+    height: 750px;
+    border-style: solid;
+    border-width: 1px;
+    background-color: white;
+    margin : 50px;
+    display: inline-block;
+}
+

@@ -14,13 +14,15 @@
 
 .run-command.btn {
     position: absolute;
-    background-color: lightseagreen;
+    background-color: #297be6;
     font-family: monospace;
     font-size: 18px;
     width: 180px;
     border-color: beige;
     margin-top: 5px;
+    margin-left: 4px;
     border-radius: 5px;
+    color:white;
 }
 
 .run-command.btn:focus {

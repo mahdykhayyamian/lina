@@ -1,6 +1,7 @@
 import { Widget } from "smartframes";
 
-const runButtonHeight = 32;
+const runButtonHeight = 40;
+const extraSpace = 4;
 
 const commandsWidget = new Widget("commands", [{
     title: 'Commands',
@@ -13,13 +14,13 @@ const commandsWidget = new Widget("commands", [{
         const commandsTextArea = document.getElementById("commandsTextArea");
         if (commandsTextArea) {
             commandsTextArea.style.setProperty("width", commandsTextArea.parentNode.offsetWidth + "px");
-            commandsTextArea.style.setProperty("height", commandsTextArea.parentNode.offsetHeight - (runButtonHeight) + "px");
+            commandsTextArea.style.setProperty("height", commandsTextArea.parentNode.offsetHeight - (runButtonHeight + extraSpace) + "px");
         }
 
         var buttons = document.querySelectorAll('.btn.run-command');
         for (let i = 0; i < buttons.length; ++i) {
             buttons[i].style.height = runButtonHeight + "px";
-            buttons[i].style.top = (commandsTextArea.parentNode.offsetHeight - (runButtonHeight)) + "px";
+            buttons[i].style.top = (commandsTextArea.parentNode.offsetHeight - (runButtonHeight + extraSpace/2)) + "px";
         }
 
     }
