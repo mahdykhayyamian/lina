@@ -4,11 +4,14 @@ const addBoardHeight = 40;
 const boardHeight = 600;
 const margin = 20;
 const whiteBoardWidth = 1000;
+const boardHeaderHeight = 50;
 
 const boardsWidget = new Widget("boards", [{
     title: 'Boards',
     contentNode: createDiv(`<div id="whiteboard" class="spa-text">
-                                <input type="button" class="btn add-board" value="Add Board"</input>
+                                <div id="board-header">
+                                    <input type="button" class="btn add-board" value="Add Board"</input>
+                                </div>
                                 <div id="board-container"></div>
                             </div>`),
 
@@ -17,8 +20,11 @@ const boardsWidget = new Widget("boards", [{
 
         let whiteBoardDiv = document.getElementById("whiteboard");
 
+        let boardHeaderDiv = document.getElementById("board-header");
+        boardHeaderDiv.style.setProperty("height", boardHeaderHeight + "px");
+
         let boardContainer = document.getElementById("board-container");                
-        boardContainer.style.setProperty("height", widget.contentHeight + "px");
+        boardContainer.style.setProperty("height", (widget.contentHeight - boardHeaderHeight) + "px");
         boardContainer.style.setProperty("width", widget.width + "px");
 
         for (let i = 0; i < buttons.length; ++i) {

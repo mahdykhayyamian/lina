@@ -1,3 +1,7 @@
+#commands-container {
+    background-color: #FDF4E7;
+}
+
 #commandsTextArea {
     position: absolute;
     border-style: ridge;
@@ -14,7 +18,7 @@
 
 .run-command.btn {
     position: absolute;
-    background-color: #297be6;
+    background-color: #6764E8;
     font-family: monospace;
     font-size: 18px;
     width: 180px;

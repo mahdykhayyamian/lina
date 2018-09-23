@@ -31,6 +31,7 @@ const commandsWidget = new Widget("commands", [{
 
 function createDiv(innerHtml) {
     const div = document.createElement("div");
+    div.setAttribute("id", "commands-container");
     div.style.setProperty("width", "100%");
     div.style.setProperty("height", "100%");
     div.innerHTML = innerHtml;
