@@ -4,7 +4,7 @@
 <html>
 <head>
 	
- <script src="/whiteboard.js" type="text/javascript"></script>
+ <script src="/lina/whiteboard.js" type="text/javascript"></script>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>Lina Whiteboard</title>
 </head>

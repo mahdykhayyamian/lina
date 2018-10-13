@@ -27,7 +27,7 @@ const boardsWidget = new Widget("boards", [{
         boardContainer.style.setProperty("height", (widget.contentHeight - boardHeaderHeight) + "px");
         boardContainer.style.setProperty("width", widget.width + "px");
 
-        for (let i = 0; i < buttons.length; ++i) {
+        for (let i = 0; i < buttons.length; i++) {
 
             buttons[i].style.height = addBoardHeight + "px";
 

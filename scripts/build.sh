@@ -92,15 +92,10 @@ function createWarFile {
 	jar -cvf ./${LINA_APP_NAME}.war *
 }
 
-function createWarFile {
-	cd ${LINA_ROOT}/deploy
-	jar -cvf ROOT.war *
-}
-
 function copyWarFile {
 	cd ${CATALINA_HOME}/webapps
 	rm -rf ROOT
-	cp ${LINA_ROOT}/deploy/ROOT.war .
+	cp ${LINA_ROOT}/deploy/${LINA_APP_NAME}.war .
 }
 
 clearDeployDirectory
