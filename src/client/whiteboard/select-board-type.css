@@ -1,0 +1,19 @@
+.board-type-select {
+	position: absolute;
+	background-color: #1BBE7E;
+    font-family: monospace;
+    font-size: 14px;
+    margin-left: 1px;
+    border-radius: 2px;
+}
+
+.board-type-select ul {
+	list-style: none;
+	padding: 0px;
+	margin: 8px;
+}
+
+.board-type-select ul li {
+	list-style: none;
+	padding-bottom: 5px;
+}

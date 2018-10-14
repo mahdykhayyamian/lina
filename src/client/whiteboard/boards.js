@@ -1,5 +1,7 @@
 import { Widget } from "smartframes";
 
+import { BoardTypeSelector } from "./select-board-type.js";
+
 const addBoardHeight = 40;
 const boardHeight = 600;
 const margin = 20;
@@ -32,6 +34,14 @@ const boardsWidget = new Widget("boards", [{
             buttons[i].style.height = addBoardHeight + "px";
 
             buttons[i].addEventListener("click", (event) => {
+
+                const buttonBoundingRect = buttons[i].getBoundingClientRect();                
+                const left = buttonBoundingRect.x + buttonBoundingRect.width;
+                const top = buttonBoundingRect.top;
+
+                const boardTypeSelector = new BoardTypeSelector(left, top);
+                boardTypeSelector.render();
+
                 boardsWidget.boards.push({
                     type: "someType",
                     commands: "someCommands"
