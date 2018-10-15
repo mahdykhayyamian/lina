@@ -18,10 +18,10 @@
 	height: 38px;
 	width: 100%;
     font-family: monospace;
-	font-size: 12px;
+	font-size: 14px;
     box-sizing: border-box;
     border-radius: 2px;
-    padding-left: 10px;
+    padding-left: 5px;
     padding-right: 5px;
 }
 
@@ -38,7 +38,7 @@
 	cursor: default;
     border-bottom-style: dashed;
     border-bottom-width: 1px;
-    height: 18px;
+    height: 20px;
 }
 
 .board-type-select ul li.selected {

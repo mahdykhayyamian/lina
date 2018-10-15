@@ -19,6 +19,11 @@ const BoardTypeSelector =  function (left, top, width) {
 	}];
 };
 
+BoardTypeSelector.prototype.render = function() {
+	const selector = createDOM(this);
+	document.body.appendChild(selector);
+};
+
 function createDOM (boardTypeSelector) {
 
 	const selectorRootDiv = document.createElement("div");
@@ -31,37 +36,56 @@ function createDOM (boardTypeSelector) {
 	const searchBox = document.createElement("input");
 	searchBox.setAttribute("type", "text");
 	searchBox.setAttribute("placeholder", "Search for Board Type...");
+
+	searchBox.addEventListener("keyup", (event) => {
+		console.log(event);
+		console.log("searchBox.value = " + searchBox.value);
+		if (searchBox.value !== "") {
+			const matchingOptions = boardTypeSelector.options.filter(option	=> option.label.toLowerCase().startsWith(searchBox.value.toLowerCase()));
+			console.log(matchingOptions);
+			updateMachingOptions(boardTypeSelector, matchingOptions);
+		} else {
+			updateMachingOptions(boardTypeSelector, boardTypeSelector.options);
+		}
+	});
+
 	selectorRootDiv.appendChild(searchBox);
 
-	const options = document.createElement("ul");
-	selectorRootDiv.appendChild(options);
+	boardTypeSelector.matchingOptionsRoot = document.createElement("ul");
+	selectorRootDiv.appendChild(boardTypeSelector.matchingOptionsRoot);
 
-	for (let i=0; i<boardTypeSelector.options.length; i++) {
-		const option = boardTypeSelector.options[i];
+	updateMachingOptions(boardTypeSelector, boardTypeSelector.options);
+
+	return selectorRootDiv;
+}
+
+function updateMachingOptions(boardTypeSelector, matchingOptions) {
+
+	removeMatchingOptions(boardTypeSelector);
+
+	for (let i=0; i<matchingOptions.length; i++) {
+		const option = matchingOptions[i];
 		const optionItem = document.createElement("li");
 		optionItem.setAttribute("id", option.value);
 		optionItem.innerText = option.label;
 
 		optionItem.addEventListener("mousemove", (event) => {
-			console.log(event.target);
 			event.target.classList.add("selected");
 		});
 
 		optionItem.addEventListener("mouseleave", (event) => {
-			console.log(event.target);
 			event.target.classList.remove("selected");
 		});
 
-		options.appendChild(optionItem);
+		boardTypeSelector.matchingOptionsRoot.appendChild(optionItem);
 	}
-
-	return selectorRootDiv;
 }
 
-BoardTypeSelector.prototype.render = function() {
-	const selector = createDOM(this);
-	document.body.appendChild(selector);
-};
-     
+function removeMatchingOptions(boardTypeSelector) {
+    while (boardTypeSelector.matchingOptionsRoot.firstChild) {
+        boardTypeSelector.matchingOptionsRoot.removeChild(boardTypeSelector.matchingOptionsRoot.firstChild);
+    }
+}
+
 export {BoardTypeSelector};
 require("whiteboard/select-board-type.css")

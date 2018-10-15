@@ -38,7 +38,7 @@ const boardsWidget = new Widget("boards", [{
                 const buttonBoundingRect = buttons[i].getBoundingClientRect();                
                 const left = buttonBoundingRect.x + buttonBoundingRect.width;
                 const top = buttonBoundingRect.top;
-                const width = 200;
+                const width = 250;
 
                 const boardTypeSelector = new BoardTypeSelector(left, top, width);
                 boardTypeSelector.render();
