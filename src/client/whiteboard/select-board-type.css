@@ -2,7 +2,8 @@
 	position: absolute;
 	background-color: #1BBE7E;
     font-family: monospace;
-    font-size: 14px;
+    font-size: 16px;
+    color: white;
     margin-left: 1px;
     border-radius: 2px;
 }
@@ -10,10 +11,36 @@
 .board-type-select ul {
 	list-style: none;
 	padding: 0px;
-	margin: 8px;
+	margin: 0px;
+}
+
+.board-type-select input {
+	height: 38px;
+	width: 100%;
+    font-family: monospace;
+	font-size: 12px;
+    box-sizing: border-box;
+    border-radius: 2px;
+    padding-left: 10px;
+    padding-right: 5px;
+}
+
+.board-type-select input:focus, .board-type-select input:focus{
+    outline: none;
 }
 
 .board-type-select ul li {
 	list-style: none;
-	padding-bottom: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	cursor: default;
+    border-bottom-style: dashed;
+    border-bottom-width: 1px;
+    height: 18px;
+}
+
+.board-type-select ul li.selected {
+	background-color: #26AB76;
 }
