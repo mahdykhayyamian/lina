@@ -29,19 +29,19 @@ const boardsWidget = new Widget("boards", [{
         boardContainer.style.setProperty("height", (widget.contentHeight - boardHeaderHeight) + "px");
         boardContainer.style.setProperty("width", widget.width + "px");
 
+        const width = 250;
+        let boardTypeSelector = null;
+
         for (let i = 0; i < buttons.length; i++) {
 
             buttons[i].style.height = addBoardHeight + "px";
 
             buttons[i].addEventListener("click", (event) => {
 
-                const buttonBoundingRect = buttons[i].getBoundingClientRect();                
-                const left = buttonBoundingRect.x + buttonBoundingRect.width;
-                const top = buttonBoundingRect.top;
-                const width = 250;
-
-                const boardTypeSelector = new BoardTypeSelector(left, top, width);
-                boardTypeSelector.render();
+                if (boardTypeSelector === null) {
+                    boardTypeSelector = new BoardTypeSelector(boardHeaderDiv, width);
+                    boardTypeSelector.render();
+                }
 
                 boardsWidget.boards.push({
                     type: "someType",

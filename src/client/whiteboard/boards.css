@@ -1,5 +1,4 @@
 .add-board.btn {
-    position: absolute;
     background-color: #6764E8;
     font-size: 18px;
     width: 150px;
@@ -7,8 +6,7 @@
     border-radius: 5px;
     margin-left: 4px;
     color:white;
-    left: 10px;
-    top : 10px;
+    margin-top: 5px;
 }
 
 .add-board.btn:focus {
@@ -28,6 +26,7 @@
 #board-header {
     width: 100%;
     background: #FDF4E7;
+    display: flex;
 }
 
 .board {

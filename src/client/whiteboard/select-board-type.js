@@ -1,7 +1,6 @@
-const BoardTypeSelector =  function (left, top, width) {
+const BoardTypeSelector =  function (parent, width) {
 
-	this.left = left;
-	this.top = top;
+	this.parent = parent;
 	this.width = width;
 
 	this.options = [{
@@ -21,7 +20,7 @@ const BoardTypeSelector =  function (left, top, width) {
 
 BoardTypeSelector.prototype.render = function() {
 	const selector = createDOM(this);
-	document.body.appendChild(selector);
+	this.parent.appendChild(selector);
 };
 
 function createDOM (boardTypeSelector) {
@@ -35,7 +34,7 @@ function createDOM (boardTypeSelector) {
 
 	const searchBox = document.createElement("input");
 	searchBox.setAttribute("type", "text");
-	searchBox.setAttribute("placeholder", "Search for Board Type...");
+	searchBox.setAttribute("placeholder", "Search Content Type...");
 
 	searchBox.addEventListener("keyup", (event) => {
 		console.log(event);

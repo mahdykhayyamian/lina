@@ -1,11 +1,13 @@
 .board-type-select {
-	position: absolute;
 	background-color: #1BBE7E;
     font-family: monospace;
     font-size: 16px;
     color: white;
     margin-left: 1px;
     border-radius: 2px;
+    height: fit-content;
+    z-index: 1;
+    margin-top: 5px;
 }
 
 .board-type-select ul {
