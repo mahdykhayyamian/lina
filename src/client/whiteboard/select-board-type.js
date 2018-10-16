@@ -1,7 +1,8 @@
-const BoardTypeSelector =  function (parent, width) {
+const BoardTypeSelector =  function (parent, width, onSelectCallback) {
 
 	this.parent = parent;
 	this.width = width;
+	this.onSelectCallback = onSelectCallback;
 
 	this.options = [{
 		value: "bar-chart",
@@ -23,14 +24,18 @@ BoardTypeSelector.prototype.render = function() {
 	this.parent.appendChild(selector);
 };
 
+BoardTypeSelector.prototype.remove = function() {
+    this.selectorRootDiv.remove();
+};
+
 function createDOM (boardTypeSelector) {
 
-	const selectorRootDiv = document.createElement("div");
-	selectorRootDiv.setAttribute("class", "board-type-select");
+	boardTypeSelector.selectorRootDiv = document.createElement("div");
+	boardTypeSelector.selectorRootDiv.setAttribute("class", "board-type-select");
 
-	selectorRootDiv.style.setProperty("left", boardTypeSelector.left + "px");
-	selectorRootDiv.style.setProperty("top", boardTypeSelector.top + "px");
-	selectorRootDiv.style.setProperty("width", boardTypeSelector.width + "px");
+	boardTypeSelector.selectorRootDiv.style.setProperty("left", boardTypeSelector.left + "px");
+	boardTypeSelector.selectorRootDiv.style.setProperty("top", boardTypeSelector.top + "px");
+	boardTypeSelector.selectorRootDiv.style.setProperty("width", boardTypeSelector.width + "px");
 
 	const searchBox = document.createElement("input");
 	searchBox.setAttribute("type", "text");
@@ -48,14 +53,14 @@ function createDOM (boardTypeSelector) {
 		}
 	});
 
-	selectorRootDiv.appendChild(searchBox);
+	boardTypeSelector.selectorRootDiv.appendChild(searchBox);
 
 	boardTypeSelector.matchingOptionsRoot = document.createElement("ul");
-	selectorRootDiv.appendChild(boardTypeSelector.matchingOptionsRoot);
+	boardTypeSelector.selectorRootDiv.appendChild(boardTypeSelector.matchingOptionsRoot);
 
 	updateMachingOptions(boardTypeSelector, boardTypeSelector.options);
 
-	return selectorRootDiv;
+	return boardTypeSelector.selectorRootDiv;
 }
 
 function updateMachingOptions(boardTypeSelector, matchingOptions) {
@@ -74,6 +79,12 @@ function updateMachingOptions(boardTypeSelector, matchingOptions) {
 
 		optionItem.addEventListener("mouseleave", (event) => {
 			event.target.classList.remove("selected");
+		});
+
+		optionItem.addEventListener("click", (event) => {
+			removeMatchingOptions(boardTypeSelector);
+			console.log(event.target.id);
+			boardTypeSelector.onSelectCallback(event.target.id);
 		});
 
 		boardTypeSelector.matchingOptionsRoot.appendChild(optionItem);

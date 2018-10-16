@@ -33,29 +33,32 @@ const boardsWidget = new Widget("boards", [{
         let boardTypeSelector = null;
 
         for (let i = 0; i < buttons.length; i++) {
-
             buttons[i].style.height = addBoardHeight + "px";
-
             buttons[i].addEventListener("click", (event) => {
-
-                if (boardTypeSelector === null) {
-                    boardTypeSelector = new BoardTypeSelector(boardHeaderDiv, width);
-                    boardTypeSelector.render();
+                if (boardTypeSelector !== null) {
+                    return;
                 }
 
-                boardsWidget.boards.push({
-                    type: "someType",
-                    commands: "someCommands"
+                boardTypeSelector = new BoardTypeSelector(boardHeaderDiv, width, (contentType) => {
+                    boardsWidget.boards.push({
+                        type: contentType,
+                        commands: "someCommands"
+                    });
+
+                    let newBoardDiv = document.createElement("div");
+                    newBoardDiv.setAttribute("id", "board-" + boardsWidget.boards.length);
+                    newBoardDiv.setAttribute("class", "board");
+
+                    let newBoardTop = (boardsWidget.boards.length-1) * boardHeight + boardsWidget.boards.length * margin + addBoardHeight;
+                    newBoardDiv.style.setProperty("top", newBoardTop + "px");
+
+                    boardContainer.appendChild(newBoardDiv);
+
+                    boardTypeSelector.remove();
+                    boardTypeSelector = null;
                 });
 
-                let newBoardDiv = document.createElement("div");
-                newBoardDiv.setAttribute("id", "board-" + boardsWidget.boards.length);
-                newBoardDiv.setAttribute("class", "board");
-
-                let newBoardTop = (boardsWidget.boards.length-1) * boardHeight + boardsWidget.boards.length * margin + addBoardHeight;
-                newBoardDiv.style.setProperty("top", newBoardTop + "px");
-
-                boardContainer.appendChild(newBoardDiv);
+                boardTypeSelector.render();
             });
         }
     }
