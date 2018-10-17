@@ -3,6 +3,7 @@ const BoardTypeSelector =  function (parent, width, onSelectCallback) {
 	this.parent = parent;
 	this.width = width;
 	this.onSelectCallback = onSelectCallback;
+	this.shown = false;
 
 	this.options = [{
 		value: "bar-chart",
@@ -20,12 +21,22 @@ const BoardTypeSelector =  function (parent, width, onSelectCallback) {
 };
 
 BoardTypeSelector.prototype.render = function() {
+	console.log("inside render");
 	const selector = createDOM(this);
 	this.parent.appendChild(selector);
+	this.shown = true;
+
+	registerClickOutOfSelectorEventListner(this);
 };
 
 BoardTypeSelector.prototype.remove = function() {
     this.selectorRootDiv.remove();
+    document.body.removeEventListener("click", this.clickHandler);
+    this.shown = false;
+};
+
+BoardTypeSelector.prototype.isShown = function() {
+	return this.shown;
 };
 
 function createDOM (boardTypeSelector) {
@@ -42,8 +53,6 @@ function createDOM (boardTypeSelector) {
 	searchBox.setAttribute("placeholder", "Search Content Type...");
 
 	searchBox.addEventListener("keyup", (event) => {
-		console.log(event);
-		console.log("searchBox.value = " + searchBox.value);
 		if (searchBox.value !== "") {
 			const matchingOptions = boardTypeSelector.options.filter(option	=> option.label.toLowerCase().startsWith(searchBox.value.toLowerCase()));
 			console.log(matchingOptions);
@@ -95,6 +104,23 @@ function removeMatchingOptions(boardTypeSelector) {
     while (boardTypeSelector.matchingOptionsRoot.firstChild) {
         boardTypeSelector.matchingOptionsRoot.removeChild(boardTypeSelector.matchingOptionsRoot.firstChild);
     }
+}
+
+
+function registerClickOutOfSelectorEventListner(boardTypeSelector) {
+
+	boardTypeSelector.clickHandler = function(event) {
+
+		// remove selector if click was outside of the selector
+		if (!event.target.closest(".board-type-select")) {
+			boardTypeSelector.remove();
+		}
+	}
+
+	// wrapping in setTimeout to avoid removing immediately after adding the selector.
+	setTimeout(() => {
+		document.body.addEventListener("click", boardTypeSelector.clickHandler);
+	}, 0);
 }
 
 export {BoardTypeSelector};

@@ -1,4 +1,4 @@
-.add-board.btn {
+#add-board {
     background-color: #6764E8;
     font-size: 18px;
     width: 150px;
@@ -9,7 +9,7 @@
     margin-top: 5px;
 }
 
-.add-board.btn:focus {
+#add-board:focus {
     outline: none;
 }
 

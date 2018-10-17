@@ -12,13 +12,13 @@ const boardsWidget = new Widget("boards", [{
     title: 'Boards',
     contentNode: createDiv(`<div id="whiteboard" class="spa-text">
                                 <div id="board-header">
-                                    <input type="button" class="btn add-board" value="Add Board"</input>
+                                    <input id = "add-board" type="button" class="btn" value="Add Board"</input>
                                 </div>
                                 <div id="board-container"></div>
                             </div>`),
 
     onRenderCallback: (widget) => {
-        var buttons = document.querySelectorAll('.btn.add-board');
+        const addBoardButton = document.getElementById('add-board');
 
         let whiteBoardDiv = document.getElementById("whiteboard");
 
@@ -32,35 +32,33 @@ const boardsWidget = new Widget("boards", [{
         const width = 250;
         let boardTypeSelector = null;
 
-        for (let i = 0; i < buttons.length; i++) {
-            buttons[i].style.height = addBoardHeight + "px";
-            buttons[i].addEventListener("click", (event) => {
-                if (boardTypeSelector !== null) {
-                    return;
-                }
+        addBoardButton.style.height = addBoardHeight + "px";
+        addBoardButton.addEventListener("click", (event) => {
 
-                boardTypeSelector = new BoardTypeSelector(boardHeaderDiv, width, (contentType) => {
-                    boardsWidget.boards.push({
-                        type: contentType,
-                        commands: "someCommands"
-                    });
+            if (boardTypeSelector && boardTypeSelector.isShown()) {
+                return;
+            }
 
-                    let newBoardDiv = document.createElement("div");
-                    newBoardDiv.setAttribute("id", "board-" + boardsWidget.boards.length);
-                    newBoardDiv.setAttribute("class", "board");
-
-                    let newBoardTop = (boardsWidget.boards.length-1) * boardHeight + boardsWidget.boards.length * margin + addBoardHeight;
-                    newBoardDiv.style.setProperty("top", newBoardTop + "px");
-
-                    boardContainer.appendChild(newBoardDiv);
-
-                    boardTypeSelector.remove();
-                    boardTypeSelector = null;
+            boardTypeSelector = new BoardTypeSelector(boardHeaderDiv, width, (contentType) => {
+                boardsWidget.boards.push({
+                    type: contentType,
+                    commands: ""
                 });
 
-                boardTypeSelector.render();
+                let newBoardDiv = document.createElement("div");
+                newBoardDiv.setAttribute("id", "board-" + boardsWidget.boards.length);
+                newBoardDiv.setAttribute("class", "board");
+
+                let newBoardTop = (boardsWidget.boards.length-1) * boardHeight + boardsWidget.boards.length * margin + addBoardHeight;
+                newBoardDiv.style.setProperty("top", newBoardTop + "px");
+
+                boardContainer.appendChild(newBoardDiv);
+
+                boardTypeSelector.remove();
             });
-        }
+
+            boardTypeSelector.render();
+        });
     }
 }]);
 
