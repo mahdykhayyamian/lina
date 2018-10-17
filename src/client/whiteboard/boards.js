@@ -8,6 +8,40 @@ const margin = 20;
 const whiteBoardWidth = 1000;
 const boardHeaderHeight = 50;
 
+let boardTypeSelector;
+let boardHeaderDiv;
+let boardContainer;
+
+function addButtonClickEventListener(event) {
+
+    if (boardTypeSelector && boardTypeSelector.isShown()) {
+        return;
+    }
+
+    const width = 250;
+
+    boardTypeSelector = new BoardTypeSelector(boardHeaderDiv, width, (contentType) => {
+        boardsWidget.boards.push({
+            type: contentType,
+            commands: ""
+        });
+
+        let newBoardDiv = document.createElement("div");
+        newBoardDiv.setAttribute("id", "board-" + boardsWidget.boards.length);
+        newBoardDiv.setAttribute("class", "board");
+
+        let newBoardTop = (boardsWidget.boards.length-1) * boardHeight + boardsWidget.boards.length * margin + addBoardHeight;
+        newBoardDiv.style.setProperty("top", newBoardTop + "px");
+
+        boardContainer.appendChild(newBoardDiv);
+
+        boardTypeSelector.remove();
+    });
+
+    boardTypeSelector.render();
+}
+
+
 const boardsWidget = new Widget("boards", [{
     title: 'Boards',
     contentNode: createDiv(`<div id="whiteboard" class="spa-text">
@@ -18,47 +52,18 @@ const boardsWidget = new Widget("boards", [{
                             </div>`),
 
     onRenderCallback: (widget) => {
+
         const addBoardButton = document.getElementById('add-board');
 
-        let whiteBoardDiv = document.getElementById("whiteboard");
-
-        let boardHeaderDiv = document.getElementById("board-header");
+        boardHeaderDiv = document.getElementById("board-header");
         boardHeaderDiv.style.setProperty("height", boardHeaderHeight + "px");
 
-        let boardContainer = document.getElementById("board-container");                
+        boardContainer = document.getElementById("board-container");
         boardContainer.style.setProperty("height", (widget.contentHeight - boardHeaderHeight) + "px");
         boardContainer.style.setProperty("width", widget.width + "px");
 
-        const width = 250;
-        let boardTypeSelector = null;
-
         addBoardButton.style.height = addBoardHeight + "px";
-        addBoardButton.addEventListener("click", (event) => {
-
-            if (boardTypeSelector && boardTypeSelector.isShown()) {
-                return;
-            }
-
-            boardTypeSelector = new BoardTypeSelector(boardHeaderDiv, width, (contentType) => {
-                boardsWidget.boards.push({
-                    type: contentType,
-                    commands: ""
-                });
-
-                let newBoardDiv = document.createElement("div");
-                newBoardDiv.setAttribute("id", "board-" + boardsWidget.boards.length);
-                newBoardDiv.setAttribute("class", "board");
-
-                let newBoardTop = (boardsWidget.boards.length-1) * boardHeight + boardsWidget.boards.length * margin + addBoardHeight;
-                newBoardDiv.style.setProperty("top", newBoardTop + "px");
-
-                boardContainer.appendChild(newBoardDiv);
-
-                boardTypeSelector.remove();
-            });
-
-            boardTypeSelector.render();
-        });
+        addBoardButton.addEventListener("click", addButtonClickEventListener);
     }
 }]);
 
