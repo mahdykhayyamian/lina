@@ -6,6 +6,7 @@ const CommandsComponent =  function () {
 	    <textarea id="${CONSTANTS.COMMANDS_TEXT_AREA_ID}" placeholder="Write commands to visualize..."></textarea>
 	    <input type="button" class="btn run-command" value="Run" />
 	    `);
+	this.commandsRoot.id = "commands-container";
 
 	this.samplesRoot = createDiv(`
 	    <div id="${CONSTANTS.SAMPLE_COMMANDS_ID}"></div>

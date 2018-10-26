@@ -1,7 +1,8 @@
-const BoardTypeSelector =  function (parent, width, onSelectCallback) {
+const boardTypeSelectorWidth = 250;
 
-	this.parent = parent;
-	this.width = width;
+const BoardTypeSelector =  function (boardsComponent, onSelectCallback) {
+
+	this.boardsComponent = boardsComponent;
 	this.onSelectCallback = onSelectCallback;
 	this.shown = false;
 
@@ -23,7 +24,7 @@ const BoardTypeSelector =  function (parent, width, onSelectCallback) {
 BoardTypeSelector.prototype.render = function() {
 	console.log("inside render");
 	const selector = createDOM(this);
-	this.parent.appendChild(selector);
+	this.boardsComponent.boardHeaderDiv.appendChild(selector);
 	this.shown = true;
 
 	registerClickOutOfSelectorEventListner(this);
@@ -46,7 +47,7 @@ function createDOM (boardTypeSelector) {
 
 	boardTypeSelector.selectorRootDiv.style.setProperty("left", boardTypeSelector.left + "px");
 	boardTypeSelector.selectorRootDiv.style.setProperty("top", boardTypeSelector.top + "px");
-	boardTypeSelector.selectorRootDiv.style.setProperty("width", boardTypeSelector.width + "px");
+	boardTypeSelector.selectorRootDiv.style.setProperty("width", boardTypeSelectorWidth + "px");
 
 	const searchBox = document.createElement("input");
 	searchBox.setAttribute("type", "text");
@@ -92,8 +93,7 @@ function updateMachingOptions(boardTypeSelector, matchingOptions) {
 
 		optionItem.addEventListener("click", (event) => {
 			removeMatchingOptions(boardTypeSelector);
-			console.log(event.target.id);
-			boardTypeSelector.onSelectCallback(event.target.id);
+			boardTypeSelector.onSelectCallback(boardTypeSelector.boardsComponent, event.target.id);
 		});
 
 		boardTypeSelector.matchingOptionsRoot.appendChild(optionItem);
@@ -124,4 +124,4 @@ function registerClickOutOfSelectorEventListner(boardTypeSelector) {
 }
 
 export {BoardTypeSelector};
-require("whiteboard/select-board-type.css")
+require("whiteboard/boards/select-board-type.css")
