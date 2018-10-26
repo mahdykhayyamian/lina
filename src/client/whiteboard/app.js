@@ -3,7 +3,7 @@ import { WidgetContainer } from "smartframes";
 import { WidgetTabDragController } from "smartframes";
 import { WidgetResizeController } from "smartframes";
 import { CONSTANTS } from "smartframes";
-import { commandsWidget } from "whiteboard/commands.js";
+import { CommandsComponent } from "./commands/commands-component.js";
 import { boardsWidget } from "whiteboard/boards.js";
 
 window.onload = function() {
@@ -37,6 +37,10 @@ window.onload = function() {
         contentNode: createDiv(`<div id="chat" class="spa-text"></div>`)
     }]);
 
+
+    const commandsComponent = new CommandsComponent();
+    const commandsWidget = commandsComponent.createWidget();
+
     const topLevelContainer = new WidgetContainer([commandsWidget, boardsWidget, chatWidget], CONSTANTS.LEFT_TO_RIGHT);
     topLevelContainer.childrenRatios = [0.2, 0.6, 0.2];
     const widgetTabDragController = new WidgetTabDragController(topLevelContainer);
@@ -46,6 +50,8 @@ window.onload = function() {
     commandsWidget.widgetContainer = topLevelContainer;
     boardsWidget.widgetContainer = topLevelContainer;
     chatWidget.widgetContainer = topLevelContainer;
+
+    boardsWidget.commandsComponent = commandsComponent;
 
     function onResize() {
         const width = window.innerWidth - 50;

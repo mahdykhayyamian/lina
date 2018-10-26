@@ -1,6 +1,7 @@
 import { Widget } from "smartframes";
-
 import { BoardTypeSelector } from "./select-board-type.js";
+import { samples as barChartSamples } from "./visualization/bar-chart/sample-command.js";
+import { CONSTANTS } from "./constants.js";
 
 const addBoardHeight = 40;
 const boardHeight = 600;
@@ -21,10 +22,13 @@ function addButtonClickEventListener(event) {
     const width = 250;
 
     boardTypeSelector = new BoardTypeSelector(boardHeaderDiv, width, (contentType) => {
-        boardsWidget.boards.push({
+        const newBoard = {
             type: contentType,
-            commands: ""
-        });
+            commands: "",
+            samples: getSamplesForContentType(contentType)
+        };
+
+        boardsWidget.boards.push(newBoard);
 
         let newBoardDiv = document.createElement("div");
         newBoardDiv.setAttribute("id", "board-" + boardsWidget.boards.length);
@@ -34,15 +38,20 @@ function addButtonClickEventListener(event) {
         newBoardDiv.style.setProperty("top", newBoardTop + "px");
 
         boardContainer.appendChild(newBoardDiv);
-
         boardTypeSelector.remove();
+        boardsWidget.commandsComponent.setSamples(newBoard.samples);
     });
 
     boardTypeSelector.render();
 }
 
+function setSampleCommands(commands) {
+    const sampleCommands = document.getElementById(CONSTANTS.SAMPLE_COMMANDS_ID);
+    console.log(sampleCommands);
+    sampleCommands.innerText = commands;
+}
 
-const boardsWidget = new Widget("boards", [{
+var boardsWidget = new Widget("boards", [{
     title: 'Boards',
     contentNode: createDiv(`<div id="whiteboard" class="spa-text">
                                 <div id="board-header">
@@ -55,15 +64,19 @@ const boardsWidget = new Widget("boards", [{
 
         const addBoardButton = document.getElementById('add-board');
 
+        if (addBoardButton) {
+            addBoardButton.style.height = addBoardHeight + "px";
+            addBoardButton.addEventListener("click", addButtonClickEventListener);
+        }
+
         boardHeaderDiv = document.getElementById("board-header");
-        boardHeaderDiv.style.setProperty("height", boardHeaderHeight + "px");
 
-        boardContainer = document.getElementById("board-container");
-        boardContainer.style.setProperty("height", (widget.contentHeight - boardHeaderHeight) + "px");
-        boardContainer.style.setProperty("width", widget.width + "px");
-
-        addBoardButton.style.height = addBoardHeight + "px";
-        addBoardButton.addEventListener("click", addButtonClickEventListener);
+        if (boardHeaderDiv) {
+            boardHeaderDiv.style.setProperty("height", boardHeaderHeight + "px");
+            boardContainer = document.getElementById("board-container");
+            boardContainer.style.setProperty("height", (widget.contentHeight - boardHeaderHeight) + "px");
+            boardContainer.style.setProperty("width", widget.width + "px");
+        }
     }
 }]);
 
@@ -75,6 +88,20 @@ function createDiv(innerHtml) {
     div.style.setProperty("height", "100%");
     div.innerHTML = innerHtml;
     return div;
+}
+
+
+function getSamplesForContentType(contentType) {
+    console.log("in getSamplesForContentType, contentType = " + contentType);
+    console.log(barChartSamples);
+    switch (contentType) {
+        case "bar-chart":
+            return barChartSamples;
+            break;
+        default:
+            return [];
+            break;
+    }
 }
 
 export { boardsWidget };
