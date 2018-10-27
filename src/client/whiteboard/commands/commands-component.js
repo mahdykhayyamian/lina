@@ -11,6 +11,7 @@ const CommandsComponent =  function () {
 	this.samplesRoot = createDiv(`
 	    <div id="${CONSTANTS.SAMPLE_COMMANDS_ID}"></div>
 	`);
+	this.samplesRoot.style.overflow = "auto";
 };
 
 CommandsComponent.prototype.createWidget = function() {
@@ -33,7 +34,11 @@ CommandsComponent.prototype.createWidget = function() {
 	    }
 	}, {
 	    title: 'Sample Commands',
-	    contentNode: this.samplesRoot
+	    contentNode: this.samplesRoot,
+
+	    onRenderCallback: (widget) => {
+			this.samplesRoot.style.height = widget.contentHeight;
+	    }
 	}]);
 
 	return commandsWidget;
