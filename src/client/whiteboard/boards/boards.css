@@ -1,15 +1,16 @@
-#add-board {
+#add-board, #remove-board {
     background-color: #6764E8;
     font-size: 18px;
     width: 150px;
     border-color: beige;
     border-radius: 5px;
-    margin-left: 4px;
     color:white;
     margin-top: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
-#add-board:focus {
+#add-board:focus, #remove-board:focus {
     outline: none;
 }
 
@@ -24,7 +25,18 @@
 }
 
 #board-header {
-    width: 100%;
+    display: flex;
+}
+
+#remove-board-header {
+    width: 50%;
+    background: #FDF4E7;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+#add-board-header {
+    width: 50%;
     background: #FDF4E7;
     display: flex;
 }

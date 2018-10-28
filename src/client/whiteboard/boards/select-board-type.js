@@ -22,9 +22,8 @@ const BoardTypeSelector =  function (boardsComponent, onSelectCallback) {
 };
 
 BoardTypeSelector.prototype.render = function() {
-	console.log("inside render");
 	const selector = createDOM(this);
-	this.boardsComponent.boardHeaderDiv.appendChild(selector);
+	this.boardsComponent.addBoardHeader.appendChild(selector);
 	this.shown = true;
 
 	registerClickOutOfSelectorEventListner(this);
@@ -56,7 +55,6 @@ function createDOM (boardTypeSelector) {
 	searchBox.addEventListener("keyup", (event) => {
 		if (searchBox.value !== "") {
 			const matchingOptions = boardTypeSelector.options.filter(option	=> option.label.toLowerCase().startsWith(searchBox.value.toLowerCase()));
-			console.log(matchingOptions);
 			updateMachingOptions(boardTypeSelector, matchingOptions);
 		} else {
 			updateMachingOptions(boardTypeSelector, boardTypeSelector.options);
