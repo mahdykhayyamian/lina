@@ -61,6 +61,11 @@ BoardsComponent.prototype.createWidget = function() {
 };
 
 
+BoardsComponent.prototype.setCommandsComponent = function(commandsComponent) {
+	this.commandsComponent = commandsComponent;
+}
+
+
 function addBoard(boardsComponent, contentType) {
 
     const newBoard = {
@@ -75,6 +80,9 @@ function addBoard(boardsComponent, contentType) {
     newBoardDiv.setAttribute("id", "board-" + boardsComponent.boards.length);
     newBoardDiv.setAttribute("class", "board");
 
+    addBoardOnClickHandler(newBoardDiv, boardsComponent);
+    makeBoardSelected(boardsComponent.boards.length-1, newBoardDiv, boardsComponent);
+
     let newBoardTop = (boardsComponent.boards.length-1) * boardHeight + boardsComponent.boards.length * margin + addBoardHeight;
     newBoardDiv.style.setProperty("top", newBoardTop + "px");
 
@@ -83,8 +91,21 @@ function addBoard(boardsComponent, contentType) {
     boardsComponent.commandsComponent.setSamples(newBoard.samples);
 };
 
-BoardsComponent.prototype.setCommandsComponent = function(commandsComponent) {
-	this.commandsComponent = commandsComponent;
+function addBoardOnClickHandler(boardDiv, boardsComponent) {
+	boardDiv.addEventListener("click", (event) => {
+		const selectedBoardIndex = Array.from(boardDiv.parentNode.children).indexOf(boardDiv);
+		makeBoardSelected(selectedBoardIndex, boardDiv, boardsComponent);
+	});
+}
+
+function makeBoardSelected(selectedBoardIndex, selectedBoardDiv, boardsComponent) {
+	if (boardsComponent.selectedBoardDiv) {
+		boardsComponent.selectedBoardDiv.classList.remove("selected");
+	}
+
+	boardsComponent.selectedBoardIndex = selectedBoardIndex;
+    boardsComponent.selectedBoardDiv = selectedBoardDiv;
+	selectedBoardDiv.classList.add("selected");
 }
 
 function createDiv(innerHtml) {
