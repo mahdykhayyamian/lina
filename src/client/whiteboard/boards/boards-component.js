@@ -101,9 +101,6 @@ function addBoard(boardsComponent, contentType) {
 	addBoardOnClickHandler(newBoardDiv, boardsComponent);
 	makeBoardSelected(boardsComponent.boards.length-1, newBoard, newBoardDiv, boardsComponent);
 
-	let newBoardTop = (boardsComponent.boards.length-1) * boardHeight + boardsComponent.boards.length * margin + addBoardHeight;
-	newBoardDiv.style.setProperty("top", newBoardTop + "px");
-
 	boardsComponent.boardContainer.appendChild(newBoardDiv);
 	boardsComponent.boardTypeSelector.remove();
 };
@@ -130,6 +127,9 @@ function makeBoardSelected(selectedBoardIndex, selectedBoard, selectedBoardDiv, 
 }
 
 function removeSelectedBoard(boardsComponent) {
+
+	console.log("in removeSelectedBoard, selectedBoardIndex=" + boardsComponent.selectedBoardIndex + ", selectedBoardDiv.id = " + boardsComponent.selectedBoardDiv.id);
+
 	if (boardsComponent.selectedBoardIndex !== null) {
 		boardsComponent.selectedBoardDiv.remove();
 		boardsComponent.boards.splice(boardsComponent.selectedBoardIndex, 1);

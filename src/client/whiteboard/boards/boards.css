@@ -19,9 +19,10 @@
 }
 
 #board-container {
-    display: inline-block;
+    display: flex;
     text-align: center;
     overflow: scroll;
+    flex-direction: column;
 }
 
 #board-header {
@@ -46,8 +47,9 @@
     height: 600px;
     background-color: white;
     margin : 10px 10px 0px 10px;
-    display: inline-block;
+    display: inline-table;
     border-width: 0px;
+    align-self: center;
 }
 
 .board.selected {
