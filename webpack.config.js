@@ -10,6 +10,7 @@ module.exports = {
     },
     output: {
         filename: '[name].js',
+        chunkFilename: '[name].bundle.js',
         path: __dirname + '/temp'
     },
     module: {
@@ -20,7 +21,7 @@ module.exports = {
             test: /\.js$/,
             use: [{
                 loader: 'babel-loader',
-                options: { presets: ['es2015'] }
+                options: { presets: ['@babel/preset-env'], plugins: ["@babel/plugin-syntax-dynamic-import"]}
             }],
         }]
     },
@@ -31,5 +32,6 @@ module.exports = {
     ] : [],
     resolve: {
         modules: [__dirname, 'client', 'node_modules']
-    }
+    },
+    mode: 'development'
 };

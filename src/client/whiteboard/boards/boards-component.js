@@ -1,6 +1,9 @@
 import { Widget } from "smartframes";
 import { BoardTypeSelector } from "whiteboard/boards/select-board-type.js";
-import { samples as barChartSamples } from "whiteboard/visualization/bar-chart/sample-command.js";
+
+// import { samples as barChartSamples } from "whiteboard/visualization/bar-chart/sample-command.js";
+
+
 import { CONSTANTS } from "whiteboard/constants.js";
 
 const addBoardHeight = 40;
@@ -88,21 +91,23 @@ function addBoard(boardsComponent, contentType) {
 
 	const newBoard = {
 		type: contentType,
-		commands: "",
-		samples: getSamplesForContentType(contentType)
+		commands: ""
 	};
 
-	boardsComponent.boards.push(newBoard);
+	return getSamplesForContentType(contentType).then(samples => {
+		newBoard.samples = samples
+		boardsComponent.boards.push(newBoard);
 
-	let newBoardDiv = document.createElement("div");
-	newBoardDiv.setAttribute("id", "board-" + boardsComponent.boards.length);
-	newBoardDiv.setAttribute("class", "board");
+		let newBoardDiv = document.createElement("div");
+		newBoardDiv.setAttribute("id", "board-" + boardsComponent.boards.length);
+		newBoardDiv.setAttribute("class", "board");
 
-	addBoardOnClickHandler(newBoardDiv, boardsComponent);
-	makeBoardSelected(boardsComponent.boards.length-1, newBoard, newBoardDiv, boardsComponent);
+		addBoardOnClickHandler(newBoardDiv, boardsComponent);
+		makeBoardSelected(boardsComponent.boards.length-1, newBoard, newBoardDiv, boardsComponent);
 
-	boardsComponent.boardContainer.appendChild(newBoardDiv);
-	boardsComponent.boardTypeSelector.remove();
+		boardsComponent.boardContainer.appendChild(newBoardDiv);
+		boardsComponent.boardTypeSelector.remove();
+	});
 };
 
 function addBoardOnClickHandler(boardDiv, boardsComponent) {
@@ -150,10 +155,13 @@ function createDiv(innerHtml) {
 function getSamplesForContentType(contentType) {
 	switch (contentType) {
 		case "bar-chart":
-			return barChartSamples;
+			return import("whiteboard/visualization/bar-chart/sample-command.js").then(barChartSamples => {
+				console.log(barChartSamples);
+				return barChartSamples.samples;
+			});
 			break;
 		default:
-			return [];
+			return Promise.resolve([]);
 			break;
 	}
 }
