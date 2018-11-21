@@ -1,10 +1,7 @@
 import { Widget } from "smartframes";
 import { BoardTypeSelector } from "whiteboard/boards/select-board-type.js";
-
-// import { samples as barChartSamples } from "whiteboard/visualization/bar-chart/sample-command.js";
-
-
 import { CONSTANTS } from "whiteboard/constants.js";
+import { moduleLoader } from "whiteboard/module-loader.js";
 
 const addBoardHeight = 40;
 const boardHeight = 600;
@@ -87,14 +84,14 @@ BoardsComponent.prototype.setCommandsComponent = function(commandsComponent) {
 }
 
 
-function addBoard(boardsComponent, contentType) {
+function addBoard(boardsComponent, type) {
 
 	const newBoard = {
-		type: contentType,
+		type,
 		commands: ""
 	};
 
-	return getSamplesForContentType(contentType).then(samples => {
+	return getSamplesForType(type).then(samples => {
 		newBoard.samples = samples
 		boardsComponent.boards.push(newBoard);
 
@@ -129,6 +126,7 @@ function makeBoardSelected(selectedBoardIndex, selectedBoard, selectedBoardDiv, 
 	selectedBoardDiv.classList.add("selected");
 
 	boardsComponent.commandsComponent.setSamples(selectedBoard.samples);
+	boardsComponent.commandsComponent.setBoard(selectedBoard);
 }
 
 function removeSelectedBoard(boardsComponent) {
@@ -152,13 +150,16 @@ function createDiv(innerHtml) {
 }
 
 
-function getSamplesForContentType(contentType) {
-	switch (contentType) {
+function getSamplesForType(type) {
+	switch (type) {
 		case "bar-chart":
-			return import("whiteboard/visualization/bar-chart/sample-command.js").then(barChartSamples => {
-				console.log(barChartSamples);
-				return barChartSamples.samples;
+			const barchartModule = moduleLoader.getModuleByName(type);
+			console.log(barchartModule);
+			return barchartModule.then(barchartModule => {
+				console.log(barchartModule);
+				return barchartModule.default.samples;
 			});
+
 			break;
 		default:
 			return Promise.resolve([]);

@@ -1,5 +1,6 @@
 import { Widget } from "smartframes";
 import { CONSTANTS } from "whiteboard/constants.js";
+import { moduleLoader } from "whiteboard/module-loader.js";
 
 const CommandsComponent =  function () {
 	this.commandsRoot = createDiv(`
@@ -15,6 +16,12 @@ const CommandsComponent =  function () {
 };
 
 CommandsComponent.prototype.createWidget = function() {
+
+	const runCommandClickEventHandler = (event) => {
+		console.log("run command click handler");
+		this.runCommands();
+	}
+
 	const commandsWidget = new Widget("commands", [{
 	    title: 'Commands',
 	    contentNode: this.commandsRoot,
@@ -30,7 +37,9 @@ CommandsComponent.prototype.createWidget = function() {
 	        for (let i = 0; i < buttons.length; ++i) {
 	            buttons[i].style.height = runButtonHeight + "px";
 	            buttons[i].style.top = (commandsTextArea.parentNode.offsetHeight - (runButtonHeight + extraSpace/2)) + "px";
+				buttons[i].addEventListener("click", runCommandClickEventHandler);
 	        }
+
 	    }
 	}, {
 	    title: 'Sample Commands',
@@ -44,8 +53,9 @@ CommandsComponent.prototype.createWidget = function() {
 	return commandsWidget;
 };
 
-CommandsComponent.prototype.setCommands = function(commands) {
 
+CommandsComponent.prototype.setBoard = function(board) {
+	this.board = board;
 };
 
 CommandsComponent.prototype.setSamples = function(samples) {
@@ -64,7 +74,16 @@ CommandsComponent.prototype.setSamples = function(samples) {
 };
 
 CommandsComponent.prototype.runCommands = function() {
+	if (!this.board) {
+		return;
+	}
 
+	const moduleName = this.board.type;
+	return moduleLoader.getModuleByName(moduleName).then(visualizerModule => {
+		console.log(visualizerModule);
+		const visualizer = visualizerModule.default.visualizer;
+		visualizer.visualize(this.board.commands);
+	});
 };
 
 const runButtonHeight = 40;
