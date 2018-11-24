@@ -39,7 +39,6 @@ CommandsComponent.prototype.createWidget = function() {
 	            buttons[i].style.top = (commandsTextArea.parentNode.offsetHeight - (runButtonHeight + extraSpace/2)) + "px";
 				buttons[i].addEventListener("click", runCommandClickEventHandler);
 	        }
-
 	    }
 	}, {
 	    title: 'Sample Commands',
@@ -79,6 +78,9 @@ CommandsComponent.prototype.runCommands = function() {
 	}
 
 	const moduleName = this.board.type;
+
+	this.board.commands = document.getElementById(CONSTANTS.COMMANDS_TEXT_AREA_ID).value;
+
 	return moduleLoader.getModuleByName(moduleName).then(visualizerModule => {
 		console.log(visualizerModule);
 		const visualizer = visualizerModule.default.visualizer;
