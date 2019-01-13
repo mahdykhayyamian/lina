@@ -7,7 +7,7 @@
     "phosphor-dockpanel": "^0.9.7",
     "phosphor-messaging": "^1.0.6",
     "phosphor-widget": "^1.0.0-rc.1",
-    "smartframes": "file:../smartframes"
+    "smartframes": "mahdykhayyamian/smartframes#master"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.5",

@@ -1,6 +1,13 @@
 #!/bin/bash
 
 LINA_APP_NAME="lina"
+LINA_ROOT=${HOME}"/workspace/lina"
+CATALINA_HOME=${HOME}"/workspace/apache-tomcat-9.0.14"
+TOMCAT_PORT=8080
+
+function updateNodePackages() {
+	npm install
+}
 
 function createDeployDirectoryStructure {
 	echoGreen "createDeployDirectoryStructure"
@@ -97,6 +104,7 @@ function copyWarFile {
 	cp ${LINA_ROOT}/deploy/${LINA_APP_NAME}.war .
 }
 
+updateNodePackages
 clearDeployDirectory
 clearTempDirectory
 createDeployDirectoryStructure
