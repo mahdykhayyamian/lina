@@ -1,7 +1,7 @@
 const samples = [
 	`
 		Barchart statePopulations \n
-		statePopulations.title = "US State Populations im millions" \n
+		statePopulations.title = "US State Populations in millions" \n
 		statePopulations.data = [["California", 36], ["Texas", 22], ["New York", 19]] \n
 		statePopulations.color = "blue"
 	`,

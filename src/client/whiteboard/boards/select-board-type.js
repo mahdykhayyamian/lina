@@ -39,7 +39,7 @@ BoardTypeSelector.prototype.isShown = function() {
 	return this.shown;
 };
 
-function createDOM (boardTypeSelector) {
+function createDOM(boardTypeSelector) {
 
 	boardTypeSelector.selectorRootDiv = document.createElement("div");
 	boardTypeSelector.selectorRootDiv.setAttribute("class", "board-type-select");
