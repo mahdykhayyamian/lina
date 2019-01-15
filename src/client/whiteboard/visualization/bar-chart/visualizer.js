@@ -17,14 +17,13 @@ function visualizeBoardCommands(board) {
 	for (const chartId in barChartIR) {
 		const labels = barChartIR[chartId].data.map(tuple => tuple[0]);
 		const data = barChartIR[chartId].data.map(tuple => tuple[1]);
-		const label = chartId;
 
 		var myChart = new Chart(barChartCanvas, {
 			type: 'bar',
 			data: {
 				labels,
 				datasets: [{
-					label: chartId,
+					label: barChartIR[chartId].title,
 					data,
 					borderWidth: 1,
 					backgroundColor: barChartIR[chartId].color

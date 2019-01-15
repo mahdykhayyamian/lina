@@ -134,8 +134,6 @@ function makeBoardSelected(selectedBoardIndex, selectedBoard, boardsComponent) {
 
 function removeSelectedBoard(boardsComponent) {
 
-	console.log("in removeSelectedBoard, selectedBoardIndex=" + boardsComponent.selectedBoardIndex + ", selectedBoardDiv.id = " + boardsComponent.selectedBoardDiv.id);
-
 	if (boardsComponent.selectedBoardIndex !== null) {
 		boardsComponent.selectedBoardDiv.remove();
 		boardsComponent.boards.splice(boardsComponent.selectedBoardIndex, 1);
@@ -157,9 +155,7 @@ function getSamplesForType(type) {
 	switch (type) {
 		case "bar-chart":
 			const barchartModule = moduleLoader.getModuleByName(type);
-			console.log(barchartModule);
 			return barchartModule.then(barchartModule => {
-				console.log(barchartModule);
 				return barchartModule.default.samples;
 			});
 

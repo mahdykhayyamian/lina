@@ -32,7 +32,6 @@ function interpretLine(line, barChartIR) {
 
 	// definition
 	if (match) {
-		console.log("It is definition statement");
 		const barchartVarName = match[1];
 		barChartIR[barchartVarName] = {};
 		return;
@@ -41,9 +40,6 @@ function interpretLine(line, barChartIR) {
 	// title
 	match = TITLE_ASSIGNMENT_REGX.exec(line);
 	if (match) {
-
-		console.log(line);
-		console.log("It is title statement");
 
 		const barchartVarName = match[1];
 
@@ -59,9 +55,6 @@ function interpretLine(line, barChartIR) {
 	// data
 	match = DATA_ASSIGNMENT_REGX.exec(line);
 	if (match) {
-		console.log(line);
-		console.log("It is data assingment");
-
 		const barchartVarName = match[1];
 
 		if (!barChartIR[barchartVarName]) {
@@ -76,7 +69,6 @@ function interpretLine(line, barChartIR) {
 	match = COLOR_ASSIGNMENT_REGX.exec(line);
 	if (match) {
 
-		console.log("It is color assingment");
 		const barchartVarName = match[1];
 
 		if (!barChartIR[barchartVarName]) {
