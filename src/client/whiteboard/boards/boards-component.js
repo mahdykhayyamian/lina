@@ -158,8 +158,14 @@ function getSamplesForType(type) {
 			return barchartModule.then(barchartModule => {
 				return barchartModule.default.samples;
 			});
-
 			break;
+		case "markdown":
+			const markdownModule = moduleLoader.getModuleByName(type);
+			return markdownModule.then(markdownModule => {
+				return markdownModule.default.samples;
+			});
+			break;
+
 		default:
 			return Promise.resolve([]);
 			break;

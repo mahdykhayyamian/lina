@@ -9,7 +9,10 @@ const BoardTypeSelector =  function (boardsComponent, onSelectCallback) {
 	this.options = [{
 		value: "bar-chart",
 		label: "Bar Chart"
-	}, {
+	},{
+		value: "markdown",
+		label: "Markdown"
+	},{
 		value: 'simple-shapes',
 		label: 'Simple Shapes'
 	}, {

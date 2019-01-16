@@ -78,15 +78,10 @@ CommandsComponent.prototype.runCommands = function() {
 	}
 
 	const moduleName = this.board.type;
-
 	this.board.commands = document.getElementById(CONSTANTS.COMMANDS_TEXT_AREA_ID).value;
 
 	return moduleLoader.getModuleByName(moduleName).then(visualizerModule => {
-		console.log(visualizerModule);
 		const visualizer = visualizerModule.default.visualizer;
-
-		console.log(this);
-
 		visualizer.visualizeBoardCommands(this.board);
 	});
 };
