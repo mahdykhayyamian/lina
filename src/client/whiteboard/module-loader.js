@@ -1,5 +1,6 @@
 let barChartModule = null;
 let markdownModule = null;
+let sequenceDiagramModule = null;
 
 function getModuleByName(moduleName) {
 	switch (moduleName) {
@@ -20,6 +21,16 @@ function getModuleByName(moduleName) {
 
 			markdownModule = import("whiteboard/visualization/markdown");
 			return markdownModule;
+			break;
+
+		case "sequence-diagram":
+
+			if (sequenceDiagramModule) {
+				return sequenceDiagramModule;
+			}
+
+			sequenceDiagramModule = import("whiteboard/visualization/sequence-diagram");
+			return sequenceDiagramModule;
 			break;
 
 		default:

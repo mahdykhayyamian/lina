@@ -165,7 +165,12 @@ function getSamplesForType(type) {
 				return markdownModule.default.samples;
 			});
 			break;
-
+		case "sequence-diagram":
+			const sequenceDiagramModule = moduleLoader.getModuleByName(type);
+			return sequenceDiagramModule.then(sequenceDiagramModule => {
+				return sequenceDiagramModule.default.samples;
+			});
+			break;
 		default:
 			return Promise.resolve([]);
 			break;

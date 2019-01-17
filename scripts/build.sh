@@ -49,6 +49,11 @@ function addJSBundles {
 	cp ${LINA_ROOT}/temp/*.js  ${LINA_ROOT}/deploy
 }
 
+function addJSLibs {
+	cp ${LINA_ROOT}/js-libs/*.js  ${LINA_ROOT}/deploy
+}
+
+
 function copyWebContent {
 	cd ${LINA_ROOT}
 	cp -r ${LINA_ROOT}/src/client/* ${LINA_ROOT}/deploy
@@ -112,6 +117,7 @@ copyLibs
 compileJavaFiles
 copyWebContent
 addJSBundles
+addJSLibs
 createWarFile
 copyWarFile
 startTomcat
