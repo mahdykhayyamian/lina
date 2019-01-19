@@ -73,7 +73,9 @@ CommandsComponent.prototype.setSamples = function(samples) {
 };
 
 CommandsComponent.prototype.setCommands = function(commands) {
+	console.log(CONSTANTS.COMMANDS_TEXT_AREA_ID);
 	const commandsTextArea = document.getElementById(CONSTANTS.COMMANDS_TEXT_AREA_ID);
+	console.log(commandsTextArea);
 	commandsTextArea.value = commands;
 };
 

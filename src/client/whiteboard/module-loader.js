@@ -1,3 +1,5 @@
+import * as loadJS from "load-js"
+
 let barChartModule = null;
 let markdownModule = null;
 let sequenceDiagramModule = null;
@@ -12,7 +14,6 @@ function getModuleByName(moduleName) {
 
 			barChartModule = import("whiteboard/visualization/bar-chart");
 			return barChartModule;
-			break;
 		case "markdown":
 
 			if (markdownModule) {
@@ -21,18 +22,34 @@ function getModuleByName(moduleName) {
 
 			markdownModule = import("whiteboard/visualization/markdown");
 			return markdownModule;
-			break;
-
 		case "sequence-diagram":
 
 			if (sequenceDiagramModule) {
 				return sequenceDiagramModule;
 			}
 
-			sequenceDiagramModule = import("whiteboard/visualization/sequence-diagram");
-			return sequenceDiagramModule;
-			break;
-
+			return loadJS([{
+				async: true,
+				url: "/lina/webfont.js"
+			}, {
+					async: true,
+					url: "/lina/snap.svg-min.js"
+			}, {
+					async: true,
+					url: "/lina/underscore-min.js"
+			}])
+			.then(() => {
+				console.log("All dependencies for js-sequence-diagrams loaded");
+				return loadJS([{
+					async: true,
+					url: "/lina/sequence-diagram-min.js"
+				}]);
+			})
+			.then(() => {
+				console.log("js-sequence-diagrams loaded");
+				sequenceDiagramModule = import("whiteboard/visualization/sequence-diagram");
+				return sequenceDiagramModule;
+			});	
 		default:
 			return Promise.resolve(null);
 			break;
