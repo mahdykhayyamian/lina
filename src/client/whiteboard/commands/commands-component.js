@@ -72,6 +72,12 @@ CommandsComponent.prototype.setSamples = function(samples) {
 	}
 };
 
+CommandsComponent.prototype.setCommands = function(commands) {
+	const commandsTextArea = document.getElementById(CONSTANTS.COMMANDS_TEXT_AREA_ID);
+	commandsTextArea.value = commands;
+};
+
+
 CommandsComponent.prototype.runCommands = function() {
 	if (!this.board) {
 		return;

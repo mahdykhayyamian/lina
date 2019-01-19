@@ -87,7 +87,6 @@ BoardsComponent.prototype.setCommandsComponent = function(commandsComponent) {
 function addBoard(boardsComponent, type) {
 
 	let newBoardDiv = document.createElement("div");
-	newBoardDiv.setAttribute("id", "board-" + boardsComponent.boards.length);
 	newBoardDiv.setAttribute("class", "board");
 
 	const newBoard = {
@@ -128,6 +127,7 @@ function makeBoardSelected(selectedBoardIndex, selectedBoard, boardsComponent) {
 	boardsComponent.selectedBoardDiv = selectedBoardDiv;
 	selectedBoardDiv.classList.add("selected");
 
+	boardsComponent.commandsComponent.setCommands(selectedBoard.commands);
 	boardsComponent.commandsComponent.setSamples(selectedBoard.samples);
 	boardsComponent.commandsComponent.setBoard(selectedBoard);
 }
