@@ -30,19 +30,19 @@ function getModuleByName(moduleName) {
 
 			return loadJS([{
 				async: true,
-				url: "/lina/webfont.js"
+				url: "/webfont.js"
 			}, {
 					async: true,
-					url: "/lina/snap.svg-min.js"
+					url: "/snap.svg-min.js"
 			}, {
 					async: true,
-					url: "/lina/underscore-min.js"
+					url: "/underscore-min.js"
 			}])
 			.then(() => {
 				console.log("All dependencies for js-sequence-diagrams loaded");
 				return loadJS([{
 					async: true,
-					url: "/lina/sequence-diagram-min.js"
+					url: "/sequence-diagram-min.js"
 				}]);
 			})
 			.then(() => {

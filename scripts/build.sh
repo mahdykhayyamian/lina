@@ -1,6 +1,5 @@
 #!/bin/bash
 
-LINA_APP_NAME="lina"
 LINA_ROOT=${HOME}"/workspace/lina"
 CATALINA_HOME=${HOME}"/workspace/apache-tomcat-9.0.14"
 TOMCAT_PORT=8080
@@ -100,13 +99,13 @@ function shutDownTomcat {
 
 function createWarFile {
 	cd ${LINA_ROOT}/deploy
-	jar -cvf ./${LINA_APP_NAME}.war *
+	jar -cvf ./ROOT.war *
 }
 
 function copyWarFile {
 	cd ${CATALINA_HOME}/webapps
 	rm -rf ROOT
-	cp ${LINA_ROOT}/deploy/${LINA_APP_NAME}.war .
+	cp ${LINA_ROOT}/deploy/ROOT.war .
 }
 
 updateNodePackages

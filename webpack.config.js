@@ -1,5 +1,4 @@
 var webpack = require('webpack');
-var path = require('path');
 
 var PROD = JSON.parse(process.env.PROD_ENV || '0');
 

@@ -1,3 +1,8 @@
+LINA_APP_NAME="lina"
+LINA_ROOT=${HOME}"/workspace/lina"
+CATALINA_HOME=${HOME}"/workspace/apache-tomcat-9.0.14"
+TOMCAT_PORT=8080
+
 function echoGreen {
 	tput setaf 2;
 	echo $1
@@ -15,9 +20,9 @@ cp ${LINA_ROOT}/scripts/server.xml .
 cd ${LINA_ROOT}
 echoGreen "zipping tomcat..."
 cd temp
-zip -q -r tomcat.zip ${tomcatFolder} 
+zip -q -r tomcat.zip ${tomcatFolder}
 echoGreen "copying tomcat.zip to lina host..."
-scp -i /Users/khaymahd/workspace/pet/lina-host-keypair.pem tomcat.zip ec2-user@ec2-34-217-234-64.us-west-2.compute.amazonaws.com:/tmp
+scp -i ${HOME}/workspace/lina-host-keypair.pem tomcat.zip ec2-user@ec2-34-217-234-64.us-west-2.compute.amazonaws.com:/tmp
 echoGreen "running rest of the deployment script on the host..."
 cd ${LINA_ROOT}
-ssh -i /Users/khaymahd/workspace/pet/lina-host-keypair.pem ec2-user@ec2-34-217-234-64.us-west-2.compute.amazonaws.com "bash -s" < ./scripts/host-deploy-script.sh
+ssh -i ${HOME}/workspace/lina-host-keypair.pem ec2-user@ec2-34-217-234-64.us-west-2.compute.amazonaws.com "bash -s" < ./scripts/host-deploy-script.sh
