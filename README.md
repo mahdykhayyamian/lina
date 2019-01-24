@@ -7,7 +7,7 @@
 ``brew install npm``
 
 * Install Java
-``brew cask install java``
+``brew cask install java8``
 
 * Download tomcat from https://tomcat.apache.org/download-90.cgi and copy it preferrably next to project folder.
 
