@@ -83,9 +83,7 @@ BoardsComponent.prototype.setCommandsComponent = function(commandsComponent) {
 	this.commandsComponent = commandsComponent;
 }
 
-
 function addBoard(boardsComponent, type) {
-
 	let newBoardDiv = document.createElement("div");
 	newBoardDiv.setAttribute("class", "board");
 

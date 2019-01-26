@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+const MinifyPlugin = require('babel-minify-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -22,8 +23,11 @@ module.exports = {
             }],
         }]
     },
+    plugins: [
+        new MinifyPlugin()
+    ],
     resolve: {
         modules: [__dirname, 'client', 'node_modules']
     },
-    mode: 'development'
+    mode: 'production'
 };

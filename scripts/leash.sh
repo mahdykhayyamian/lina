@@ -4,6 +4,20 @@ LINA_ROOT=${HOME}"/workspace/lina"
 CATALINA_HOME=${HOME}"/workspace/apache-tomcat-9.0.14"
 TOMCAT_PORT=8080
 
+env="DEV"
+
+function determinEnv {
+	for (( i=1; i<=$#; i++)); do
+		j=$((i+1))
+		if  [ ${!i} == "-env" ]
+		then
+			env=${!j}
+		fi
+	done
+
+	echoGreen "Env set to ${env}"
+}
+
 function updateNodePackages() {
 	npm install
 }
@@ -44,7 +58,14 @@ function copyLibs {
 }
 
 function addJSBundles {
-	node_modules/.bin/webpack
+	if [ ${env} == "prod" ]
+	then
+		echoGreen "packing for prod env"
+		node_modules/.bin/webpack --config webpack.prod.config.js
+	else
+		echoGreen "packing for dev env"
+		node_modules/.bin/webpack --config webpack.config.js
+	fi
 	cp ${LINA_ROOT}/temp/*.js  ${LINA_ROOT}/deploy
 }
 
@@ -108,18 +129,35 @@ function copyWarFile {
 	cp ${LINA_ROOT}/deploy/ROOT.war .
 }
 
-updateNodePackages
-clearDeployDirectory
-clearTempDirectory
-createDeployDirectoryStructure
-copyLibs
-compileJavaFiles
-copyWebContent
-addJSBundles
-addJSLibs
-createWarFile
-copyWarFile
-startTomcat
-clearTempDirectory
-clearDeployDirectory
-tailTomcatLogs
+determinEnv "$@"
+
+function build {
+	updateNodePackages
+	clearDeployDirectory
+	clearTempDirectory
+	createDeployDirectoryStructure
+	copyLibs
+	compileJavaFiles
+	copyWebContent
+	addJSBundles
+	addJSLibs
+	createWarFile
+	copyWarFile
+}
+
+function run {
+	startTomcat
+	clearTempDirectory
+	#clearDeployDirectory
+	tailTomcatLogs
+}
+
+if  [ ${1} == "build" ]
+then
+	echoGreen "Going to build the project"
+	build
+elif [ ${1} == "run" ]
+then
+	echoGreen "Going to run tomcat locally"
+	run
+fi

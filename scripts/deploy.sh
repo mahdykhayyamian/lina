@@ -10,6 +10,8 @@ function echoGreen {
 }
 
 cd ${LINA_ROOT}
+echoGreen "building project in production mode..."
+./scripts/leash.sh build -env prod
 mkdir -p temp
 cd temp
 cp -r ${CATALINA_HOME} .
