@@ -95,7 +95,8 @@ CommandsComponent.prototype.runCommands = function() {
 	}
 
 	const moduleName = this.board.type;
-	this.board.commands = document.getElementById(CONSTANTS.COMMANDS_TEXT_AREA_ID).value;
+	this.commands = document.getElementById(CONSTANTS.COMMANDS_TEXT_AREA_ID).value;
+	this.board.commands = this.commands;
 
 	return moduleLoader.getModuleByName(moduleName).then(visualizerModule => {
 		const visualizer = visualizerModule.default.visualizer;
