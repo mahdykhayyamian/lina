@@ -54,18 +54,7 @@ CommandsComponent.prototype.createWidget = function() {
 
 	    onRenderCallback: (widget) => {
 			this.samplesRoot.style.height = widget.contentHeight;
-
-			// remove current samples if any
-			while (this.samplesRoot.firstChild) {
-				this.samplesRoot.removeChild(this.samplesRoot.firstChild);
-			}
-
-			for (let i=0; i<self.samples.length; i++) {
-				const sampleDiv = document.createElement("div");
-				sampleDiv.classList.add('sample-command');
-				sampleDiv.innerText = self.samples[i];
-				this.samplesRoot.appendChild(sampleDiv);
-			}
+			this.setSamples(this.samples);
 	    }
 	}]);
 
@@ -80,12 +69,20 @@ CommandsComponent.prototype.setBoard = function(board) {
 
 CommandsComponent.prototype.setSamples = function(samples) {
 	this.samples = samples;
-	this.widget.render();
+	const samplesDiv = document.getElementById(CONSTANTS.SAMPLE_COMMANDS_ID);
+
+	if (samplesDiv) {
+		refreshSamples(samplesDiv, samples);
+	}
 };
 
 CommandsComponent.prototype.setCommands = function(commands) {
 	this.commands = commands;
-	this.widget.render();
+
+	const commandsTextArea = document.getElementById(CONSTANTS.COMMANDS_TEXT_AREA_ID);
+	if (commandsTextArea) {
+		commandsTextArea.value = this.commands;
+	}
 };
 
 
@@ -110,6 +107,21 @@ function createDiv(innerHtml) {
     div.style.setProperty("height", "100%");
     div.innerHTML = innerHtml;
     return div;
+}
+
+
+function refreshSamples(samplesDiv, samples) {
+	// remove current samples if any
+	while (samplesDiv.firstChild) {
+		samplesDiv.removeChild(samplesDiv.firstChild);
+	}
+
+	for (let i=0; i<samples.length; i++) {
+		const sampleDiv = document.createElement("div");
+		sampleDiv.classList.add('sample-command');
+		sampleDiv.innerText = samples[i];
+		samplesDiv.appendChild(sampleDiv);
+	}
 }
 
 export {CommandsComponent};

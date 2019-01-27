@@ -148,7 +148,6 @@ function build {
 function run {
 	startTomcat
 	clearTempDirectory
-	#clearDeployDirectory
 	tailTomcatLogs
 }
 
