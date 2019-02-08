@@ -113,61 +113,18 @@ function addBoardOnClickHandler(boardDiv, boardsComponent) {
 	});
 }
 
-function hasScroll(element) {
-	return element.scrollHeight > element.clientHeight;
-}
-
-function scrollToBaord(boardInex, boardsComponent) {
-
+ function scrollToBaord(boardIndex, boardsComponent) {
 	const boardsContainer = document.getElementById("board-container");
+	const boardElement = boardsComponent.boards[boardIndex].rootElement;
+	const boardStyle = boardElement.currentStyle || window.getComputedStyle(boardElement);
+	const marginTop = parseInt(boardStyle.getPropertyValue('margin-top'), 10);
+	const marginBottom = parseInt(boardStyle.getPropertyValue('margin-bottom'), 10);
 
-	const boardRoot = boardsComponent.boards[boardInex].rootElement;
-	let boardBounds = boardRoot.getBoundingClientRect();
+	const marginTooSeeALittleBitOfBoardAbove = 25;
+	const scrollTop = boardIndex * (boardElement.clientHeight + marginBottom + marginTop) - marginTooSeeALittleBitOfBoardAbove;
+	boardsContainer.scrollTop = scrollTop;
+ }
 
-	const boardsHeader = document.getElementById("board-header");
-	let headerBounds = boardsHeader.getBoundingClientRect();
-
-	console.log("headerBounds");
-	console.log(JSON.stringify(headerBounds, null, 4));
-
-	console.log("boardBounds");
-	console.log(boardRoot);
-
-	console.log(JSON.stringify(boardBounds, null, 4));
-
-	console.log("distance between top of the board to the bottom of header : " + (boardBounds.top - headerBounds.bottom));
-
-	const marginTop = 10;
-	let targetTop = headerBounds.bottom + marginTop;
-	let distance = boardBounds.top - targetTop;
-
-	let previousDistance = undefined;
-
-	const step = 1;
-
-	while (hasScroll(boardsContainer) && (Math.abs(distance) > step) && (previousDistance !== distance)) {
-
-		console.log("Curr scroll top is : " + boardsContainer.scrollTop);
-
-		if (distance > 0) {
-			boardsContainer.scrollTop = boardsContainer.scrollTop + step;
-		} else {
-			boardsContainer.scrollTop = boardsContainer.scrollTop - step;
-		}
-
-		console.log("Now scroll top is : " + boardsContainer.scrollTop);
-
-		previousDistance = distance;
-
-		boardBounds = boardRoot.getBoundingClientRect();
-		headerBounds = boardsHeader.getBoundingClientRect();
-
-		let targetTop = headerBounds.bottom + marginTop;
-		distance = boardBounds.top - targetTop;
-
-		console.log("distance between top of the board to the bottom of header : " + (boardBounds.top - headerBounds.bottom));
-	}
-}
 
 function makeBoardSelected(selectedBoardIndex, selectedBoard, boardsComponent) {
 
