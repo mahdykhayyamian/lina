@@ -128,8 +128,6 @@ function addBoardOnClickHandler(boardDiv, boardsComponent) {
 
 function makeBoardSelected(selectedBoardIndex, selectedBoard, boardsComponent) {
 
-	console.log("in makeBoardSelected");
-
 	const selectedBoardDiv = selectedBoard.rootElement;
 
 	if (boardsComponent.selectedBoardDiv) {

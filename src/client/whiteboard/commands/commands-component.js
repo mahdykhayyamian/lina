@@ -110,6 +110,28 @@ function createDiv(innerHtml) {
 }
 
 
+function copyToClipboard(text) {
+    if (window.clipboardData && window.clipboardData.setData) {
+        // IE specific code path to prevent textarea being shown while dialog is visible.
+        return clipboardData.setData("Text", text);
+
+    } else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+        var textarea = document.createElement("textarea");
+        textarea.textContent = text;
+        textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in MS Edge.
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            return document.execCommand("copy");  // Security exception may be thrown by some browsers.
+        } catch (ex) {
+            console.warn("Copy to clipboard failed.", ex);
+            return false;
+        } finally {
+            document.body.removeChild(textarea);
+        }
+    }
+}
+
 function refreshSamples(samplesDiv, samples) {
 	// remove current samples if any
 	while (samplesDiv.firstChild) {
@@ -119,9 +141,29 @@ function refreshSamples(samplesDiv, samples) {
 	for (let i=0; i<samples.length; i++) {
 		const sampleDiv = document.createElement("div");
 		sampleDiv.classList.add('sample-command');
-		sampleDiv.innerText = samples[i];
+
+		const sampleDivCommands = document.createElement("div");
+		sampleDivCommands.innerText = samples[i];
+		sampleDiv.appendChild(sampleDivCommands);
+
+		const sampleDivButton = document.createElement("div");
+		sampleDivButton.classList.add("copy-to-clipboard-button-holder");
+
+		const copyToClipboardButton = document.createElement("input");
+		copyToClipboardButton.setAttribute("type", "button");
+		copyToClipboardButton.setAttribute("class", "btn copy-to-clipboard");
+		copyToClipboardButton.setAttribute("value", "copy");
+
+		copyToClipboardButton.onclick = () => {
+			copyToClipboard(samples[i]);
+		};
+
+		sampleDivButton.appendChild(copyToClipboardButton);
+		sampleDiv.appendChild(sampleDivButton);
+
 		samplesDiv.appendChild(sampleDiv);
 	}
+
 }
 
 export {CommandsComponent};

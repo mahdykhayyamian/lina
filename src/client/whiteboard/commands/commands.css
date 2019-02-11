@@ -29,7 +29,28 @@
     color:white;
 }
 
-.run-command.btn:focus {
+.copy-to-clipboard.btn {
+    position: absolute;
+    background-color: #ec8e5f;
+    font-family: monospace;
+    font-size: 14px;
+    width: 50px;
+    border-color: beige;
+    border-radius: 5px;
+    color:white;
+    height:26px
+}
+
+.copy-to-clipboard-button-holder {
+    height: 30px;
+    margin: 10px 0px 0px 0px;
+    border-top:solid;
+    border-color:#e2ddd2;
+    padding-top:1px;
+    border-width: 1px;
+}
+
+.btn:focus {
     outline: none;
 }
 
@@ -38,7 +59,7 @@
     font-size: 16px;
     border-style: ridge;
     border-width: 2px;
-    padding: 10px;
+    padding: 10px 10px 0px 10px;
     box-sizing: border-box;
     resize: none;
 }
