@@ -30,7 +30,6 @@
 }
 
 .copy-to-clipboard.btn {
-    position: absolute;
     background-color: #ec8e5f;
     font-family: monospace;
     font-size: 14px;
