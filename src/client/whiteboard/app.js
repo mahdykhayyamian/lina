@@ -46,7 +46,7 @@ window.onload = function() {
     const boardsWidget = boardsComponent.createWidget();
 
     const topLevelContainer = new WidgetContainer([commandsWidget, boardsWidget, chatWidget], CONSTANTS.LEFT_TO_RIGHT);
-    topLevelContainer.childrenRatios = [0.2, 0.6, 0.2];
+    topLevelContainer.childrenRatios = [0.3, 0.5, 0.2];
     const widgetTabDragController = new WidgetTabDragController(topLevelContainer);
     const widgetResizeController = new WidgetResizeController(topLevelContainer);
     topLevelContainer.parentWidgetContainer = null;
