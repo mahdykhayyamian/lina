@@ -184,6 +184,12 @@ function getSamplesForType(type) {
 				return sequenceDiagramModule.default.samples;
 			});
 			break;
+		case "math":
+			const mathModule = moduleLoader.getModuleByName(type);
+			return mathModule.then(mathModule => {
+				return mathModule.default.samples;
+			});
+			break;
 		default:
 			return Promise.resolve([]);
 			break;

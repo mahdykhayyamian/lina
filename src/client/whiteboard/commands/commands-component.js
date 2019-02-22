@@ -97,6 +97,7 @@ CommandsComponent.prototype.runCommands = function() {
 
 	return moduleLoader.getModuleByName(moduleName).then(visualizerModule => {
 		const visualizer = visualizerModule.default.visualizer;
+		console.log(visualizer);
 		visualizer.visualizeBoardCommands(this.board);
 	});
 };

@@ -8,7 +8,7 @@ function visualizeBoardCommands(board) {
 	while (rootElement.firstChild) {
 		rootElement.firstChild.remove();
 	}
-	
+
 	const container = document.createElement("div");
 	const uniqid = String(Date.now());
 	container.id = uniqid;

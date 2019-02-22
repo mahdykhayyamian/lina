@@ -5,7 +5,10 @@
   "dependencies": {
     "@babel/register": "^7.0.0",
     "chart.js": "^2.7.3",
+    "katex": "^0.10.0",
     "load-js": "^3.0.3",
+    "loadjs": "^3.5.5",
+    "mathjax": "^2.7.5",
     "phosphor-dockpanel": "^0.9.7",
     "phosphor-messaging": "^1.0.6",
     "phosphor-widget": "^1.0.0-rc.1",

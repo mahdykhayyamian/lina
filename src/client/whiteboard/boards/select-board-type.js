@@ -12,12 +12,9 @@ const BoardTypeSelector =  function (boardsComponent, onSelectCallback) {
 	},{
 		value: "markdown",
 		label: "Markdown"
-	},{
-		value: 'simple-shapes',
-		label: 'Simple Shapes'
 	}, {
-		value: 'graph',
-		label: 'Graph'
+		value: 'math',
+		label: 'Math'
 	}, {
 		value: 'sequence-diagram',
 		label: 'Sequence Diagram'

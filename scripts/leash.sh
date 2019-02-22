@@ -70,7 +70,7 @@ function addJSBundles {
 }
 
 function addJSLibs {
-	cp ${LINA_ROOT}/js-libs/*.js  ${LINA_ROOT}/deploy
+	cp -r ${LINA_ROOT}/js-libs/*  ${LINA_ROOT}/deploy
 }
 
 
