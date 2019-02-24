@@ -41,14 +41,12 @@ function getModuleByName(moduleName) {
 					url: "/underscore-min.js"
 			}])
 			.then(() => {
-				console.log("All dependencies for js-sequence-diagrams loaded");
 				return loadJSPromise([{
 					async: true,
 					url: "/sequence-diagram-min.js"
 				}]);
 			})
 			.then(() => {
-				console.log("js-sequence-diagrams loaded");
 				sequenceDiagramModule = import("whiteboard/visualization/sequence-diagram");
 				return sequenceDiagramModule;
 			});
@@ -63,7 +61,6 @@ function getModuleByName(moduleName) {
 			.then(() => {
 				return new Promise((resolve, reject) => {
 					loadjs(['css!/katex/katex.css'], function() {
-						console.log("katex is loaded ha!");
 						mathModule = import("whiteboard/visualization/math");
 						return resolve(mathModule);
 					});

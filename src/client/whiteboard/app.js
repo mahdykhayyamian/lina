@@ -2,21 +2,63 @@ import { Widget } from "smartframes";
 import { WidgetContainer } from "smartframes";
 import { WidgetTabDragController } from "smartframes";
 import { WidgetResizeController } from "smartframes";
-import { CONSTANTS } from "smartframes";
+import { CONSTANTS as SMARTFRAME_CONSTANTS}  from "smartframes";
 import { CommandsComponent } from "./commands/commands-component.js";
 import { BoardsComponent } from "whiteboard/boards/boards-component.js";
+import { CONSTANTS } from "whiteboard/constants.js";
 
 window.onload = function() {
 
     const appDiv = document.getElementById("lina.app");
     appDiv.style.setProperty("position", "absolute");
 
-    function createTextDiv(text) {
-        const div = document.createElement("div");
-        div.textContent = text;
-        div.style["font-size"] = "12px";
-        return div;
+    const rootContainer = buildLayout();
+
+    function onResize() {
+        const width = window.innerWidth - 50;
+        const height = window.innerHeight - 50;
+        const left = 10;
+        const top = 10;
+
+        rootContainer.left = left;
+        rootContainer.top = top;
+        rootContainer.width = width;
+        rootContainer.height = height;
+
+        rootContainer.render(appDiv);
+    };
+
+    window.onresize = onResize;
+    onResize();
+}
+
+function determineDisplayType() {
+    if (screen.width <= 1600) {
+        return CONSTANTS.DISPLAY_SIZE_SMALL;
+    } else if (screen.width <= 2000) {
+        return CONSTANTS.DISPLAY_SIZE_MEDIUM;
+    } else {
+        return CONSTANTS.DISPLAY_SIZE_LARGE;
     }
+}
+
+function buildLayout() {
+    const displaySize = determineDisplayType();
+    console.log(displaySize);
+    switch (displaySize) {
+        case CONSTANTS.DISPLAY_SIZE_SMALL:
+            return createLayoutForSmallSizeDisplays();
+        case CONSTANTS.DISPLAY_SIZE_MEDIUM:
+            return createLayoutForMediumSizeDisplays();
+        case CONSTANTS.DISPLAY_SIZE_LARGE:
+            return createLayoutForLargeSizeDisplays();
+        default:
+            return null;
+    }
+}
+
+
+function createChatWidget() {
 
     function createDiv(innerHtml) {
         const div = document.createElement("div");
@@ -26,18 +68,18 @@ window.onload = function() {
         return div;
     }
 
-    function createImage(source) {
-        const image = document.createElement("img");
-        image.src = source;
-        return image;
-    }
-
     const chatWidget = new Widget("chatWidget", [{
         title: 'Chat',
         contentNode: createDiv(`<div id="chat" class="spa-text"></div>`)
     }]);
 
+    return chatWidget;
+}
 
+
+function createLayoutForSmallSizeDisplays() {
+
+    const chatWidget =  createChatWidget();
     const commandsComponent = new CommandsComponent();
     const commandsWidget = commandsComponent.createWidget();
 
@@ -45,30 +87,70 @@ window.onload = function() {
     boardsComponent.setCommandsComponent(commandsComponent);
     const boardsWidget = boardsComponent.createWidget();
 
-    const topLevelContainer = new WidgetContainer([commandsWidget, boardsWidget, chatWidget], CONSTANTS.LEFT_TO_RIGHT);
-    topLevelContainer.childrenRatios = [0.3, 0.5, 0.2];
-    const widgetTabDragController = new WidgetTabDragController(topLevelContainer);
-    const widgetResizeController = new WidgetResizeController(topLevelContainer);
-    topLevelContainer.parentWidgetContainer = null;
+    const leftContainer = new WidgetContainer([commandsWidget, chatWidget], SMARTFRAME_CONSTANTS.TOP_TO_BOTTOM);
+    leftContainer.childrenRatios = [0.7, 0.3];
+    commandsWidget.widgetContainer = leftContainer;
+    chatWidget.widgetContainer = leftContainer;
 
-    commandsWidget.widgetContainer = topLevelContainer;
-    boardsWidget.widgetContainer = topLevelContainer;
-    chatWidget.widgetContainer = topLevelContainer;
+    const rootContainer = new WidgetContainer([leftContainer, boardsWidget], SMARTFRAME_CONSTANTS.LEFT_TO_RIGHT);
+    rootContainer.childrenRatios = [0.3, 0.7];
+    rootContainer.parentWidgetContainer = null;
+    boardsWidget.widgetContainer = rootContainer;
+    leftContainer.widgetContainer = rootContainer;
 
-    function onResize() {
-        const width = window.innerWidth - 50;
-        const height = window.innerHeight - 50;
-        const left = 10;
-        const top = 10;
+    const widgetTabDragController = new WidgetTabDragController(rootContainer);
+    const widgetResizeController = new WidgetResizeController(rootContainer);
 
-        topLevelContainer.left = left;
-        topLevelContainer.top = top;
-        topLevelContainer.width = width;
-        topLevelContainer.height = height;
+    return rootContainer;
+}
 
-        topLevelContainer.render(appDiv);
-    };
 
-    window.onresize = onResize;
-    onResize();
+function createLayoutForMediumSizeDisplays() {
+
+    const chatWidget =  createChatWidget();
+    const commandsComponent = new CommandsComponent();
+    const commandsWidget = commandsComponent.createWidget();
+
+    const boardsComponent = new BoardsComponent();
+    boardsComponent.setCommandsComponent(commandsComponent);
+    const boardsWidget = boardsComponent.createWidget();
+
+    const leftContainer = new WidgetContainer([commandsWidget, chatWidget], SMARTFRAME_CONSTANTS.TOP_TO_BOTTOM);
+    leftContainer.childrenRatios = [0.7, 0.3];
+    commandsWidget.widgetContainer = leftContainer;
+    chatWidget.widgetContainer = leftContainer;
+
+    const rootContainer = new WidgetContainer([leftContainer, boardsWidget], SMARTFRAME_CONSTANTS.LEFT_TO_RIGHT);
+    rootContainer.childrenRatios = [0.4, 0.6];
+    rootContainer.parentWidgetContainer = null;
+    boardsWidget.widgetContainer = rootContainer;
+    leftContainer.widgetContainer = rootContainer;
+
+    const widgetTabDragController = new WidgetTabDragController(rootContainer);
+    const widgetResizeController = new WidgetResizeController(rootContainer);
+
+    return rootContainer;
+}
+
+function createLayoutForLargeSizeDisplays() {
+
+    const chatWidget = createChatWidget();
+    const commandsComponent = new CommandsComponent();
+    const commandsWidget = commandsComponent.createWidget();
+
+    const boardsComponent = new BoardsComponent();
+    boardsComponent.setCommandsComponent(commandsComponent);
+    const boardsWidget = boardsComponent.createWidget();
+
+    const rootContainer = new WidgetContainer([commandsWidget, boardsWidget, chatWidget], SMARTFRAME_CONSTANTS.LEFT_TO_RIGHT);
+    rootContainer.childrenRatios = [0.3, 0.5, 0.2];
+    const widgetTabDragController = new WidgetTabDragController(rootContainer);
+    const widgetResizeController = new WidgetResizeController(rootContainer);
+    rootContainer.parentWidgetContainer = null;
+
+    commandsWidget.widgetContainer = rootContainer;
+    boardsWidget.widgetContainer = rootContainer;
+    chatWidget.widgetContainer = rootContainer;
+
+    return rootContainer;
 }
