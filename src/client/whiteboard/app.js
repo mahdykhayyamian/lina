@@ -96,7 +96,7 @@ function createLayoutForSmallSizeDisplays() {
     rootContainer.childrenRatios = [0.3, 0.7];
     rootContainer.parentWidgetContainer = null;
     boardsWidget.widgetContainer = rootContainer;
-    leftContainer.widgetContainer = rootContainer;
+    leftContainer.parentWidgetContainer = rootContainer;
 
     const widgetTabDragController = new WidgetTabDragController(rootContainer);
     const widgetResizeController = new WidgetResizeController(rootContainer);
@@ -124,7 +124,7 @@ function createLayoutForMediumSizeDisplays() {
     rootContainer.childrenRatios = [0.4, 0.6];
     rootContainer.parentWidgetContainer = null;
     boardsWidget.widgetContainer = rootContainer;
-    leftContainer.widgetContainer = rootContainer;
+    leftContainer.parentWidgetContainer = rootContainer;
 
     const widgetTabDragController = new WidgetTabDragController(rootContainer);
     const widgetResizeController = new WidgetResizeController(rootContainer);
