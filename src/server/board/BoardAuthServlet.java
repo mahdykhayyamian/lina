@@ -14,14 +14,14 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class HomeServlet
  */
-@WebServlet("/whiteboard")
-public class BoardServlet extends HttpServlet {
+@WebServlet("/whiteboard/authenticate")
+public class BoardAuthServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BoardServlet() {
+    public BoardAuthServlet() {
         super();
     }
 
@@ -30,22 +30,9 @@ public class BoardServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		System.out.println("Inside board servelt haha!");
+		System.out.println("Inside board authentication");
 
-		Map<String, String[]> parmMap = request.getParameterMap();
-
-		String sessionId = null;
-
-		if (parmMap.get("roomNumber") != null && parmMap.get("roomNumber").length > 0) {
-			String roomNumber = parmMap.get("roomNumber")[0];
-			System.out.println("roomNumber in param : " + roomNumber);
-		} else {
-			System.out.println("no room Number in param");
-			response.sendRedirect(request.getContextPath() + "/whiteboard/authenticate");
-			return;
-		}
-
-		RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/whiteboard/app.jsp");
+		RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/whiteboard/authenticate.jsp");
 		RequetsDispatcherObj.forward(request, response);
 	}
 
@@ -53,7 +40,6 @@ public class BoardServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 }

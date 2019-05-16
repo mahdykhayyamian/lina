@@ -3,12 +3,19 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<script src="/whiteboard.js" type="text/javascript"></script>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Lina Whiteboard</title>
+	<title>Authentication</title>
 </head>
 
 <body>
-	<div id="lina.app"></div>
+	<div id="lina.app.authenticate">
+		<form class="ui form">
+		<div class="field">
+			<label>Pick a name</label>
+			<input type="text" name="name" placeholder="Name">
+		</div>
+		<button class="ui button" type="submit">Go!</button>
+		</form>
+	</div>
 </body>
 </html>
