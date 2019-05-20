@@ -35,13 +35,13 @@ public class BoardServlet extends HttpServlet {
 		Map<String, String[]> parmMap = request.getParameterMap();
 
 		String sessionId = null;
-
 		if (parmMap.get("roomNumber") != null && parmMap.get("roomNumber").length > 0) {
 			String roomNumber = parmMap.get("roomNumber")[0];
 			System.out.println("roomNumber in param : " + roomNumber);
 		} else {
 			System.out.println("no room Number in param");
-			response.sendRedirect(request.getContextPath() + "/whiteboard/authenticate");
+			RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/whiteboard/login.jsp");
+			RequetsDispatcherObj.forward(request, response);
 			return;
 		}
 
