@@ -14,16 +14,19 @@ window.onload = function() {
         const request = ajax({
             headers: {
                 'content-type': 'application/json',
+                'withCredentials': true
             },
             method: 'POST',
-            url: '/whiteboard/api/login',
+            url: '/whiteboard/api/authenticate',
             data: {
                 userName
             }
         })
 
         request.then((response) => {
+            console.log("got response")
             console.log(response);
+            window.location.href = "/whiteboard"
         }).catch((error)=> {
             console.log(error);
         });

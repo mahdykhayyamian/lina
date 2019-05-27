@@ -1,4 +1,4 @@
-package lina.board;
+package lina.whiteboard;
 
 import java.io.IOException;
 import java.util.Map;
@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lina.board.athentication.AuthenticationUtils;
 
 /**
  * Servlet implementation class HomeServlet
@@ -30,7 +31,15 @@ public class BoardServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		System.out.println("Inside board servelt haha!");
+		System.out.println("Inside board servelt!");
+
+		boolean authenticated = AuthenticationUtils.authenticated(request, response);
+
+		if (!authenticated) {
+			RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/whiteboard/authentication/login.jsp");
+			RequetsDispatcherObj.forward(request, response);
+			return;
+		}
 
 		Map<String, String[]> parmMap = request.getParameterMap();
 
@@ -39,10 +48,7 @@ public class BoardServlet extends HttpServlet {
 			String roomNumber = parmMap.get("roomNumber")[0];
 			System.out.println("roomNumber in param : " + roomNumber);
 		} else {
-			System.out.println("no room Number in param");
-			RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/whiteboard/login.jsp");
-			RequetsDispatcherObj.forward(request, response);
-			return;
+			System.out.println("no room Number in param, we need to create a new board");
 		}
 
 		RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/whiteboard/app.jsp");

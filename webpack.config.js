@@ -4,7 +4,7 @@ module.exports = {
     entry: {
         smartframes: './src/client/demo/smartframes/demo.js',
         whiteboard: './src/client/whiteboard/app.js',
-        login: './src/client/whiteboard/login.js'
+        login: './src/client/whiteboard/authentication/login.js'
     },
     output: {
         filename: '[name].js',
