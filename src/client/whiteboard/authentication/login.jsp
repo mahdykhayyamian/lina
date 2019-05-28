@@ -11,19 +11,12 @@
 
 	<body class="login">
 		<div>
-			<div>
-				<input type="text" id="userName" placeholder="Pick a name">
-			</div>
-			<button id="go-button" class="go-button" type="input">Go!</button>
+			<form action="/whiteboard/authenticate" method="post">
+				<div>
+					<input type="text" name="userName" placeholder="Pick a name">
+				</div>
+				<button id="go-button" class="go-button" type="input">Go!</button>
+			</form>
 		</div>
-
-
-		<form action="/whiteboard/authenticate" method="post">
-		First name:<br>
-				<input type="text" name="userName" placeholder="Pick a name">
-		Last name:<br>
-			<input type="submit" value="Submit">
-		</form>
-
 	</body>
 </html>

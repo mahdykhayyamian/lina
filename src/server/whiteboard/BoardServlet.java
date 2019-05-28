@@ -33,7 +33,12 @@ public class BoardServlet extends HttpServlet {
 
 		System.out.println("Inside board servelt!");
 
-		boolean authenticated = AuthenticationUtils.authenticated(request, response);
+		boolean authenticated = false;
+		try {
+			authenticated = AuthenticationUtils.authenticated(request, response);
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
 
 		if (!authenticated) {
 			RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/whiteboard/authentication/login.jsp");

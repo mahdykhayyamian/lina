@@ -46,6 +46,7 @@ public class AuthenticationUtils {
 			}
 
 			if (Jwts.parser().setSigningKey(AuthenticateServlet.KEY).parseClaimsJws(jwtToken).getBody().getSubject().equals(userName)) {
+                System.out.println("authentication successfull.");
 				return true;
 			}
 		}
