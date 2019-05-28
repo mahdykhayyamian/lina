@@ -17,22 +17,20 @@ import com.google.gson.Gson;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import java.security.Key;
+import lina.board.athentication.AuthenticationUtils;
 
 /**
  * Servlet implementation class HomeServlet
  */
-@WebServlet("/whiteboard/authenticate")
-public class AuthenticateServlet extends HttpServlet {
+@WebServlet("/whiteboard/login")
+public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-	public static final Key KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AuthenticateServlet() {
+    public LoginServlet() {
         super();
     }
 
@@ -46,13 +44,6 @@ public class AuthenticateServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		String remoteAddress = request.getRemoteAddr() ;
-		System.out.println("remote address : " + remoteAddress);
-
-		String userAgent = request.getHeader("User-Agent");
-		System.out.println("userAgent : " + userAgent);
-
 		String userName = request.getParameter("userName");
 		System.out.println(userName);
 
@@ -78,7 +69,7 @@ public class AuthenticateServlet extends HttpServlet {
 	}
 
 	private String jwtToken(String userName) {
-		String jws = Jwts.builder().setSubject(userName).signWith(KEY).compact();
+		String jws = Jwts.builder().setSubject(userName).signWith(AuthenticationUtils.KEY).compact();
 		return jws;
 	}
 }

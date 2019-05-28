@@ -16,9 +16,13 @@ import javax.servlet.http.Cookie;
 import io.jsonwebtoken.Jwts;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.RequestDispatcher;
-
+import io.jsonwebtoken.security.Keys;
+import java.security.Key;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 public class AuthenticationUtils {
+
+	public static final Key KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
 	public static boolean authenticated(ServletRequest request, ServletResponse response) {
 		System.out.println("authenticating...");
@@ -45,7 +49,7 @@ public class AuthenticationUtils {
 				return false;
 			}
 
-			if (Jwts.parser().setSigningKey(AuthenticateServlet.KEY).parseClaimsJws(jwtToken).getBody().getSubject().equals(userName)) {
+			if (Jwts.parser().setSigningKey(KEY).parseClaimsJws(jwtToken).getBody().getSubject().equals(userName)) {
                 System.out.println("authentication successfull.");
 				return true;
 			}
@@ -53,4 +57,17 @@ public class AuthenticationUtils {
 
 		return false;
 	}
+
+    public static Cookie getCookie(HttpServletRequest request, String name) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(name)) {
+                    return cookie;
+                }
+            }
+        }
+        return null;
+    }
+
 }

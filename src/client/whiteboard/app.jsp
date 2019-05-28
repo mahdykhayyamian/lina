@@ -9,6 +9,7 @@
 </head>
 
 <body>
+	Welcome <%= request.getAttribute("user-name") %>!
 	<div id="lina.app"></div>
 </body>
 </html>

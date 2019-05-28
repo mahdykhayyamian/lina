@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lina.board.athentication.AuthenticationUtils;
+import javax.servlet.http.Cookie;
+
 
 /**
  * Servlet implementation class HomeServlet
@@ -56,6 +58,10 @@ public class BoardServlet extends HttpServlet {
 			System.out.println("no room Number in param, we need to create a new board");
 		}
 
+		Cookie userNameCookie = AuthenticationUtils.getCookie(request, "user-name");
+		String userName = userNameCookie.getValue();
+		request.setAttribute("user-name", userName);
+
 		RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/whiteboard/app.jsp");
 		RequetsDispatcherObj.forward(request, response);
 	}
@@ -64,7 +70,5 @@ public class BoardServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
 	}
 }

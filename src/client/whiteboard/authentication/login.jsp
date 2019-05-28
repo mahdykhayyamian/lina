@@ -11,7 +11,7 @@
 
 	<body class="login">
 		<div>
-			<form action="/whiteboard/authenticate" method="post">
+			<form action="/whiteboard/login" method="post">
 				<div>
 					<input type="text" name="userName" placeholder="Pick a name">
 				</div>
