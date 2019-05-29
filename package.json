@@ -4,7 +4,6 @@
   "main": "webpack.config.js",
   "dependencies": {
     "@babel/register": "^7.0.0",
-    "@fdaciuk/ajax": "^3.0.4",
     "chart.js": "^2.7.3",
     "katex": "^0.10.0",
     "load-js": "^3.0.3",
