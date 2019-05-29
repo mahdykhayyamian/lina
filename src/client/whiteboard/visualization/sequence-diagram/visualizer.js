@@ -10,13 +10,13 @@ function visualizeBoardCommands(board) {
 	}
 
 	const container = document.createElement("div");
-	const uniqid = String(Date.now());
-	container.id = uniqid;
+	const uniqueid = String(Date.now());
+	container.id = uniqueid;
 	board.rootElement.appendChild(container);
 
 	var d = Diagram.parse(commands);
 	var options = {theme: 'simple'};
-	d.drawSVG(uniqid, options);
+	d.drawSVG(uniqueid, options);
 }
 
 const visualizer = {

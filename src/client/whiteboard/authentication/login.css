@@ -1,0 +1,48 @@
+html, body{
+    height: 100%;
+    background-color: #FDF4E7;
+}
+
+body.login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+body.login > div {
+    border: solid;
+    padding: 30px;
+    border-width: medium;
+    background-color:white;
+    border-color:antiquewhite;
+}
+
+input[type=text] {
+	width: 100%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	box-sizing: border-box;
+	font-family: monospace;
+	font-size:14px;
+}
+
+.go-button {
+    background-color: #6764E8;
+    font-size: 18px;
+    width: 100%;
+    border-color: beige;
+    border-radius: 5px;
+    color: white;
+    margin-right: 10px;
+    height: 40px;
+}
+
+input:focus {
+    outline:none
+}
+
+::placeholder {
+  font-family: monospace;
+  font-size: 14px
+}

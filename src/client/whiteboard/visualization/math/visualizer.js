@@ -1,6 +1,5 @@
 function visualizeBoardCommands(board) {
 
-	console.log('visualizing math...');
 	const {commands, rootElement} = board;
 
 	// clean the board

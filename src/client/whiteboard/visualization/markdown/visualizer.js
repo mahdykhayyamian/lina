@@ -17,7 +17,7 @@ function visualizeBoardCommands(board) {
 
 	const showDownTargetDiv = document.createElement("div");
 	rootElement.append(showDownTargetDiv);
-
+	
 	showDownTargetDiv.style.textAlign = "left";
 	showDownTargetDiv.style.margin = "10px";
 	showDownTargetDiv.innerHTML = html;
