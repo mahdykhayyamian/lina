@@ -46,3 +46,9 @@
 .board-type-select ul li.selected {
 	background-color: #26AB76;
 }
+
+#boards-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
