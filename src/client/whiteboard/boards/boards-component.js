@@ -1,18 +1,15 @@
 import { Widget } from "smartframes";
 import { BoardTypeSelector } from "whiteboard/boards/select-board-type.js";
-import { CONSTANTS } from "whiteboard/constants.js";
 import { moduleLoader } from "whiteboard/module-loader.js";
 
 const addBoardHeight = 40;
-const boardHeight = 600;
-const margin = 20;
-const whiteBoardWidth = 1000;
 const boardHeaderHeight = 50;
 
 const BoardsComponent =  function () {
 
 	this.boardsRoot = createDiv(`<div id="whiteboard" class="spa-text">
-									<div id="board-header">
+									<div id="boards-loader" style="display:none"><img src="resources/images/grid.svg" width="80" alt=""></div>
+									<div id="board-header" >
 										<div id="add-board-header">
 											<input id = "add-board" type="button" class="btn" value="Add Board"</input>
 										</div>
@@ -93,7 +90,12 @@ function addBoard(boardsComponent, type) {
 		rootElement: newBoardDiv
 	};
 
+	const loaderDiv = document.getElementById("boards-loader");
+	loaderDiv.style.display = "block"
+
 	return getSamplesForType(type).then(samples => {
+		loaderDiv.style.display = "none";
+
 		newBoard.samples = samples
 		boardsComponent.boards.push(newBoard);
 
