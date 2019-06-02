@@ -12,7 +12,7 @@ public class DBManager {
             return CONN;
         }
 
-        try{
+        try {
             Class.forName("org.postgresql.Driver");
             String url = "jdbc:postgresql://localhost/lina";
             Properties props = new Properties();
