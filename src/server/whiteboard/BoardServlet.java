@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lina.board.athentication.AuthenticationUtils;
+import lina.whiteboard.persistence.RoomRepository;
+
 import javax.servlet.http.Cookie;
 
 
@@ -55,7 +57,12 @@ public class BoardServlet extends HttpServlet {
 			String roomNumber = parmMap.get("roomNumber")[0];
 			System.out.println("roomNumber in param : " + roomNumber);
 		} else {
-			System.out.println("no room Number in param, we need to create a new board");
+			try{
+				System.out.println("no room Number in param, we need to create a new board");
+				RoomRepository.createRoom();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		Cookie userNameCookie = AuthenticationUtils.getCookie(request, "user-name");
