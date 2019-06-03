@@ -16,11 +16,9 @@ public class RoomRepository {
         System.out.println(rs.toString());
 
         if (rs.next()){
-            System.out.println("has next");
             id = rs.getInt(1);
         }
         ps.close();
-        System.out.println("id = " + id);
         return id;
     }
 

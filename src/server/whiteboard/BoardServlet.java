@@ -53,21 +53,27 @@ public class BoardServlet extends HttpServlet {
 		Map<String, String[]> parmMap = request.getParameterMap();
 
 		String sessionId = null;
+
+		Cookie userNameCookie = AuthenticationUtils.getCookie(request, "user-name");
+		String userName = userNameCookie.getValue();
+		request.setAttribute("user-name", userName);
+
+		String roomNumber = null;
+
 		if (parmMap.get("roomNumber") != null && parmMap.get("roomNumber").length > 0) {
-			String roomNumber = parmMap.get("roomNumber")[0];
-			System.out.println("roomNumber in param : " + roomNumber);
+			roomNumber = parmMap.get("roomNumber")[0];
+			System.out.println("need to load room from roomNumber in param : " + roomNumber);
 		} else {
 			try{
 				System.out.println("no room Number in param, we need to create a new board");
-				RoomRepository.createRoom();
+				int roomNum = RoomRepository.createRoom();
+				roomNumber = Integer.toString(roomNum);
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
 		}
 
-		Cookie userNameCookie = AuthenticationUtils.getCookie(request, "user-name");
-		String userName = userNameCookie.getValue();
-		request.setAttribute("user-name", userName);
+		request.setAttribute("roomNumber", roomNumber);
 
 		RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/whiteboard/app.jsp");
 		RequetsDispatcherObj.forward(request, response);

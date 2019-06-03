@@ -9,6 +9,8 @@ import { CONSTANTS } from "whiteboard/constants.js";
 
 window.onload = function() {
 
+    console.log("roomNumber : " + document.body.dataset["roomnumber"]);
+
     const appDiv = document.getElementById("lina.app");
     appDiv.style.setProperty("position", "absolute");
 
