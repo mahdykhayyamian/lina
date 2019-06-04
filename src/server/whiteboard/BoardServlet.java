@@ -63,20 +63,20 @@ public class BoardServlet extends HttpServlet {
 		if (parmMap.get("roomNumber") != null && parmMap.get("roomNumber").length > 0) {
 			roomNumber = parmMap.get("roomNumber")[0];
 			System.out.println("need to load room from roomNumber in param : " + roomNumber);
+
+			RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/whiteboard/app.jsp");
+			RequetsDispatcherObj.forward(request, response);
+
 		} else {
 			try{
 				System.out.println("no room Number in param, we need to create a new board");
 				int roomNum = RoomRepository.createRoom();
 				roomNumber = Integer.toString(roomNum);
+				response.sendRedirect("/whiteboard?roomNumber=" + roomNumber);
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
 		}
-
-		request.setAttribute("roomNumber", roomNumber);
-
-		RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/whiteboard/app.jsp");
-		RequetsDispatcherObj.forward(request, response);
 	}
 
 	/**

@@ -9,7 +9,7 @@
 		<title>Lina Whiteboard</title>
 	</head>
 
-	<body data-roomNumber="<%= request.getAttribute("roomNumber") %>">
+	<body>
 		<div class="account-info">
 			Welcome <%= request.getAttribute("user-name") %>!  <a href="/whiteboard/logout">Logout</a>
 		</div>
