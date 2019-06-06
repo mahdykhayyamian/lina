@@ -48,7 +48,7 @@ function clearTempDirectory {
 
 function compileJavaFiles {
 	echoGreen "compiling java files..."
-	find ${LINA_ROOT}/src/server -name *.java > ${LINA_ROOT}/temp/java-files.txt
+	find ${LINA_ROOT}/web-app/server -name *.java > ${LINA_ROOT}/temp/java-files.txt
 	javac -cp "${LINA_ROOT}/java-libs/*:${CATALINA_HOME}/lib/*" -d "${LINA_ROOT}/deploy/WEB-INF/classes" @${LINA_ROOT}/temp/java-files.txt || { echo 'Java compile failed' ; exit 1; }
 }
 
@@ -82,7 +82,7 @@ function addJSLibs {
 
 function copyWebContent {
 	cd ${LINA_ROOT}
-	cp -r ${LINA_ROOT}/src/client/* ${LINA_ROOT}/deploy
+	cp -r ${LINA_ROOT}/web-app/client/* ${LINA_ROOT}/deploy
 }
 
 function startTomcat {
