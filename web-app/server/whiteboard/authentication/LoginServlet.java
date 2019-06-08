@@ -20,9 +20,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import java.security.Key;
 import lina.board.athentication.AuthenticationUtils;
 
-/**
- * Servlet implementation class HomeServlet
- */
+
 @WebServlet("/whiteboard/login")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -38,29 +36,25 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		String action = "/whiteboard/authenticate";
+
+		String from = getFrom(request);
+
+		if (from != null) {
+			action += "?from=" + from;
+		}
+
+		request.setAttribute("action", action);
+
+		RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/whiteboard/authentication/login.jsp");
+		RequetsDispatcherObj.forward(request, response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String userName = request.getParameter("userName");
-		System.out.println(userName);
-
-		if (authenticate(userName)) {
-			String jwtToken = jwtToken(userName);
-			System.out.println("jwt token : " + jwtToken);
-
-			Cookie userNameCookie = new Cookie("user-name", userName);
-			userNameCookie.setMaxAge(60*60); //1 hour
-			response.addCookie(userNameCookie);
-
-			Cookie jwtTokenCookie = new Cookie("lina-token", jwtToken);
-			jwtTokenCookie.setMaxAge(60*60); //1 hour
-			response.addCookie(jwtTokenCookie);
-
-			response.sendRedirect("/whiteboard");
-		}
 	}
 
 	private boolean authenticate(String userName) {
@@ -72,4 +66,14 @@ public class LoginServlet extends HttpServlet {
 		String jws = Jwts.builder().setSubject(userName).signWith(AuthenticationUtils.KEY).compact();
 		return jws;
 	}
+
+	private String getFrom(HttpServletRequest request) {
+		Map<String, String[]> parmMap = request.getParameterMap();
+		if (parmMap.get("from") != null && parmMap.get("from").length > 0) {
+			String roomNumber = parmMap.get("from")[0];
+			return roomNumber;
+		}
+		return null;
+	}
+
 }

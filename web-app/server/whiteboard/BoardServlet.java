@@ -2,7 +2,7 @@ package lina.whiteboard;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.Base64;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -37,6 +37,8 @@ public class BoardServlet extends HttpServlet {
 
 		System.out.println("Inside board servelt!");
 
+		String roomNumberParam = getRoomNumberParam(request);
+
 		boolean authenticated = false;
 		try {
 			authenticated = AuthenticationUtils.authenticated(request, response);
@@ -45,12 +47,16 @@ public class BoardServlet extends HttpServlet {
 		}
 
 		if (!authenticated) {
-			RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/whiteboard/authentication/login.jsp");
-			RequetsDispatcherObj.forward(request, response);
+			if (roomNumberParam != null) {
+				String fromUrl = "/whiteboard?roomNumber=" + roomNumberParam;
+				String encodedFromURL = Base64.getUrlEncoder().encodeToString(fromUrl.getBytes());
+
+				response.sendRedirect("/whiteboard/login?from=" + encodedFromURL);
+			} else {
+				response.sendRedirect("/whiteboard/login");
+			}
 			return;
 		}
-
-		Map<String, String[]> parmMap = request.getParameterMap();
 
 		String sessionId = null;
 
@@ -60,13 +66,10 @@ public class BoardServlet extends HttpServlet {
 
 		String roomNumber = null;
 
-		if (parmMap.get("roomNumber") != null && parmMap.get("roomNumber").length > 0) {
-			roomNumber = parmMap.get("roomNumber")[0];
-			System.out.println("need to load room from roomNumber in param : " + roomNumber);
-
+		if (roomNumberParam != null) {
+			System.out.println("need to load room from roomNumber in param : " + roomNumberParam);
 			RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/whiteboard/app.jsp");
 			RequetsDispatcherObj.forward(request, response);
-
 		} else {
 			try{
 				System.out.println("no room Number in param, we need to create a new board");
@@ -83,5 +86,14 @@ public class BoardServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	}
+
+	private String getRoomNumberParam(HttpServletRequest request) {
+		Map<String, String[]> parmMap = request.getParameterMap();
+		if (parmMap.get("roomNumber") != null && parmMap.get("roomNumber").length > 0) {
+			String roomNumber = parmMap.get("roomNumber")[0];
+			return roomNumber;
+		}
+		return null;
 	}
 }
