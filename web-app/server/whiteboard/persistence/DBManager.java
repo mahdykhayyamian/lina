@@ -14,9 +14,11 @@ public class DBManager {
 
         try {
             Class.forName("org.postgresql.Driver");
-            String url = "jdbc:postgresql://localhost/lina";
+            String url = "jdbc:postgresql://localhost:1111/lina";
             Properties props = new Properties();
-            props.setProperty("user","mahdykhayyamian");
+            props.setProperty("user","lina_app");
+            props.setProperty("password", "w00fw00f");
+
             CONN = DriverManager.getConnection(url, props);
         } catch (Exception e) {
             e.printStackTrace();

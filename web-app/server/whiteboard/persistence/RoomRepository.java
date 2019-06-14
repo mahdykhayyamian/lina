@@ -8,7 +8,7 @@ public class RoomRepository {
     public static int createRoom() throws Exception {
         System.out.println("Going to create a new room");
         Connection conn = DBManager.getConnection();
-        PreparedStatement ps = conn.prepareStatement("INSERT INTO room (created) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement ps = conn.prepareStatement("INSERT INTO whiteboard.room (created) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
         ps.setTimestamp(1, DBManager.getCurrentTimeStamp());
         ps.executeUpdate();
         int id = 0;
