@@ -10,7 +10,7 @@
 
 	<body class="login">
 		<div>
-			<form action="/whiteboard/login" method="post">
+			<form action='<%= request.getAttribute("action") %>' method="post">
 				<div>
 					<input type="text" name="userName" placeholder="Pick a name">
 				</div>
