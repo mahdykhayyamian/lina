@@ -27,6 +27,10 @@ public class LogoutServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         AuthenticationUtils.deleteCookie(request, response, "user-name");
         AuthenticationUtils.deleteCookie(request, response, "lina-token");
+
+		String action = "/whiteboard/authenticate";
+		request.setAttribute("action", action);
+
         RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/whiteboard/authentication/login.jsp");
         RequetsDispatcherObj.forward(request, response);
 	}
