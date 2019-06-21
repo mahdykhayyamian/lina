@@ -1,3 +1,5 @@
+import ajax from '@fdaciuk/ajax'
+
 import { Widget } from "smartframes";
 import { BoardTypeSelector } from "whiteboard/boards/select-board-type.js";
 import { moduleLoader } from "whiteboard/module-loader.js";
@@ -7,18 +9,21 @@ const boardHeaderHeight = 50;
 
 const BoardsComponent =  function () {
 
-	this.boardsRoot = createDiv(`<div id="whiteboard" class="spa-text">
-									<div id="boards-loader" style="display:none"><img src="resources/images/grid.svg" width="80" alt=""></div>
-									<div id="board-header" >
-										<div id="add-board-header">
-											<input id = "add-board" type="button" class="btn" value="Add Board"</input>
-										</div>
-										<div id="remove-board-header">
-											<input id="remove-board" type="button" class="btn" value="Remove Board"</input>
-										</div>
-									</div>
-									<div id="board-container"></div>
-								</div>`);
+	this.boardsRoot = createDiv(`
+		<div id="whiteboard" class="spa-text">
+			<div id="boards-loader" style="display:none"><img src="resources/images/grid.svg" width="80" alt=""></div>
+			<div id="board-header" >
+				<div id="add-board-header">
+					<input id = "add-board" type="button" class="btn" value="Add Board"</input>
+				</div>
+				<div id="remove-board-header">
+					<input id="remove-board" type="button" class="btn" value="Remove Board"</input>
+				</div>
+			</div>
+			<div id="board-container"></div>
+		</div>
+	`);
+
 	this.boards = [];
 	this.boardTypeSelector = null;
 	this.boardHeaderDiv = null;
@@ -81,6 +86,18 @@ BoardsComponent.prototype.setCommandsComponent = function(commandsComponent) {
 }
 
 function addBoard(boardsComponent, type) {
+
+	console.log("Calling backend to add a board first...");
+	console.log(document.cookie);
+
+	const request = ajax({
+		headers: {
+			'content-type': 'application/json',
+		}
+	});
+
+	request.post('/addBoard', { username: 'user', password: 'b4d45$' })
+
 	let newBoardDiv = document.createElement("div");
 	newBoardDiv.setAttribute("class", "board");
 
@@ -89,6 +106,7 @@ function addBoard(boardsComponent, type) {
 		commands: "",
 		rootElement: newBoardDiv
 	};
+
 
 	const loaderDiv = document.getElementById("boards-loader");
 	loaderDiv.style.display = "block"

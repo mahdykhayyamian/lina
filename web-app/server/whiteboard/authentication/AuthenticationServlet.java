@@ -51,9 +51,11 @@ public class AuthenticationServlet extends HttpServlet {
 
 			Cookie userNameCookie = new Cookie("user-name", userName);
 			userNameCookie.setMaxAge(60*60); //1 hour
+			userNameCookie.setPath("/");
 			response.addCookie(userNameCookie);
 
 			Cookie jwtTokenCookie = new Cookie("lina-token", jwtToken);
+			jwtTokenCookie.setPath("/");
 			jwtTokenCookie.setMaxAge(60*60); //1 hour
 			response.addCookie(jwtTokenCookie);
 
