@@ -86,7 +86,6 @@ BoardsComponent.prototype.setCommandsComponent = function(commandsComponent) {
 }
 
 function addBoard(boardsComponent, type) {
-
 	console.log("Calling backend to add a board first...");
 	console.log(document.cookie);
 
@@ -96,33 +95,37 @@ function addBoard(boardsComponent, type) {
 		}
 	});
 
-	request.post('/addBoard', { username: 'user', password: 'b4d45$' })
-
-	let newBoardDiv = document.createElement("div");
-	newBoardDiv.setAttribute("class", "board");
-
-	const newBoard = {
+	const roomNumber = getRoomNumberFromUrl();
+	request.post('/api/addBoard', { roomNumber, board: {
 		type,
 		commands: "",
-		rootElement: newBoardDiv
-	};
+	}}).then(() => {
 
+		let newBoardDiv = document.createElement("div");
+		newBoardDiv.setAttribute("class", "board");
 
-	const loaderDiv = document.getElementById("boards-loader");
-	loaderDiv.style.display = "block"
+		const newBoard = {
+			type,
+			commands: "",
+			rootElement: newBoardDiv
+		};
 
-	return getSamplesForType(type).then(samples => {
-		loaderDiv.style.display = "none";
+		const loaderDiv = document.getElementById("boards-loader");
+		loaderDiv.style.display = "block"
 
-		newBoard.samples = samples
-		boardsComponent.boards.push(newBoard);
+		return getSamplesForType(type).then(samples => {
+			loaderDiv.style.display = "none";
 
-		addBoardOnClickHandler(newBoard.rootElement, boardsComponent);
-		boardsComponent.boardContainer.appendChild(newBoard.rootElement);
+			newBoard.samples = samples
+			boardsComponent.boards.push(newBoard);
 
-		makeBoardSelected(boardsComponent.boards.length-1, newBoard, boardsComponent);
-		boardsComponent.boardTypeSelector.remove();
-	});
+			addBoardOnClickHandler(newBoard.rootElement, boardsComponent);
+			boardsComponent.boardContainer.appendChild(newBoard.rootElement);
+
+			makeBoardSelected(boardsComponent.boards.length-1, newBoard, boardsComponent);
+			boardsComponent.boardTypeSelector.remove();
+		});
+	})
 };
 
 function addBoardOnClickHandler(boardDiv, boardsComponent) {
@@ -214,6 +217,12 @@ function getSamplesForType(type) {
 			return Promise.resolve([]);
 			break;
 	}
+}
+
+function getRoomNumberFromUrl() {
+	const url = new URL(window.location.href);
+	const roomNumber = url.searchParams.get("roomNumber");
+	return roomNumber;
 }
 
 export {BoardsComponent};

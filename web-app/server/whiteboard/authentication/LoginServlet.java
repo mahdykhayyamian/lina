@@ -57,11 +57,6 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	}
 
-	private boolean authenticate(String userName) {
-		//TODO actually implement authentication
-		return true;
-	}
-
 	private String jwtToken(String userName) {
 		String jws = Jwts.builder().setSubject(userName).signWith(AuthenticationUtils.KEY).compact();
 		return jws;
