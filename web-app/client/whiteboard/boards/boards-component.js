@@ -96,7 +96,7 @@ function addBoard(boardsComponent, type) {
 	});
 
 	const roomNumber = getRoomNumberFromUrl();
-	request.post('/api/addBoard', { roomNumber, board: {
+	request.post('/api/addBoard', { roomNumber, boardPayload: {
 		type,
 		commands: "",
 	}}).then(() => {
