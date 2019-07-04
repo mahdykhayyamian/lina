@@ -34,9 +34,7 @@ public class WhiteBoardServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		String roomNumberParam = getRoomNumberParam(request);
-
 		boolean authenticated = false;
 		try {
 			authenticated = AuthenticationUtils.authenticated(request, response);

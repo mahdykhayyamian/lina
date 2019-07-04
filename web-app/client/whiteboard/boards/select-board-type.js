@@ -1,32 +1,39 @@
-const boardTypeSelectorWidth = 250;
+import ajax from '@fdaciuk/ajax'
 
+const boardTypeSelectorWidth = 250;
 const BoardTypeSelector =  function (boardsComponent, onSelectCallback) {
 
 	this.boardsComponent = boardsComponent;
 	this.onSelectCallback = onSelectCallback;
 	this.shown = false;
 
-	this.options = [{
-		value: "bar-chart",
-		label: "Bar Chart"
-	},{
-		value: "markdown",
-		label: "Markdown"
-	}, {
-		value: 'math',
-		label: 'Math'
-	}, {
-		value: 'sequence-diagram',
-		label: 'Sequence Diagram'
-	}];
+	this.options = null;
+
 };
 
 BoardTypeSelector.prototype.render = function() {
-	const selector = createDOM(this);
-	this.boardsComponent.addBoardHeader.appendChild(selector);
-	this.shown = true;
+	const request = ajax({
+		headers: {
+			'content-type': 'application/json',
+		}
+	});
 
-	registerClickOutOfSelectorEventListner(this);
+	let promise;
+	if (this.options == null) {
+		promise = request.get('/api/getContentTypes');
+	} else {
+		promise = Promise.resolve(this.options);
+	}
+
+	return promise.then((data) => {
+		console.log(data);
+		this.options = data;
+		console.log("time to render...")
+		const selector = createDOM(this);
+		this.boardsComponent.addBoardHeader.appendChild(selector);
+		this.shown = true;
+		registerClickOutOfSelectorEventListner(this);
+	})
 };
 
 BoardTypeSelector.prototype.remove = function() {
@@ -54,7 +61,7 @@ function createDOM(boardTypeSelector) {
 
 	searchBox.addEventListener("keyup", (event) => {
 		if (searchBox.value !== "") {
-			const matchingOptions = boardTypeSelector.options.filter(option	=> option.label.toLowerCase().startsWith(searchBox.value.toLowerCase()));
+			const matchingOptions = boardTypeSelector.options.filter(option	=> option.name.toLowerCase().startsWith(searchBox.value.toLowerCase()));
 			updateMachingOptions(boardTypeSelector, matchingOptions);
 		} else {
 			updateMachingOptions(boardTypeSelector, boardTypeSelector.options);
@@ -78,8 +85,8 @@ function updateMachingOptions(boardTypeSelector, matchingOptions) {
 	for (let i=0; i<matchingOptions.length; i++) {
 		const option = matchingOptions[i];
 		const optionItem = document.createElement("li");
-		optionItem.setAttribute("id", option.value);
-		optionItem.innerText = option.label;
+		optionItem.setAttribute("id", option.id);
+		optionItem.innerText = option.name;
 
 		optionItem.addEventListener("mousemove", (event) => {
 			event.target.classList.add("selected");
