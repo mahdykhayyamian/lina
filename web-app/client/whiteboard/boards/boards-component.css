@@ -1,13 +1,28 @@
 #add-board, #remove-board {
     background-color: #6764E8;
-    font-size: 18px;
-    width: 150px;
+    font-size: 16px;
+    font-family: monospace;
+    padding: 0px 5px 0px 21px;
     border-color: beige;
     border-radius: 5px;
     color:white;
     margin-top: 5px;
     margin-left: 10px;
     margin-right: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+#add-board img {
+    width: 16px;
+    padding: 5px 0px 5px 5px;
+    visibility: hidden;
+}
+
+#add-board.loading img {
+    visibility: visible;
 }
 
 #add-board:focus, #remove-board:focus {

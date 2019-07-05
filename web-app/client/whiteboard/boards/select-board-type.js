@@ -18,6 +18,9 @@ BoardTypeSelector.prototype.render = function() {
 		}
 	});
 
+	const addBoardDiv = document.getElementById("add-board");
+	addBoardDiv.classList.add("loading");
+
 	let promise;
 	if (this.options == null) {
 		promise = request.get('/api/getContentTypes');
@@ -26,6 +29,7 @@ BoardTypeSelector.prototype.render = function() {
 	}
 
 	return promise.then((data) => {
+		addBoardDiv.classList.remove("loading");
 		console.log(data);
 		this.options = data;
 		console.log("time to render...")
@@ -86,6 +90,7 @@ function updateMachingOptions(boardTypeSelector, matchingOptions) {
 		const option = matchingOptions[i];
 		const optionItem = document.createElement("li");
 		optionItem.setAttribute("id", option.id);
+		optionItem.setAttribute("type", option.type);
 		optionItem.innerText = option.name;
 
 		optionItem.addEventListener("mousemove", (event) => {
@@ -98,7 +103,8 @@ function updateMachingOptions(boardTypeSelector, matchingOptions) {
 
 		optionItem.addEventListener("click", (event) => {
 			removeMatchingOptions(boardTypeSelector);
-			boardTypeSelector.onSelectCallback(boardTypeSelector.boardsComponent, event.target.id);
+			console.log(event.target);
+			boardTypeSelector.onSelectCallback(boardTypeSelector.boardsComponent, event.target.type);
 		});
 
 		boardTypeSelector.matchingOptionsRoot.appendChild(optionItem);

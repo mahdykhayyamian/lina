@@ -14,7 +14,10 @@ const BoardsComponent =  function () {
 			<div id="boards-loader" style="display:none"><img src="resources/images/grid.svg" width="80" alt=""></div>
 			<div id="board-header" >
 				<div id="add-board-header">
-					<input id = "add-board" type="button" class="btn" value="Add Board"</input>
+					<div id="add-board">
+						<div class="btn"> Add Board</div>
+						<img src="resources/images/grid.svg" alt=""/>
+					</div>
 				</div>
 				<div id="remove-board-header">
 					<input id="remove-board" type="button" class="btn" value="Remove Board"</input>
@@ -28,6 +31,8 @@ const BoardsComponent =  function () {
 	this.boardTypeSelector = null;
 	this.boardHeaderDiv = null;
 	this.boardContainer = null;
+
+	this.boardTypeSelector = new BoardTypeSelector(this, addBoard);
 };
 
 BoardsComponent.prototype.createWidget = function() {
@@ -36,7 +41,6 @@ BoardsComponent.prototype.createWidget = function() {
 		if (this.boardTypeSelector &&  this.boardTypeSelector.isShown()) {
 			return;
 		}
-		this.boardTypeSelector = new BoardTypeSelector(this, addBoard);
 		this.boardTypeSelector.render();
 	}
 
@@ -194,28 +198,23 @@ function getSamplesForType(type) {
 			return barchartModule.then(barchartModule => {
 				return barchartModule.default.samples;
 			});
-			break;
 		case "markdown":
 			const markdownModule = moduleLoader.getModuleByName(type);
 			return markdownModule.then(markdownModule => {
 				return markdownModule.default.samples;
 			});
-			break;
 		case "sequence-diagram":
 			const sequenceDiagramModule = moduleLoader.getModuleByName(type);
 			return sequenceDiagramModule.then(sequenceDiagramModule => {
 				return sequenceDiagramModule.default.samples;
 			});
-			break;
 		case "math":
 			const mathModule = moduleLoader.getModuleByName(type);
 			return mathModule.then(mathModule => {
 				return mathModule.default.samples;
 			});
-			break;
 		default:
 			return Promise.resolve([]);
-			break;
 	}
 }
 
@@ -226,4 +225,4 @@ function getRoomNumberFromUrl() {
 }
 
 export {BoardsComponent};
-require("whiteboard/boards/boards.css");
+require("whiteboard/boards/boards-component.css");
