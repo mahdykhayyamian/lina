@@ -2,7 +2,7 @@
     background-color: #6764E8;
     font-size: 16px;
     font-family: monospace;
-    padding: 0px 5px 0px 21px;
+    padding: 0px 5px 0px 29px;
     border-color: beige;
     border-radius: 5px;
     color:white;
@@ -16,17 +16,13 @@
 }
 
 #add-board img, #remove-board img {
-    width: 16px;
+    width: 24px;
     padding: 5px 0px 5px 5px;
     visibility: hidden;
 }
 
 #add-board.loading img, #remove-board.loading img {
     visibility: visible;
-}
-
-#add-board.loading, #remove-board.loading {
-    opacity: 0.9;
 }
 
 #add-board:focus, #remove-board:focus {

@@ -11,12 +11,12 @@ const BoardsComponent =  function () {
 
 	this.boardsRoot = createDiv(`
 		<div id="whiteboard" class="spa-text">
-			<div id="boards-loader" style="display:none"><img src="resources/images/grid.svg" width="80" alt=""></div>
+			<div id="boards-loader" style="display:none"><img src="resources/images/spinner-grey.svg" width="80" alt=""></div>
 			<div id="board-header" >
 				<div id="add-board-header">
 					<div id="add-board">
 						<div class="btn"> Add Board</div>
-						<img src="resources/images/grid.svg" alt=""/>
+						<img src="resources/images/spinner.svg" alt=""/>
 					</div>
 				</div>
 				<div id="remove-board-header">

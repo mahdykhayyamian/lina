@@ -9,7 +9,7 @@ import lina.whiteboard.model.Board;
 public class BoardRepository {
 
     public static int createBoard(Board board) throws Exception {
-        System.out.println("Going to create a room");
+        System.out.println("Going to create a board");
         Connection conn = DBManager.getConnection();
         PreparedStatement ps = conn.prepareStatement("INSERT INTO whiteboard.board (room_id, content_type_id, commands, created) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         ps.setLong(1, board.getRoomId());
