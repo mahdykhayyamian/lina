@@ -20,7 +20,10 @@ const BoardsComponent =  function () {
 					</div>
 				</div>
 				<div id="remove-board-header">
-					<input id="remove-board" type="button" class="btn" value="Remove Board"</input>
+					<div id="remove-board">
+						<div class="btn"> Remove Board</div>
+						<img src="resources/images/grid.svg" alt=""/>
+					</div>
 				</div>
 			</div>
 			<div id="board-container"></div>
@@ -90,8 +93,9 @@ BoardsComponent.prototype.setCommandsComponent = function(commandsComponent) {
 }
 
 function addBoard(boardsComponent, type) {
-	console.log("Calling backend to add a board first...");
-	console.log(document.cookie);
+
+	const loaderDiv = document.getElementById("boards-loader");
+	loaderDiv.style.display = "block"
 
 	const request = ajax({
 		headers: {
@@ -113,9 +117,6 @@ function addBoard(boardsComponent, type) {
 			commands: "",
 			rootElement: newBoardDiv
 		};
-
-		const loaderDiv = document.getElementById("boards-loader");
-		loaderDiv.style.display = "block"
 
 		return getSamplesForType(type).then(samples => {
 			loaderDiv.style.display = "none";

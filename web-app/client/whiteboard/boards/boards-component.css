@@ -15,14 +15,18 @@
     justify-content: center;
 }
 
-#add-board img {
+#add-board img, #remove-board img {
     width: 16px;
     padding: 5px 0px 5px 5px;
     visibility: hidden;
 }
 
-#add-board.loading img {
+#add-board.loading img, #remove-board.loading img {
     visibility: visible;
+}
+
+#add-board.loading, #remove-board.loading {
+    opacity: 0.9;
 }
 
 #add-board:focus, #remove-board:focus {
