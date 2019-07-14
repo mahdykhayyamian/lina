@@ -9,23 +9,22 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 
 import javax.servlet.ServletException;
+import java.io.BufferedReader;
 import com.google.gson.Gson;
 import lombok.Data;
 import lina.whiteboard.model.Board;
 import lina.whiteboard.persistence.BoardRepository;
-import lina.board.athentication.AuthenticationUtils;
 import lina.board.utils.ServletUtils;
-import java.io.PrintWriter;
+import lina.board.athentication.AuthenticationUtils;
 
-
-@WebServlet("/api/addBoard")
-public class AddBoardServlet extends HttpServlet {
+@WebServlet("/api/updateBoardCommands")
+public class UpdateBoardCommandsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AddBoardServlet() {
+    public UpdateBoardCommandsServlet() {
         super();
     }
 
@@ -58,22 +57,9 @@ public class AddBoardServlet extends HttpServlet {
             System.out.println(data);
 
             Gson gson = new Gson();
-            AddBoardPayload payload = gson.fromJson(data, AddBoardPayload.class);
-            System.out.println(payload.boardPayload.type);
+            UpdateBoardCommandsPayload payload = gson.fromJson(data, UpdateBoardCommandsPayload.class);
 
-            Board board = new Board();
-            board.setRoomId(Long.parseLong(payload.roomNumber));
-            board.setContentTypeId(4);
-            board.setCommands(payload.boardPayload.commands);
-
-            int boardId = BoardRepository.createBoard(board);
-
-            PrintWriter out = response.getWriter();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            out.print(Integer.toString(boardId));
-            out.flush();
-
+            BoardRepository.updateBoardCommands(payload.boardId, payload.commands);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -82,14 +68,7 @@ public class AddBoardServlet extends HttpServlet {
 
 @Data
 @AllArgsConstructor
-class AddBoardPayload {
-   String roomNumber;
-   BoardPayload boardPayload;
-}
-
-@Data
-@AllArgsConstructor
-class BoardPayload {
-    String type;
-    String commands;
+class UpdateBoardCommandsPayload {
+   int boardId;
+   String commands;
 }

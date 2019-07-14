@@ -15,7 +15,7 @@ import java.util.List;
 import lina.whiteboard.model.ContentType;
 import com.google.gson.Gson;
 import java.io.PrintWriter;
-
+import lina.board.athentication.AuthenticationUtils;
 
 @WebServlet("/api/getContentTypes")
 public class GetContentTypesServlet extends HttpServlet {
@@ -33,6 +33,19 @@ public class GetContentTypesServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Inside getting content types...");
+
+		boolean authenticated = false;
+		try {
+			authenticated = AuthenticationUtils.authenticated(request, response);
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+        if (!authenticated) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+
         try {
             List<ContentType> contentTypes = ContentTypeRepository.getContentTypes();
             Gson gson = new Gson();

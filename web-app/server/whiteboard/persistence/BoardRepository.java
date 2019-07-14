@@ -28,6 +28,16 @@ public class BoardRepository {
         return id;
     }
 
+    public static void updateBoardCommands(int boardId, String commands) throws Exception {
+        System.out.println("Going to update board commands");
+        Connection conn = DBManager.getConnection();
+        PreparedStatement ps = conn.prepareStatement("UPDATE whiteboard.board SET commands=?, updated=? where id = ?");
+        ps.setString(1, commands);
+        ps.setTimestamp(2, DBManager.getCurrentTimeStamp());
+        ps.setLong(3, boardId);
+        ps.executeUpdate();
+    }
+
     public static java.sql.Timestamp getCurrentTimeStamp() {
         java.util.Date today = new java.util.Date();
         return new java.sql.Timestamp(today.getTime());

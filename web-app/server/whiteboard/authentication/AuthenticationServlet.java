@@ -90,6 +90,4 @@ public class AuthenticationServlet extends HttpServlet {
 		}
 		return null;
 	}
-
-
 }

@@ -107,7 +107,7 @@ function addBoard(boardsComponent, type) {
 	request.post('/api/addBoard', { roomNumber, boardPayload: {
 		type,
 		commands: "",
-	}}).then(() => {
+	}}).then((boardId) => {
 
 		let newBoardDiv = document.createElement("div");
 		newBoardDiv.setAttribute("class", "board");
@@ -115,7 +115,8 @@ function addBoard(boardsComponent, type) {
 		const newBoard = {
 			type,
 			commands: "",
-			rootElement: newBoardDiv
+			rootElement: newBoardDiv,
+			boardId
 		};
 
 		return getSamplesForType(type).then(samples => {
