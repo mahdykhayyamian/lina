@@ -104,7 +104,7 @@ function updateMachingOptions(boardTypeSelector, matchingOptions) {
 		optionItem.addEventListener("click", (event) => {
 			removeMatchingOptions(boardTypeSelector);
 			console.log(event.target);
-			boardTypeSelector.onSelectCallback(boardTypeSelector.boardsComponent, event.target.type);
+			boardTypeSelector.onSelectCallback(boardTypeSelector.boardsComponent, event.target.type, event.target.id);
 		});
 
 		boardTypeSelector.matchingOptionsRoot.appendChild(optionItem);

@@ -61,10 +61,11 @@ public class AddBoardServlet extends HttpServlet {
             AddBoardPayload payload = gson.fromJson(data, AddBoardPayload.class);
             System.out.println(payload.boardPayload.type);
 
-            Board board = new Board();
-            board.setRoomId(Long.parseLong(payload.roomNumber));
-            board.setContentTypeId(4);
-            board.setCommands(payload.boardPayload.commands);
+            Board board = Board.builder()
+                .roomId(Long.parseLong(payload.roomNumber))
+                .contentTypeId(Long.parseLong(payload.boardPayload.typeId))
+                .commands(payload.boardPayload.commands)
+            .build();
 
             int boardId = BoardRepository.createBoard(board);
 
@@ -76,6 +77,7 @@ public class AddBoardServlet extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 }
@@ -91,5 +93,6 @@ class AddBoardPayload {
 @AllArgsConstructor
 class BoardPayload {
     String type;
+    String typeId;
     String commands;
 }

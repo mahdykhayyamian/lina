@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import lina.whiteboard.model.Board;
+import java.util.List;
+import java.util.ArrayList;
 
 public class BoardRepository {
 
@@ -36,6 +38,34 @@ public class BoardRepository {
         ps.setTimestamp(2, DBManager.getCurrentTimeStamp());
         ps.setLong(3, boardId);
         ps.executeUpdate();
+    }
+
+    public static List<Board> getBoardsForRoom(String roomId) throws Exception {
+
+        List<Board> boards = new ArrayList<>();
+
+        Connection conn = DBManager.getConnection();
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery(
+            "select lina.whiteboard.board.id,  lina.whiteboard.board.room_id,  lina.whiteboard.board.content_type_id, lina.whiteboard.content_type.type, lina.whiteboard.board.commands \n" +
+            "from lina.whiteboard.board, lina.whiteboard.content_type where lina.whiteboard.board.content_type_id = lina.whiteboard.content_type.id and room_id = " + roomId);
+
+        while (rs.next()) {
+            System.out.print("Column 1 returned ");
+            System.out.println(rs.getString(1));
+            boards.add(Board.builder()
+                .id(rs.getLong(1))
+                .roomId(rs.getLong(2))
+                .contentTypeId(rs.getLong(3))
+                .contentType(rs.getString(4))
+                .commands(rs.getString(5))
+            .build());
+        }
+
+        rs.close();
+        st.close();
+
+        return boards;
     }
 
     public static java.sql.Timestamp getCurrentTimeStamp() {

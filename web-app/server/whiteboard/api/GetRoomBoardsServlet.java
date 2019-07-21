@@ -16,15 +16,20 @@ import lina.whiteboard.model.ContentType;
 import com.google.gson.Gson;
 import java.io.PrintWriter;
 import lina.board.athentication.AuthenticationUtils;
+import lina.whiteboard.persistence.BoardRepository;
+import lombok.AllArgsConstructor;
+import lina.whiteboard.model.Board;
+import com.google.gson.Gson;
 
-@WebServlet("/api/getContentTypes")
-public class GetContentTypesServlet extends HttpServlet {
+
+@WebServlet("/api/getRoomBoards")
+public class GetRoomBoardsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetContentTypesServlet() {
+    public GetRoomBoardsServlet() {
         super();
     }
 
@@ -32,13 +37,14 @@ public class GetContentTypesServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("Inside getting content types...");
+        System.out.println("Inside getting board rooms...");
 
 		boolean authenticated = false;
 		try {
 			authenticated = AuthenticationUtils.authenticated(request, response);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		}
 
         if (!authenticated) {
@@ -46,10 +52,14 @@ public class GetContentTypesServlet extends HttpServlet {
             return;
         }
 
-        try {
-            List<ContentType> contentTypes = ContentTypeRepository.getContentTypes();
+		try{
+			String roomNumber = request.getParameter("roomNumber");
+			System.out.println("Room number is " + roomNumber);
+
+			List<Board> boards = BoardRepository.getBoardsForRoom(roomNumber);
+
             Gson gson = new Gson();
-            String jsonPayload = gson.toJson(contentTypes);
+            String jsonPayload = gson.toJson(boards);
             System.out.println("json payload");
             System.out.println(jsonPayload);
 
@@ -58,14 +68,21 @@ public class GetContentTypesServlet extends HttpServlet {
             response.setCharacterEncoding("UTF-8");
             out.print(jsonPayload);
             out.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }
+
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
+}
+
+
+@Data
+@AllArgsConstructor
+class GetRoomBoardsPayload {
+   String roomNumber;
 }

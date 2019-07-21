@@ -62,6 +62,7 @@ public class UpdateBoardCommandsServlet extends HttpServlet {
             BoardRepository.updateBoardCommands(payload.boardId, payload.commands);
         } catch (Exception e) {
             e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 }

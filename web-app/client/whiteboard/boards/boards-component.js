@@ -92,7 +92,45 @@ BoardsComponent.prototype.setCommandsComponent = function(commandsComponent) {
 	this.commandsComponent = commandsComponent;
 }
 
-function addBoard(boardsComponent, type) {
+BoardsComponent.prototype.loadBoardsFromServer = function() {
+	const request = ajax({
+		headers: {
+			'content-type': 'application/json',
+		}
+	});
+
+	const roomNumber = getRoomNumberFromUrl();
+	console.log("Going to get boards with roomNumber : " + roomNumber)
+
+	request.get('/api/getRoomBoards?roomNumber=' + roomNumber).then((loadedBoards) => {
+		console.log(loadedBoards);
+		for (let i=0; i<loadedBoards.length; i++) {
+			const loadedBoard = loadedBoards[i];
+			console.log(loadedBoard);
+
+			let boardDiv = document.createElement("div");
+			boardDiv.setAttribute("class", "board");
+
+			const board = {
+				type: loadedBoard.contentType,
+				commands: loadedBoard.commands,
+				rootElement: boardDiv,
+				boardId: loadedBoard.id
+			};
+
+			this.boards.push(board);
+			this.boardContainer.appendChild(board.rootElement);
+			registerBoardOnClickHandler(board.rootElement, this);
+
+			moduleLoader.getModuleByName(board.type).then(visualizerModule => {
+				const visualizer = visualizerModule.default.visualizer;
+				visualizer.visualizeBoardCommands(board);
+			});
+		}
+	});
+}
+
+function addBoard(boardsComponent, boardType, typeId) {
 
 	const loaderDiv = document.getElementById("boards-loader");
 	loaderDiv.style.display = "block"
@@ -105,7 +143,8 @@ function addBoard(boardsComponent, type) {
 
 	const roomNumber = getRoomNumberFromUrl();
 	request.post('/api/addBoard', { roomNumber, boardPayload: {
-		type,
+		boardType,
+		typeId,
 		commands: "",
 	}}).then((boardId) => {
 
@@ -113,19 +152,19 @@ function addBoard(boardsComponent, type) {
 		newBoardDiv.setAttribute("class", "board");
 
 		const newBoard = {
-			type,
+			type: boardType,
 			commands: "",
 			rootElement: newBoardDiv,
 			boardId
 		};
 
-		return getSamplesForType(type).then(samples => {
+		return getSamplesForType(boardType).then(samples => {
 			loaderDiv.style.display = "none";
 
 			newBoard.samples = samples
 			boardsComponent.boards.push(newBoard);
 
-			addBoardOnClickHandler(newBoard.rootElement, boardsComponent);
+			registerBoardOnClickHandler(newBoard.rootElement, boardsComponent);
 			boardsComponent.boardContainer.appendChild(newBoard.rootElement);
 
 			makeBoardSelected(boardsComponent.boards.length-1, newBoard, boardsComponent);
@@ -134,7 +173,7 @@ function addBoard(boardsComponent, type) {
 	})
 };
 
-function addBoardOnClickHandler(boardDiv, boardsComponent) {
+function registerBoardOnClickHandler(boardDiv, boardsComponent) {
 	boardDiv.addEventListener("click", (event) => {
 		const boardIndex = Array.from(boardDiv.parentNode.children).indexOf(boardDiv);
 		const board = boardsComponent.boards[boardIndex];
