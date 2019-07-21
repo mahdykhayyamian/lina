@@ -125,6 +125,9 @@ BoardsComponent.prototype.loadBoardsFromServer = function() {
 			moduleLoader.getModuleByName(board.type).then(visualizerModule => {
 				const visualizer = visualizerModule.default.visualizer;
 				visualizer.visualizeBoardCommands(board);
+				getSamplesForType(board.type).then(samples => {
+					board.samples = samples
+				});
 			});
 		}
 	});
