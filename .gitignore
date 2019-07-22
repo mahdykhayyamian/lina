@@ -1,0 +1,14 @@
+.DS_Store
+.classpath
+.project
+.settings/
+deploy/
+java-libs/
+lina.code-workspace
+lina.sublime-project
+lina.sublime-workspace
+node_modules/
+web-app/.DS_Store
+web-app/client/.DS_Store
+web-app/client/resources/images/.DS_Store
+bin

@@ -15,13 +15,14 @@ public class DBManager {
         }
 
         try {
-
             String linaEnv = getLinaEnv();
 
             Class.forName("org.postgresql.Driver");
             String url = "jdbc:postgresql://" + getHost(linaEnv) + ":" + getPort(linaEnv) + "/lina";
             Properties props = new Properties();
             props.setProperty("user","lina_app");
+
+            //TODO remove password from source
             props.setProperty("password", "w00fw00f");
 
             CONN = DriverManager.getConnection(url, props);
@@ -46,7 +47,6 @@ public class DBManager {
         } else {
             System.out.println("Lina env set to " + linaEnv);
         }
-
         return linaEnv;
     }
 
@@ -69,6 +69,5 @@ public class DBManager {
             return "";
         }
     }
-
 }
 

@@ -68,7 +68,6 @@ function getModuleByName(moduleName) {
 			});
 		default:
 			return Promise.resolve(null);
-			break;
 	}
 }
 

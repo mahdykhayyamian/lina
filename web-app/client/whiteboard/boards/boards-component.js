@@ -1,3 +1,5 @@
+import ajax from '@fdaciuk/ajax'
+
 import { Widget } from "smartframes";
 import { BoardTypeSelector } from "whiteboard/boards/select-board-type.js";
 import { moduleLoader } from "whiteboard/module-loader.js";
@@ -7,22 +9,33 @@ const boardHeaderHeight = 50;
 
 const BoardsComponent =  function () {
 
-	this.boardsRoot = createDiv(`<div id="whiteboard" class="spa-text">
-									<div id="boards-loader" style="display:none"><img src="resources/images/grid.svg" width="80" alt=""></div>
-									<div id="board-header" >
-										<div id="add-board-header">
-											<input id = "add-board" type="button" class="btn" value="Add Board"</input>
-										</div>
-										<div id="remove-board-header">
-											<input id="remove-board" type="button" class="btn" value="Remove Board"</input>
-										</div>
-									</div>
-									<div id="board-container"></div>
-								</div>`);
+	this.boardsRoot = createDiv(`
+		<div id="whiteboard" class="spa-text">
+			<div id="boards-loader" style="display:none"><img src="resources/images/spinner-grey.svg" width="80" alt=""></div>
+			<div id="board-header" >
+				<div id="add-board-header">
+					<div id="add-board">
+						<div class="btn"> Add Board</div>
+						<img src="resources/images/spinner.svg" alt=""/>
+					</div>
+				</div>
+				<div id="remove-board-header">
+					<div id="remove-board">
+						<div class="btn"> Remove Board</div>
+						<img src="resources/images/grid.svg" alt=""/>
+					</div>
+				</div>
+			</div>
+			<div id="board-container"></div>
+		</div>
+	`);
+
 	this.boards = [];
 	this.boardTypeSelector = null;
 	this.boardHeaderDiv = null;
 	this.boardContainer = null;
+
+	this.boardTypeSelector = new BoardTypeSelector(this, addBoard);
 };
 
 BoardsComponent.prototype.createWidget = function() {
@@ -31,7 +44,6 @@ BoardsComponent.prototype.createWidget = function() {
 		if (this.boardTypeSelector &&  this.boardTypeSelector.isShown()) {
 			return;
 		}
-		this.boardTypeSelector = new BoardTypeSelector(this, addBoard);
 		this.boardTypeSelector.render();
 	}
 
@@ -80,34 +92,91 @@ BoardsComponent.prototype.setCommandsComponent = function(commandsComponent) {
 	this.commandsComponent = commandsComponent;
 }
 
-function addBoard(boardsComponent, type) {
-	let newBoardDiv = document.createElement("div");
-	newBoardDiv.setAttribute("class", "board");
+BoardsComponent.prototype.loadBoardsFromServer = function() {
+	const request = ajax({
+		headers: {
+			'content-type': 'application/json',
+		}
+	});
 
-	const newBoard = {
-		type,
-		commands: "",
-		rootElement: newBoardDiv
-	};
+	const roomNumber = getRoomNumberFromUrl();
+	console.log("Going to get boards with roomNumber : " + roomNumber)
+
+	request.get('/api/getRoomBoards?roomNumber=' + roomNumber).then((loadedBoards) => {
+		console.log(loadedBoards);
+		for (let i=0; i<loadedBoards.length; i++) {
+			const loadedBoard = loadedBoards[i];
+			console.log(loadedBoard);
+
+			let boardDiv = document.createElement("div");
+			boardDiv.setAttribute("class", "board");
+
+			const board = {
+				type: loadedBoard.contentType,
+				commands: loadedBoard.commands,
+				rootElement: boardDiv,
+				boardId: loadedBoard.id
+			};
+
+			this.boards.push(board);
+			this.boardContainer.appendChild(board.rootElement);
+			registerBoardOnClickHandler(board.rootElement, this);
+
+			moduleLoader.getModuleByName(board.type).then(visualizerModule => {
+				const visualizer = visualizerModule.default.visualizer;
+				visualizer.visualizeBoardCommands(board);
+				getSamplesForType(board.type).then(samples => {
+					board.samples = samples
+				});
+			});
+		}
+	});
+}
+
+function addBoard(boardsComponent, boardType, typeId) {
 
 	const loaderDiv = document.getElementById("boards-loader");
 	loaderDiv.style.display = "block"
 
-	return getSamplesForType(type).then(samples => {
-		loaderDiv.style.display = "none";
-
-		newBoard.samples = samples
-		boardsComponent.boards.push(newBoard);
-
-		addBoardOnClickHandler(newBoard.rootElement, boardsComponent);
-		boardsComponent.boardContainer.appendChild(newBoard.rootElement);
-
-		makeBoardSelected(boardsComponent.boards.length-1, newBoard, boardsComponent);
-		boardsComponent.boardTypeSelector.remove();
+	const request = ajax({
+		headers: {
+			'content-type': 'application/json',
+		}
 	});
+
+	const roomNumber = getRoomNumberFromUrl();
+	request.post('/api/addBoard', { roomNumber, boardPayload: {
+		boardType,
+		typeId,
+		commands: "",
+	}}).then((boardId) => {
+
+		let newBoardDiv = document.createElement("div");
+		newBoardDiv.setAttribute("class", "board");
+
+		const newBoard = {
+			type: boardType,
+			commands: "",
+			rootElement: newBoardDiv,
+			boardId
+		};
+
+		return getSamplesForType(boardType).then(samples => {
+			loaderDiv.style.display = "none";
+
+			newBoard.samples = samples
+			boardsComponent.boards.push(newBoard);
+
+			registerBoardOnClickHandler(newBoard.rootElement, boardsComponent);
+			boardsComponent.boardContainer.appendChild(newBoard.rootElement);
+
+			makeBoardSelected(boardsComponent.boards.length-1, newBoard, boardsComponent);
+			boardsComponent.boardTypeSelector.remove();
+		});
+	})
 };
 
-function addBoardOnClickHandler(boardDiv, boardsComponent) {
+function registerBoardOnClickHandler(boardDiv, boardsComponent) {
 	boardDiv.addEventListener("click", (event) => {
 		const boardIndex = Array.from(boardDiv.parentNode.children).indexOf(boardDiv);
 		const board = boardsComponent.boards[boardIndex];
@@ -173,30 +242,31 @@ function getSamplesForType(type) {
 			return barchartModule.then(barchartModule => {
 				return barchartModule.default.samples;
 			});
-			break;
 		case "markdown":
 			const markdownModule = moduleLoader.getModuleByName(type);
 			return markdownModule.then(markdownModule => {
 				return markdownModule.default.samples;
 			});
-			break;
 		case "sequence-diagram":
 			const sequenceDiagramModule = moduleLoader.getModuleByName(type);
 			return sequenceDiagramModule.then(sequenceDiagramModule => {
 				return sequenceDiagramModule.default.samples;
 			});
-			break;
 		case "math":
 			const mathModule = moduleLoader.getModuleByName(type);
 			return mathModule.then(mathModule => {
 				return mathModule.default.samples;
 			});
-			break;
 		default:
 			return Promise.resolve([]);
-			break;
 	}
 }
 
+function getRoomNumberFromUrl() {
+	const url = new URL(window.location.href);
+	const roomNumber = url.searchParams.get("roomNumber");
+	return roomNumber;
+}
+
 export {BoardsComponent};
-require("whiteboard/boards/boards.css");
+require("whiteboard/boards/boards-component.css");

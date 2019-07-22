@@ -20,13 +20,13 @@ import javax.servlet.http.Cookie;
  * Servlet implementation class HomeServlet
  */
 @WebServlet("/whiteboard")
-public class BoardServlet extends HttpServlet {
+public class WhiteBoardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BoardServlet() {
+    public WhiteBoardServlet() {
         super();
     }
 
@@ -34,11 +34,7 @@ public class BoardServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		System.out.println("Inside board servelt!");
-
 		String roomNumberParam = getRoomNumberParam(request);
-
 		boolean authenticated = false;
 		try {
 			authenticated = AuthenticationUtils.authenticated(request, response);

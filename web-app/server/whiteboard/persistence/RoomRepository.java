@@ -1,7 +1,10 @@
 package lina.whiteboard.persistence;
-import java.sql.*;
-import java.util.Properties;
-import java.lang.Class;
+import java.sql.Timestamp;
+import java.sql.ResultSet;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+
 
 public class RoomRepository {
 

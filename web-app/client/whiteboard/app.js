@@ -12,7 +12,8 @@ window.onload = function() {
     const appDiv = document.getElementById("lina.app");
     appDiv.style.setProperty("position", "absolute");
 
-    const rootContainer = buildLayout();
+    const boardsComponent = new BoardsComponent();
+    const rootContainer = buildLayout(boardsComponent);
 
     function onResize() {
         const width = window.innerWidth - 50;
@@ -30,6 +31,7 @@ window.onload = function() {
 
     window.onresize = onResize;
     onResize();
+    boardsComponent.loadBoardsFromServer();
 }
 
 function determineDisplayType() {
@@ -42,16 +44,16 @@ function determineDisplayType() {
     }
 }
 
-function buildLayout() {
+function buildLayout(boardsComponent) {
     const displaySize = determineDisplayType();
     console.log(displaySize);
     switch (displaySize) {
         case CONSTANTS.DISPLAY_SIZE_SMALL:
-            return createLayoutForSmallSizeDisplays();
+            return createLayoutForSmallSizeDisplays(boardsComponent);
         case CONSTANTS.DISPLAY_SIZE_MEDIUM:
-            return createLayoutForMediumSizeDisplays();
+            return createLayoutForMediumSizeDisplays(boardsComponent);
         case CONSTANTS.DISPLAY_SIZE_LARGE:
-            return createLayoutForLargeSizeDisplays();
+            return createLayoutForLargeSizeDisplays(boardsComponent);
         default:
             return null;
     }
@@ -77,13 +79,12 @@ function createChatWidget() {
 }
 
 
-function createLayoutForSmallSizeDisplays() {
+function createLayoutForSmallSizeDisplays(boardsComponent) {
 
     const chatWidget =  createChatWidget();
     const commandsComponent = new CommandsComponent();
     const commandsWidget = commandsComponent.createWidget();
 
-    const boardsComponent = new BoardsComponent();
     boardsComponent.setCommandsComponent(commandsComponent);
     const boardsWidget = boardsComponent.createWidget();
 
@@ -105,13 +106,12 @@ function createLayoutForSmallSizeDisplays() {
 }
 
 
-function createLayoutForMediumSizeDisplays() {
+function createLayoutForMediumSizeDisplays(boardsComponent) {
 
     const chatWidget =  createChatWidget();
     const commandsComponent = new CommandsComponent();
     const commandsWidget = commandsComponent.createWidget();
 
-    const boardsComponent = new BoardsComponent();
     boardsComponent.setCommandsComponent(commandsComponent);
     const boardsWidget = boardsComponent.createWidget();
 
@@ -132,13 +132,12 @@ function createLayoutForMediumSizeDisplays() {
     return rootContainer;
 }
 
-function createLayoutForLargeSizeDisplays() {
+function createLayoutForLargeSizeDisplays(boardsComponent) {
 
     const chatWidget = createChatWidget();
     const commandsComponent = new CommandsComponent();
     const commandsWidget = commandsComponent.createWidget();
 
-    const boardsComponent = new BoardsComponent();
     boardsComponent.setCommandsComponent(commandsComponent);
     const boardsWidget = boardsComponent.createWidget();
 

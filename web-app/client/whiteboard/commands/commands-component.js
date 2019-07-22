@@ -1,6 +1,8 @@
 import { Widget } from "smartframes";
 import { CONSTANTS } from "whiteboard/constants.js";
 import { moduleLoader } from "whiteboard/module-loader.js";
+import ajax from '@fdaciuk/ajax';
+
 
 const CommandsComponent =  function () {
 	this.commandsRoot = createDiv(`
@@ -91,15 +93,29 @@ CommandsComponent.prototype.runCommands = function() {
 		return;
 	}
 
-	const moduleName = this.board.type;
 	this.commands = document.getElementById(CONSTANTS.COMMANDS_TEXT_AREA_ID).value;
-	this.board.commands = this.commands;
 
-	return moduleLoader.getModuleByName(moduleName).then(visualizerModule => {
-		const visualizer = visualizerModule.default.visualizer;
-		console.log(visualizer);
-		visualizer.visualizeBoardCommands(this.board);
+	const request = ajax({
+		headers: {
+			'content-type': 'application/json',
+		}
 	});
+
+	request.post(
+		'/api/updateBoardCommands', {
+			boardId: this.board.boardId,
+			commands: this.commands,
+		}).then(() => {
+			console.log("board commands updated");
+
+			const moduleName = this.board.type;
+			this.board.commands = this.commands;
+
+			return moduleLoader.getModuleByName(moduleName).then(visualizerModule => {
+				const visualizer = visualizerModule.default.visualizer;
+				visualizer.visualizeBoardCommands(this.board);
+			});
+		});
 };
 
 function createDiv(innerHtml) {
