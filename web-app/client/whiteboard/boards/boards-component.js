@@ -217,13 +217,25 @@ function makeBoardSelected(selectedBoardIndex, selectedBoard, boardsComponent) {
 }
 
 function removeSelectedBoard(boardsComponent) {
+	const board = boardsComponent.boards[boardsComponent.selectedBoardIndex];
+	const request = ajax({
+		headers: {
+			'content-type': 'application/json',
+		}
+	});
 
-	if (boardsComponent.selectedBoardIndex !== null) {
-		boardsComponent.selectedBoardDiv.remove();
-		boardsComponent.boards.splice(boardsComponent.selectedBoardIndex, 1);
-		boardsComponent.selectedBoardIndex = null;
-		boardsComponent.selectedBoardDiv = null;
-	}
+	const roomNumber = getRoomNumberFromUrl();
+	request.post('/api/removeBoard', {
+		boardId: board.boardId,
+		roomNumber,
+	}).then(() => {
+		if (boardsComponent.selectedBoardIndex !== null) {
+			boardsComponent.selectedBoardDiv.remove();
+			boardsComponent.boards.splice(boardsComponent.selectedBoardIndex, 1);
+			boardsComponent.selectedBoardIndex = null;
+			boardsComponent.selectedBoardDiv = null;
+		}
+	});
 }
 
 function createDiv(innerHtml) {
