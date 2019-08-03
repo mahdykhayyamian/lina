@@ -46,3 +46,7 @@ input:focus {
   font-family: monospace;
   font-size: 14px
 }
+
+.hidden {
+    visibility: hidden;
+}
