@@ -1,7 +1,6 @@
 LINA_APP_NAME="lina"
 LINA_ROOT=${HOME}"/workspace/lina"
 CATALINA_HOME=${HOME}"/workspace/apache-tomcat-9.0.14"
-TOMCAT_PORT=8080
 
 function echoGreen {
 	tput setaf 2;

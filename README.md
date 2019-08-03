@@ -19,4 +19,4 @@ CATALINA_HOME=${HOME}"/workspace/apache-tomcat-9.0.14"
 * Run the build script to build and start the server
 ```./scripts/build.sh```
 
-* Point your browser to `http://localhost:8080/lina/whiteboard`
+* Point your browser to `http://localhost:8080/lina/paragraph`

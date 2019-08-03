@@ -3,7 +3,7 @@ var webpack = require('webpack');
 module.exports = {
     entry: {
         smartframes: './web-app/client/demo/smartframes/demo.js',
-        whiteboard: './web-app/client/whiteboard/app.js',
+        paragraph: './web-app/client/paragraph/app.js',
     },
     output: {
         filename: '[name].js',
