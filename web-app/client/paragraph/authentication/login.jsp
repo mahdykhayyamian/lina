@@ -18,7 +18,8 @@
 		<div>
 			<form id="login-form" action='<%= request.getAttribute("action") %>' method="post">
 				<div class="hidden">
-					<input id="user-name" type="text" name="userName" placeholder="Pick a name">
+					<input id="user-name" type="text" name="userName">
+					<input id="google-auth-token" type="text" name="googleAuthToken">
 				</div>
 				<div id="my-signin2"></div>
 			</form>

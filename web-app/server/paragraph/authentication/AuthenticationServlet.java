@@ -19,6 +19,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.security.Key;
 import lina.board.athentication.AuthenticationUtils;
+import lina.board.athentication.GoogleAuthHelper;
 
 
 @WebServlet("/paragraph/authenticate")
@@ -42,10 +43,14 @@ public class AuthenticationServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String userName = request.getParameter("userName");
-		System.out.println(userName);
 
-		if (authenticate(userName)) {
+		String userName = request.getParameter("userName");
+		System.out.println("userName : " + userName);
+
+		String googleAuthToken = request.getParameter("googleAuthToken");
+		System.out.println("googleAuthToken : " + googleAuthToken);
+
+		if (authenticate(userName, googleAuthToken)) {
 			String jwtToken = jwtToken(userName);
 			System.out.println("jwt token : " + jwtToken);
 
@@ -72,9 +77,11 @@ public class AuthenticationServlet extends HttpServlet {
 		}
 	}
 
-	private boolean authenticate(String userName) {
-		//TODO actually implement authentication
-		return true;
+	private boolean authenticate(String userName, String googleAuthToken) {
+		if (googleAuthToken != null) {
+			return GoogleAuthHelper.validateGoogleToken(googleAuthToken);
+		}
+		return false;
 	}
 
 	private String jwtToken(String userName) {

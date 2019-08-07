@@ -50,7 +50,7 @@ public class AuthenticationUtils {
 			}
 
 			if (Jwts.parser().setSigningKey(KEY).parseClaimsJws(jwtToken).getBody().getSubject().equals(userName)) {
-                System.out.println("authentication successfull.");
+				System.out.println("authentication successfull.");
 				return true;
 			}
 		}
@@ -58,24 +58,24 @@ public class AuthenticationUtils {
 		return false;
 	}
 
-    public static Cookie getCookie(HttpServletRequest request, String name) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(name)) {
-                    return cookie;
-                }
-            }
-        }
-        return null;
-    }
+	public static Cookie getCookie(HttpServletRequest request, String name) {
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals(name)) {
+					return cookie;
+				}
+			}
+		}
+		return null;
+	}
 
-    public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
-        Cookie cookie = getCookie(request, name);
-        cookie.setValue(null);
-        cookie.setMaxAge(0);
-        cookie.setPath(cookie.getPath());
-        response.addCookie(cookie);
-    }
+	public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
+		Cookie cookie = getCookie(request, name);
+		cookie.setValue(null);
+		cookie.setMaxAge(0);
+		cookie.setPath(cookie.getPath());
+		response.addCookie(cookie);
+	}
 
 }
