@@ -9,7 +9,7 @@
 		<!-- Google Sign-in --->
 		<script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
 		<meta name="google-signin-client_id" content="737742406146-ctvhpef0pmjin27075a9vhsfb0pre821.apps.googleusercontent.com">
-		<script src="/paragraph/authentication/google-auth.js"></script>
+		<script src="/paragraph/authentication/google-sign-in.js"></script>
 
 		<title>Login</title>
 	</head>

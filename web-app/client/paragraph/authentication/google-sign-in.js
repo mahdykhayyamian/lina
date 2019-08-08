@@ -1,6 +1,7 @@
 // Reference: https://developers.google.com/identity/sign-in/web/build-button
 
 function onSuccess(googleUser) {
+	console.log("onSuccess...");
 	var profile = googleUser.getBasicProfile();
 	console.log('given name :' + profile.getGivenName())
 	console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
