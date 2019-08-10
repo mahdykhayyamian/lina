@@ -8,13 +8,16 @@ import java.util.Collections;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import java.security.GeneralSecurityException;
 import java.io.IOException;
+import lombok.Builder;
+import lombok.Data;
 
 // Based on https://developers.google.com/identity/sign-in/web/backend-auth
 public class GoogleAuthHelper {
 
 	public static String CLIENT_ID = "737742406146-ctvhpef0pmjin27075a9vhsfb0pre821.apps.googleusercontent.com";
 
-	public static boolean validateGoogleToken(String idTokenString)  {
+	public static ParsedGoogleToken validateGoogleToken(String idTokenString)  {
+		System.out.println("in validateGoogleToken...");
 		try {
 			GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new JacksonFactory())
 				// Specify the CLIENT_ID of the app that accesses the backend:
@@ -46,14 +49,35 @@ public class GoogleAuthHelper {
 
 				// Use or store profile information
 				// ...
-				return true;
+				System.out.println("validated token successfully");
+				return ParsedGoogleToken.builder()
+					.userId(userId)
+					.email(email)
+					.name(name)
+					.pictureUrl(pictureUrl)
+					.locale(locale)
+					.familyName(familyName)
+					.givenName(givenName)
+				.build();
 			} else {
 			  System.out.println("Invalid ID token.");
-			  return false;
+			  return null;
 			}
 		} catch (Exception e) {
-			return false;
+			e.printStackTrace();
+			return null;
 		}
 	}
 }
 
+@Data
+@Builder
+class ParsedGoogleToken {
+	String userId;
+	String email;
+	String name;
+	String pictureUrl;
+	String locale;
+	String familyName;
+	String givenName;
+}

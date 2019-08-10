@@ -51,18 +51,26 @@ public class AuthenticationServlet extends HttpServlet {
 		System.out.println("googleAuthToken : " + googleAuthToken);
 
 		if (authenticate(userName, googleAuthToken)) {
-			String jwtToken = jwtToken(userName);
-			System.out.println("jwt token : " + jwtToken);
 
-			Cookie userNameCookie = new Cookie("user-name", userName);
-			userNameCookie.setMaxAge(60*60); //1 hour
-			userNameCookie.setPath("/");
-			response.addCookie(userNameCookie);
+			System.out.println("authenticated, going to set cookies");
 
-			Cookie jwtTokenCookie = new Cookie("lina-token", jwtToken);
-			jwtTokenCookie.setPath("/");
-			jwtTokenCookie.setMaxAge(60*60); //1 hour
-			response.addCookie(jwtTokenCookie);
+			if (googleAuthToken != null) {
+
+				Cookie authTypeCookie = new Cookie("auth-type", "googleAuth");
+				authTypeCookie.setMaxAge(60*60); //1 hour
+				authTypeCookie.setPath("/");
+				response.addCookie(authTypeCookie);
+
+				Cookie authTokenCookie = new Cookie("auth-token", googleAuthToken);
+				authTokenCookie.setMaxAge(60*60); //1 hour
+				authTokenCookie.setPath("/");
+				response.addCookie(authTokenCookie);
+
+				Cookie userNameCookie = new Cookie("user-name", userName);
+				userNameCookie.setMaxAge(60*60); //1 hour
+				userNameCookie.setPath("/");
+				response.addCookie(userNameCookie);
+			}
 
 			String fromEncoded = getFrom(request);
 
@@ -74,12 +82,19 @@ public class AuthenticationServlet extends HttpServlet {
 			} else {
 				response.sendRedirect("/paragraph");
 			}
+		} else {
+			System.out.println("could not authenticate!");
 		}
 	}
 
 	private boolean authenticate(String userName, String googleAuthToken) {
 		if (googleAuthToken != null) {
-			return GoogleAuthHelper.validateGoogleToken(googleAuthToken);
+			ParsedGoogleToken parsedGoogleToken = GoogleAuthHelper.validateGoogleToken(googleAuthToken);
+			if (parsedGoogleToken != null) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 		return false;
 	}

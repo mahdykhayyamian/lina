@@ -25,8 +25,8 @@ public class LogoutServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        AuthenticationUtils.deleteCookie(request, response, "user-name");
-        AuthenticationUtils.deleteCookie(request, response, "lina-token");
+        AuthenticationUtils.deleteCookie(request, response, "auth-type");
+        AuthenticationUtils.deleteCookie(request, response, "auth-token");
 
 		String action = "/paragraph/authenticate";
 		request.setAttribute("action", action);

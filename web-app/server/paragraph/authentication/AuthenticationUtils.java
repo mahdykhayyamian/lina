@@ -19,7 +19,8 @@ import javax.servlet.RequestDispatcher;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import io.jsonwebtoken.SignatureAlgorithm;
-
+import lina.board.athentication.GoogleAuthHelper;
+import lina.board.athentication.ParsedGoogleToken;
 public class AuthenticationUtils {
 
 	public static final Key KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
@@ -28,30 +29,34 @@ public class AuthenticationUtils {
 		System.out.println("authenticating...");
 		Cookie[] cookies = ((HttpServletRequest)request).getCookies();
 
-		String jwtToken = null;
-		String userName = null;
+		String authType = null;
+		String authToken = null;
 
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {
 				System.out.println(cookie.getName() + " : " + cookie.getValue());
 
-				if (cookie.getName().equals("user-name")) {
-					userName = cookie.getValue();
+				if (cookie.getName().equals("auth-type")) {
+					authType = cookie.getValue();
 				}
 
-				if (cookie.getName().equals("lina-token")) {
-					jwtToken = cookie.getValue();
+				if (cookie.getName().equals("auth-token")) {
+					authToken = cookie.getValue();
 				}
 			}
 
-			if (userName == null || jwtToken == null) {
-				System.out.println("userName or jwtToken not provided, auth failed.");
+			if (authType == null || authToken == null) {
+				System.out.println("authType or authToken not provided, auth failed.");
 				return false;
 			}
 
-			if (Jwts.parser().setSigningKey(KEY).parseClaimsJws(jwtToken).getBody().getSubject().equals(userName)) {
-				System.out.println("authentication successfull.");
-				return true;
+			if (authType.equals("googleAuth")) {
+				ParsedGoogleToken parsedGoogleToken = GoogleAuthHelper.validateGoogleToken(authToken);
+				if (parsedGoogleToken != null) {
+					return true;
+				} else {
+					return false;
+				}
 			}
 		}
 
@@ -72,10 +77,12 @@ public class AuthenticationUtils {
 
 	public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
 		Cookie cookie = getCookie(request, name);
-		cookie.setValue(null);
-		cookie.setMaxAge(0);
-		cookie.setPath(cookie.getPath());
-		response.addCookie(cookie);
+		if (cookie != null) {
+			cookie.setValue(null);
+			cookie.setMaxAge(0);
+			cookie.setPath(cookie.getPath());
+			response.addCookie(cookie);			
+		} 
 	}
 
 }
