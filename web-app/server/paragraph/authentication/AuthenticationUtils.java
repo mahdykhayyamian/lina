@@ -75,14 +75,11 @@ public class AuthenticationUtils {
 		return null;
 	}
 
-	public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
-		Cookie cookie = getCookie(request, name);
-		if (cookie != null) {
-			cookie.setValue(null);
-			cookie.setMaxAge(0);
-			cookie.setPath(cookie.getPath());
-			response.addCookie(cookie);			
-		} 
-	}
-
+    public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
+        Cookie cookie = getCookie(request, name);
+        cookie.setValue("");
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+    }
 }
