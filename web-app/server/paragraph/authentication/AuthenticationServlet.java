@@ -45,10 +45,7 @@ public class AuthenticationServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String userName = request.getParameter("userName");
-		System.out.println("userName : " + userName);
-
 		String googleAuthToken = request.getParameter("googleAuthToken");
-		System.out.println("googleAuthToken : " + googleAuthToken);
 
 		if (authenticate(userName, googleAuthToken)) {
 

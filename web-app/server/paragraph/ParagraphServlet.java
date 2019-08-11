@@ -42,8 +42,6 @@ public class ParagraphServlet extends HttpServlet {
 			System.out.println(e.getMessage());
 		}
 
-		System.out.println("authenticated : " + authenticated);
-
 		if (!authenticated) {
 			if (roomNumberParam != null) {
 				String fromUrl = "/paragraph?roomNumber=" + roomNumberParam;
@@ -59,9 +57,6 @@ public class ParagraphServlet extends HttpServlet {
 		String sessionId = null;
 
 		Cookie userNameCookie = AuthenticationUtils.getCookie(request, "user-name");
-
-		System.out.println("userNameCookie");
-		System.out.println(userNameCookie);
 
 		String userName = userNameCookie.getValue();
 		request.setAttribute("user-name", userName);
