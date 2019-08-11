@@ -20,13 +20,8 @@ public class GoogleAuthHelper {
 		System.out.println("in validateGoogleToken...");
 		try {
 			GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new JacksonFactory())
-				// Specify the CLIENT_ID of the app that accesses the backend:
 				.setAudience(Collections.singletonList(CLIENT_ID))
-				// Or, if multiple clients access the backend:
-				//.setAudience(Arrays.asList(CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3))
 				.build();
-
-			// (Receive idTokenString by HTTPS POST)
 
 			GoogleIdToken idToken = verifier.verify(idTokenString);
 			if (idToken != null) {
@@ -46,9 +41,7 @@ public class GoogleAuthHelper {
 				String locale = (String) payload.get("locale");
 				String familyName = (String) payload.get("family_name");
 				String givenName = (String) payload.get("given_name");
-
-				// Use or store profile information
-				// ...
+				
 				System.out.println("validated token successfully");
 				return ParsedGoogleToken.builder()
 					.userId(userId)

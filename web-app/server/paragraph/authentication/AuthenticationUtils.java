@@ -17,13 +17,10 @@ import io.jsonwebtoken.Jwts;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.RequestDispatcher;
 import io.jsonwebtoken.security.Keys;
-import java.security.Key;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lina.board.athentication.GoogleAuthHelper;
 import lina.board.athentication.ParsedGoogleToken;
 public class AuthenticationUtils {
-
-	public static final Key KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
 	public static boolean authenticated(ServletRequest request, ServletResponse response) {
 		System.out.println("authenticating...");
