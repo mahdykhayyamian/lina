@@ -70,6 +70,8 @@ function runPrettierOnJSfiles {
 }
 
 function addJSBundles {
+	cd ${LINA_ROOT}
+
 	if [ ${env} == "prod" ]
 	then
 		echoGreen "packing for prod env"
