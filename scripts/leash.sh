@@ -63,6 +63,12 @@ function copyLibs {
 	cp -r ${LINA_ROOT}/java-libs ${LINA_ROOT}/deploy/WEB-INF/lib
 }
 
+function runPrettierOnJSfiles {
+	echoGreen "Running prettier on client JS files"
+	cd ${LINA_ROOT}/web-app/client
+	node_modules/.bin/prettier --write "**/*.js"	
+}
+
 function addJSBundles {
 	if [ ${env} == "prod" ]
 	then
@@ -146,6 +152,7 @@ function build {
 	copyLibs
 	compileJavaFiles
 	copyWebContent
+	runPrettierOnJSfiles
 	addJSBundles
 	addJSLibs
 	createWarFile
