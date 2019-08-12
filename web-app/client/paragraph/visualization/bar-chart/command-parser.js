@@ -7,23 +7,22 @@
 	statePopulations.color = "blue"
 */
 
-const DEFINITION_REGX = /^Barchart[\s+]([\S].*)$/
-const TITLE_ASSIGNMENT_REGX  = /^(.*)\.title[\s*]=[\s*]\"(.*)\"$/
-const DATA_ASSIGNMENT_REGX  = /^(.*)\.data[\s*]=[\s*](.*)$/
-const COLOR_ASSIGNMENT_REGX  = /^(.*)\.color[\s*]=[\s*]\"(.*)\"$/
+const DEFINITION_REGX = /^Barchart[\s+]([\S].*)$/;
+const TITLE_ASSIGNMENT_REGX = /^(.*)\.title[\s*]=[\s*]\"(.*)\"$/;
+const DATA_ASSIGNMENT_REGX = /^(.*)\.data[\s*]=[\s*](.*)$/;
+const COLOR_ASSIGNMENT_REGX = /^(.*)\.color[\s*]=[\s*]\"(.*)\"$/;
 
 const parseBarChartCommands = function(commands) {
-
 	const barChartIR = {};
 
 	const lines = commands.split(/\r?\n/);
 
-	for (let i=0; i<lines.length; i++) {
+	for (let i = 0; i < lines.length; i++) {
 		interpretLine(lines[i], barChartIR);
 	}
 
 	return barChartIR;
-}
+};
 
 function interpretLine(line, barChartIR) {
 	line = line.trim();
@@ -40,7 +39,6 @@ function interpretLine(line, barChartIR) {
 	// title
 	match = TITLE_ASSIGNMENT_REGX.exec(line);
 	if (match) {
-
 		const barchartVarName = match[1];
 
 		if (!barChartIR[barchartVarName]) {
@@ -68,7 +66,6 @@ function interpretLine(line, barChartIR) {
 	// color
 	match = COLOR_ASSIGNMENT_REGX.exec(line);
 	if (match) {
-
 		const barchartVarName = match[1];
 
 		if (!barChartIR[barchartVarName]) {
@@ -81,4 +78,4 @@ function interpretLine(line, barChartIR) {
 	}
 }
 
-export {parseBarChartCommands};
+export { parseBarChartCommands };

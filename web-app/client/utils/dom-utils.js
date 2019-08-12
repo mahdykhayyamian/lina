@@ -1,4 +1,3 @@
-const domUtils = {
-}
+const domUtils = {};
 
-export {domUtils};
+export { domUtils };
