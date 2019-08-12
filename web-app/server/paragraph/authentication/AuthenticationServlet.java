@@ -15,10 +15,8 @@ import javax.servlet.http.Cookie;
 import java.util.stream.Collectors;
 import com.google.gson.Gson;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import java.security.Key;
 import lina.board.athentication.AuthenticationUtils;
+import lina.board.athentication.GoogleAuthHelper;
 
 
 @WebServlet("/paragraph/authenticate")
@@ -42,22 +40,31 @@ public class AuthenticationServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 		String userName = request.getParameter("userName");
-		System.out.println(userName);
+		String googleAuthToken = request.getParameter("googleAuthToken");
 
-		if (authenticate(userName)) {
-			String jwtToken = jwtToken(userName);
-			System.out.println("jwt token : " + jwtToken);
+		if (authenticate(userName, googleAuthToken)) {
 
-			Cookie userNameCookie = new Cookie("user-name", userName);
-			userNameCookie.setMaxAge(60*60); //1 hour
-			userNameCookie.setPath("/");
-			response.addCookie(userNameCookie);
+			System.out.println("authenticated, going to set cookies");
 
-			Cookie jwtTokenCookie = new Cookie("lina-token", jwtToken);
-			jwtTokenCookie.setPath("/");
-			jwtTokenCookie.setMaxAge(60*60); //1 hour
-			response.addCookie(jwtTokenCookie);
+			if (googleAuthToken != null) {
+
+				Cookie authTypeCookie = new Cookie("auth-type", "googleAuth");
+				authTypeCookie.setMaxAge(60*60); //1 hour
+				authTypeCookie.setPath("/");
+				response.addCookie(authTypeCookie);
+
+				Cookie authTokenCookie = new Cookie("auth-token", googleAuthToken);
+				authTokenCookie.setMaxAge(60*60); //1 hour
+				authTokenCookie.setPath("/");
+				response.addCookie(authTokenCookie);
+
+				Cookie userNameCookie = new Cookie("user-name", userName);
+				userNameCookie.setMaxAge(60*60); //1 hour
+				userNameCookie.setPath("/");
+				response.addCookie(userNameCookie);
+			}
 
 			String fromEncoded = getFrom(request);
 
@@ -69,17 +76,21 @@ public class AuthenticationServlet extends HttpServlet {
 			} else {
 				response.sendRedirect("/paragraph");
 			}
+		} else {
+			System.out.println("could not authenticate!");
 		}
 	}
 
-	private boolean authenticate(String userName) {
-		//TODO actually implement authentication
-		return true;
-	}
-
-	private String jwtToken(String userName) {
-		String jws = Jwts.builder().setSubject(userName).signWith(AuthenticationUtils.KEY).compact();
-		return jws;
+	private boolean authenticate(String userName, String googleAuthToken) {
+		if (googleAuthToken != null) {
+			ParsedGoogleToken parsedGoogleToken = GoogleAuthHelper.validateGoogleToken(googleAuthToken);
+			if (parsedGoogleToken != null) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
 	}
 
 	private String getFrom(HttpServletRequest request) {

@@ -103,7 +103,6 @@ BoardsComponent.prototype.loadBoardsFromServer = function() {
 	console.log("Going to get boards with roomNumber : " + roomNumber)
 
 	request.get('/api/getRoomBoards?roomNumber=' + roomNumber).then((loadedBoards) => {
-		console.log(loadedBoards);
 		for (let i=0; i<loadedBoards.length; i++) {
 			const loadedBoard = loadedBoards[i];
 			console.log(loadedBoard);
