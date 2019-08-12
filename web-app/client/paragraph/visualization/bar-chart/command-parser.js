@@ -8,77 +8,74 @@
 */
 
 const DEFINITION_REGX = /^Barchart[\s+]([\S].*)$/
-const TITLE_ASSIGNMENT_REGX  = /^(.*)\.title[\s*]=[\s*]\"(.*)\"$/
-const DATA_ASSIGNMENT_REGX  = /^(.*)\.data[\s*]=[\s*](.*)$/
-const COLOR_ASSIGNMENT_REGX  = /^(.*)\.color[\s*]=[\s*]\"(.*)\"$/
+const TITLE_ASSIGNMENT_REGX = /^(.*)\.title[\s*]=[\s*]\"(.*)\"$/
+const DATA_ASSIGNMENT_REGX = /^(.*)\.data[\s*]=[\s*](.*)$/
+const COLOR_ASSIGNMENT_REGX = /^(.*)\.color[\s*]=[\s*]\"(.*)\"$/
 
 const parseBarChartCommands = function(commands) {
+    const barChartIR = {}
 
-	const barChartIR = {};
+    const lines = commands.split(/\r?\n/)
 
-	const lines = commands.split(/\r?\n/);
+    for (let i = 0; i < lines.length; i++) {
+        interpretLine(lines[i], barChartIR)
+    }
 
-	for (let i=0; i<lines.length; i++) {
-		interpretLine(lines[i], barChartIR);
-	}
-
-	return barChartIR;
+    return barChartIR
 }
 
 function interpretLine(line, barChartIR) {
-	line = line.trim();
+    line = line.trim()
 
-	let match = DEFINITION_REGX.exec(line);
+    let match = DEFINITION_REGX.exec(line)
 
-	// definition
-	if (match) {
-		const barchartVarName = match[1];
-		barChartIR[barchartVarName] = {};
-		return;
-	}
+    // definition
+    if (match) {
+        const barchartVarName = match[1]
+        barChartIR[barchartVarName] = {}
+        return
+    }
 
-	// title
-	match = TITLE_ASSIGNMENT_REGX.exec(line);
-	if (match) {
+    // title
+    match = TITLE_ASSIGNMENT_REGX.exec(line)
+    if (match) {
+        const barchartVarName = match[1]
 
-		const barchartVarName = match[1];
+        if (!barChartIR[barchartVarName]) {
+            throw new Error(`${barchartVarName} is not defined`)
+        }
 
-		if (!barChartIR[barchartVarName]) {
-			throw new Error(`${barchartVarName} is not defined`);
-		}
+        const barchartTitle = match[2]
+        barChartIR[barchartVarName].title = barchartTitle
+        return
+    }
 
-		const barchartTitle = match[2];
-		barChartIR[barchartVarName].title = barchartTitle;
-		return;
-	}
+    // data
+    match = DATA_ASSIGNMENT_REGX.exec(line)
+    if (match) {
+        const barchartVarName = match[1]
 
-	// data
-	match = DATA_ASSIGNMENT_REGX.exec(line);
-	if (match) {
-		const barchartVarName = match[1];
+        if (!barChartIR[barchartVarName]) {
+            throw new Error(`${barchartVarName} is not defined`)
+        }
+        const data = JSON.parse(match[2])
+        barChartIR[barchartVarName].data = data
+        return
+    }
 
-		if (!barChartIR[barchartVarName]) {
-			throw new Error(`${barchartVarName} is not defined`);
-		}
-		const data = JSON.parse(match[2]);
-		barChartIR[barchartVarName].data = data;
-		return;
-	}
+    // color
+    match = COLOR_ASSIGNMENT_REGX.exec(line)
+    if (match) {
+        const barchartVarName = match[1]
 
-	// color
-	match = COLOR_ASSIGNMENT_REGX.exec(line);
-	if (match) {
+        if (!barChartIR[barchartVarName]) {
+            throw new Error(`${barchartVarName} is not defined`)
+        }
 
-		const barchartVarName = match[1];
-
-		if (!barChartIR[barchartVarName]) {
-			throw new Error(`${barchartVarName} is not defined`);
-		}
-
-		const barChartColor = match[2];
-		barChartIR[barchartVarName].color = barChartColor;
-		return;
-	}
+        const barChartColor = match[2]
+        barChartIR[barchartVarName].color = barChartColor
+        return
+    }
 }
 
-export {parseBarChartCommands};
+export { parseBarChartCommands }

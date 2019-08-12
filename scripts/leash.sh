@@ -66,7 +66,7 @@ function copyLibs {
 function runPrettierOnJSfiles {
 	echoGreen "Running prettier on client JS files"
 	cd ${LINA_ROOT}/web-app/client
-	node_modules/.bin/prettier --write "**/*.js"	
+	${LINA_ROOT}/node_modules/.bin/prettier --write "**/*.js"	
 }
 
 function addJSBundles {
