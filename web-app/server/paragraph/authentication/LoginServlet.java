@@ -15,9 +15,6 @@ import javax.servlet.http.Cookie;
 import java.util.stream.Collectors;
 import com.google.gson.Gson;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import java.security.Key;
 import lina.board.athentication.AuthenticationUtils;
 
 
@@ -55,11 +52,6 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	}
-
-	private String jwtToken(String userName) {
-		String jws = Jwts.builder().setSubject(userName).signWith(AuthenticationUtils.KEY).compact();
-		return jws;
 	}
 
 	private String getFrom(HttpServletRequest request) {
