@@ -155,7 +155,7 @@ BoardsComponent.prototype.loadBoardsFromServer = function() {
 
 			// make the first board selected by default
 			if (loadedBoards.length > 0) {
-				makeBoardSelected(0, this.boards[0], this);
+				makeBoardSelected(0, this);
 			}
 		});
 };
@@ -207,7 +207,6 @@ function addBoard(boardsComponent, boardType, typeId) {
 
 				makeBoardSelected(
 					boardsComponent.boards.length - 1,
-					newBoard,
 					boardsComponent
 				);
 				boardsComponent.boardTypeSelector.remove();
@@ -221,7 +220,7 @@ function registerBoardOnClickHandler(boardDiv, boardsComponent) {
 			boardDiv
 		);
 		const board = boardsComponent.boards[boardIndex];
-		makeBoardSelected(boardIndex, board, boardsComponent);
+		makeBoardSelected(boardIndex, boardsComponent);
 	});
 }
 
@@ -243,14 +242,15 @@ function scrollToBaord(boardIndex, boardsComponent) {
 	boardsContainer.scrollTop = scrollTop;
 }
 
-function makeBoardSelected(selectedBoardIndex, selectedBoard, boardsComponent) {
+function makeBoardSelected(boardIndex, boardsComponent) {
+	const selectedBoard = boardsComponent.boards[boardIndex];
 	const selectedBoardDiv = selectedBoard.rootElement;
 
 	if (boardsComponent.selectedBoardDiv) {
 		boardsComponent.selectedBoardDiv.classList.remove('selected');
 	}
 
-	boardsComponent.selectedBoardIndex = selectedBoardIndex;
+	boardsComponent.boardIndex = boardIndex;
 	boardsComponent.selectedBoardDiv = selectedBoardDiv;
 	selectedBoardDiv.classList.add('selected');
 
@@ -258,7 +258,7 @@ function makeBoardSelected(selectedBoardIndex, selectedBoard, boardsComponent) {
 	boardsComponent.commandsComponent.setSamples(selectedBoard.samples);
 	boardsComponent.commandsComponent.setBoard(selectedBoard);
 
-	scrollToBaord(selectedBoardIndex, boardsComponent);
+	scrollToBaord(boardIndex, boardsComponent);
 }
 
 function removeSelectedBoard(boardsComponent) {
