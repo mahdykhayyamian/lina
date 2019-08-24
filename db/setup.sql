@@ -72,3 +72,4 @@ INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('bar-chart', 'B
 INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('markdown',  'Mark Down', current_timestamp);
 INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('sequence-diagram', 'Sequence Diagram', current_timestamp);
 INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('math', 'Math', current_timestamp);
+INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('venn-diagram', 'Venn Diagram', current_timestamp);

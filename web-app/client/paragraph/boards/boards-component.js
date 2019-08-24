@@ -318,6 +318,11 @@ function getSamplesForType(type) {
 			return mathModule.then(mathModule => {
 				return mathModule.default.samples;
 			});
+		case 'venn-diagram':
+			const vennDiagramModule = moduleLoader.getModuleByName(type);
+			return vennDiagramModule.then(vennDiagramModule => {
+				return vennDiagramModule.default.samples;
+			});
 		default:
 			return Promise.resolve([]);
 	}
