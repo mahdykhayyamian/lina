@@ -6,6 +6,7 @@
     "@babel/register": "^7.0.0",
     "@fdaciuk/ajax": "^3.0.4",
     "chart.js": "^2.7.3",
+    "d3": "^5.11.0",
     "katex": "^0.10.0",
     "load-js": "^3.0.3",
     "loadjs": "^3.5.5",
@@ -14,7 +15,8 @@
     "phosphor-messaging": "^1.0.6",
     "phosphor-widget": "^1.0.0-rc.1",
     "showdown": "^1.9.0",
-    "smartframes": "mahdykhayyamian/smartframes#master"
+    "smartframes": "mahdykhayyamian/smartframes#master",
+    "venn.js": "^0.2.20"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.5",

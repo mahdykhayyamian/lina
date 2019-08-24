@@ -250,7 +250,7 @@ function makeBoardSelected(boardIndex, boardsComponent) {
 		boardsComponent.selectedBoardDiv.classList.remove('selected');
 	}
 
-	boardsComponent.boardIndex = boardIndex;
+	boardsComponent.selectedBoardIndex = boardIndex;
 	boardsComponent.selectedBoardDiv = selectedBoardDiv;
 	selectedBoardDiv.classList.add('selected');
 
@@ -262,6 +262,7 @@ function makeBoardSelected(boardIndex, boardsComponent) {
 }
 
 function removeSelectedBoard(boardsComponent) {
+	console.log(boardsComponent);
 	const board = boardsComponent.boards[boardsComponent.selectedBoardIndex];
 	const request = ajax({
 		headers: {
@@ -317,6 +318,11 @@ function getSamplesForType(type) {
 			const mathModule = moduleLoader.getModuleByName(type);
 			return mathModule.then(mathModule => {
 				return mathModule.default.samples;
+			});
+		case 'venn-diagram':
+			const vennDiagramModule = moduleLoader.getModuleByName(type);
+			return vennDiagramModule.then(vennDiagramModule => {
+				return vennDiagramModule.default.samples;
 			});
 		default:
 			return Promise.resolve([]);

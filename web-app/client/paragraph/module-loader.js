@@ -5,6 +5,7 @@ let barChartModule = null;
 let markdownModule = null;
 let sequenceDiagramModule = null;
 let mathModule = null;
+let vennDiagramModule = null;
 
 function getModuleByName(moduleName) {
 	switch (moduleName) {
@@ -72,6 +73,13 @@ function getModuleByName(moduleName) {
 					});
 				});
 			});
+		case 'venn-diagram':
+			if (vennDiagramModule) {
+				return vennDiagramModule;
+			}
+
+			vennDiagramModule = import('paragraph/visualization/venn-diagram');
+			return vennDiagramModule;
 		default:
 			return Promise.resolve(null);
 	}
