@@ -11,9 +11,6 @@ function visualizeBoardCommands(board) {
 		rootElement.firstChild.remove();
 	}
 
-	console.log(venn);
-	console.log(d3);
-
 	const container = document.createElement('div');
 	const uniqueid = 'id-' + String(Date.now());
 	container.id = uniqueid;
