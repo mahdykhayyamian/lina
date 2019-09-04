@@ -2,8 +2,6 @@ import * as d3 from 'd3';
 import * as venn from 'venn.js';
 
 function visualizeBoardCommands(board) {
-	console.log('in venn diagram visualization');
-
 	const { commands, rootElement } = board;
 
 	// clean the board
@@ -12,8 +10,8 @@ function visualizeBoardCommands(board) {
 	}
 
 	const container = document.createElement('div');
-	const uniqueid = 'id-' + String(Date.now());
-	container.id = uniqueid;
+	const uniqueId = 'id-' + String(Date.now());
+	container.id = uniqueId;
 	board.rootElement.appendChild(container);
 
 	if (!commands || commands.length == 0) {
@@ -22,7 +20,7 @@ function visualizeBoardCommands(board) {
 
 	const sets = JSON.parse(commands);
 	var chart = venn.VennDiagram();
-	d3.select(`#${uniqueid}`)
+	d3.select(`#${uniqueId}`)
 		.datum(sets)
 		.call(chart);
 }

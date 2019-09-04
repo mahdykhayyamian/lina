@@ -1,6 +1,4 @@
 function visualizeBoardCommands(board) {
-	console.log('in sequence diagram visualization');
-
 	const { commands, rootElement } = board;
 
 	// clean the board

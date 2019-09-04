@@ -149,13 +149,13 @@ BoardsComponent.prototype.loadBoardsFromServer = function() {
 						visualizer.visualizeBoardCommands(board);
 						getSamplesForType(board.type).then(samples => {
 							board.samples = samples;
+
+							// make the first board selected by default
+							if (loadedBoards.length > 0) {
+								makeBoardSelected(0, this);
+							}
 						});
 					});
-			}
-
-			// make the first board selected by default
-			if (loadedBoards.length > 0) {
-				makeBoardSelected(0, this);
 			}
 		});
 };
