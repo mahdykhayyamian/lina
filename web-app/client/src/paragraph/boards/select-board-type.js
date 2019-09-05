@@ -152,4 +152,4 @@ function registerClickOutOfSelectorEventListner(boardTypeSelector) {
 }
 
 export { BoardTypeSelector };
-require('paragraph/boards/select-board-type.css');
+require('src/paragraph/boards/select-board-type.css');

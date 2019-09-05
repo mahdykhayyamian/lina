@@ -20,4 +20,4 @@ const visualizer = {
 };
 
 export { visualizer };
-require('paragraph/visualization/math/visualizer.css');
+require('src/paragraph/visualization/math/visualizer.css');

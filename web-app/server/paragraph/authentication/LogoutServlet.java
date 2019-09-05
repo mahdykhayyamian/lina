@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lina.board.athentication.AuthenticationUtils;
 
-@WebServlet("/paragraph/logout")
+@WebServlet("/src/paragraph/logout")
 public class LogoutServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -28,10 +28,10 @@ public class LogoutServlet extends HttpServlet {
         AuthenticationUtils.deleteCookie(request, response, "auth-type");
         AuthenticationUtils.deleteCookie(request, response, "auth-token");
 
-		String action = "/paragraph/authenticate";
+		String action = "/src/paragraph/authenticate";
 		request.setAttribute("action", action);
 
-        RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/paragraph/authentication/login.jsp");
+        RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/src/paragraph/authentication/login.jsp");
         RequetsDispatcherObj.forward(request, response);
 	}
 
