@@ -5,7 +5,7 @@ module.exports = (config) => {
     singleRun: true,
     autoWatch: true,
     files: [
-      { pattern: 'web-app/client/test/**/*spec.js', watched: true },
+      { pattern: 'web-app/client/test/**/*spec.js', watched: false },
     ],
     frameworks: ['jasmine'],
     reporters: ['spec'],
