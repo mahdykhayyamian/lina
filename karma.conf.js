@@ -2,15 +2,16 @@ var webPackConfig = require('./webpack.config.js');
 
 module.exports = (config) => {
   config.set({
-    singleRun: true,
+    captureConsole: true,
+    singleRun: false,
     autoWatch: true,
     files: [
-      { pattern: 'web-app/client/test/**/*spec.js', watched: false },
+      { pattern: 'web-app/client/test/**/*.test.js', watched: false },
     ],
     frameworks: ['jasmine'],
     reporters: ['spec'],
     preprocessors: {
-      'web-app/client/test/**/*spec.js': ['webpack'],
+      'web-app/client/test/**/*.test.js': ['webpack'],
     },
     webpack: webPackConfig,
     webpackMiddleware: {

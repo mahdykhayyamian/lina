@@ -25,5 +25,6 @@ module.exports = {
     resolve: {
         modules: [__dirname, 'client', 'node_modules']
     },
-    mode: 'development'
+    mode: 'development',
+    devtool: 'source-map',
 };
