@@ -16,7 +16,7 @@ const tabContent = document.createElement('div');
 
 // create brace
 const braceImg = document.createElement('img');
-braceImg.src = '/resources/icons/Accolade_dessous.png';
+braceImg.src = '/src/resources/icons/Accolade_dessous.png';
 braceImg.setAttribute('class', 'brace');
 const braceDiv = document.createElement('div');
 braceDiv.appendChild(braceImg);
@@ -30,7 +30,7 @@ tabContent.appendChild(braceDiv);
 
 // create drag down image
 const dragDownImg = document.createElement('img');
-dragDownImg.src = '/resources/icons/drag-down.png';
+dragDownImg.src = '/src/resources/icons/drag-down.png';
 dragDownImg.setAttribute('class', 'drag-down');
 const dragDownDiv = document.createElement('div');
 dragDownDiv.appendChild(dragDownImg);
@@ -44,7 +44,7 @@ tabContent.appendChild(dragDownDiv);
 
 // create resize left image
 const resizeLeftImg = document.createElement('img');
-resizeLeftImg.src = '/resources/icons/resize-left.png';
+resizeLeftImg.src = '/src/resources/icons/resize-left.png';
 resizeLeftImg.setAttribute('class', 'resize-left');
 const resizeLeftDiv = document.createElement('div');
 resizeLeftDiv.appendChild(resizeLeftImg);
@@ -58,7 +58,7 @@ tabContent.appendChild(resizeLeftTextDiv);
 
 // create resize right image
 const resizeRightImg = document.createElement('img');
-resizeRightImg.src = '/resources/icons/resize-right.png';
+resizeRightImg.src = '/src/resources/icons/resize-right.png';
 resizeRightImg.setAttribute('class', 'resize-right');
 const resizeRightDiv = document.createElement('div');
 resizeRightDiv.appendChild(resizeRightImg);
@@ -123,4 +123,4 @@ navyblueDiv.style.setProperty('height', '100%');
 instructorWidget.tabs[2].contentNode = navyblueDiv;
 
 export { instructorWidget };
-require('demo/smartframes/demo.css');
+require('src/demo/smartframes/demo.css');

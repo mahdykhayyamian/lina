@@ -47,9 +47,9 @@ public class ParagraphServlet extends HttpServlet {
 				String fromUrl = "/paragraph?roomNumber=" + roomNumberParam;
 				String encodedFromURL = Base64.getUrlEncoder().encodeToString(fromUrl.getBytes());
 
-				response.sendRedirect("/paragraph/login?from=" + encodedFromURL);
+				response.sendRedirect("/src/paragraph/login?from=" + encodedFromURL);
 			} else {
-				response.sendRedirect("/paragraph/login");
+				response.sendRedirect("/src/paragraph/login");
 			}
 			return;
 		}
@@ -65,7 +65,7 @@ public class ParagraphServlet extends HttpServlet {
 
 		if (roomNumberParam != null) {
 			System.out.println("need to load room from roomNumber in param : " + roomNumberParam);
-			RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/paragraph/app.jsp");
+			RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/src/paragraph/app.jsp");
 			RequetsDispatcherObj.forward(request, response);
 		} else {
 			try{

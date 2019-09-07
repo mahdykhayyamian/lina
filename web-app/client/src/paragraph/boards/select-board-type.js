@@ -1,4 +1,4 @@
-import ajax from '@fdaciuk/ajax';
+import { ajaxProvider } from 'src/paragraph/providers.js';
 
 const boardTypeSelectorWidth = 250;
 const BoardTypeSelector = function(boardsComponent, onSelectCallback) {
@@ -10,6 +10,7 @@ const BoardTypeSelector = function(boardsComponent, onSelectCallback) {
 };
 
 BoardTypeSelector.prototype.render = function() {
+	const ajax = ajaxProvider.provide();
 	const request = ajax({
 		headers: {
 			'content-type': 'application/json'
@@ -28,9 +29,7 @@ BoardTypeSelector.prototype.render = function() {
 
 	return promise.then(data => {
 		addBoardDiv.classList.remove('loading');
-		console.log(data);
 		this.options = data;
-		console.log('time to render...');
 		const selector = createDOM(this);
 		this.boardsComponent.addBoardHeader.appendChild(selector);
 		this.shown = true;
@@ -152,4 +151,4 @@ function registerClickOutOfSelectorEventListner(boardTypeSelector) {
 }
 
 export { BoardTypeSelector };
-require('paragraph/boards/select-board-type.css');
+require('src/paragraph/boards/select-board-type.css');

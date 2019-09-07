@@ -1,6 +1,6 @@
 import { Widget } from 'smartframes';
-import { CONSTANTS } from 'paragraph/constants.js';
-import { moduleLoader } from 'paragraph/module-loader.js';
+import { CONSTANTS } from 'src/paragraph/constants.js';
+import { moduleLoader } from 'src/paragraph/module-loader.js';
 import ajax from '@fdaciuk/ajax';
 
 const CommandsComponent = function() {
@@ -206,4 +206,4 @@ function refreshSamples(samplesDiv, samples) {
 }
 
 export { CommandsComponent };
-require('paragraph/commands/commands.css');
+require('src/paragraph/commands/commands.css');

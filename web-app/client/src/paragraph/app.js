@@ -4,8 +4,8 @@ import { WidgetTabDragController } from 'smartframes';
 import { WidgetResizeController } from 'smartframes';
 import { CONSTANTS as SMARTFRAME_CONSTANTS } from 'smartframes';
 import { CommandsComponent } from './commands/commands-component.js';
-import { BoardsComponent } from 'paragraph/boards/boards-component.js';
-import { CONSTANTS } from 'paragraph/constants.js';
+import { BoardsComponent } from 'src/paragraph/boards/boards-component.js';
+import { CONSTANTS } from 'src/paragraph/constants.js';
 
 window.onload = function() {
 	const appDiv = document.getElementById('lina.app');

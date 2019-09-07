@@ -27,9 +27,15 @@
     "babel-loader": "^8.0.5",
     "babel-minify-webpack-plugin": "^0.3.1",
     "babel-preset-env": "^1.7.0",
+    "chai": "^4.2.0",
     "css-loader": "^0.26.1",
     "file-loader": "^1.1.6",
     "install": "^0.12.2",
+    "karma": "^4.3.0",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-jasmine": "^2.0.1",
+    "karma-spec-reporter": "0.0.32",
+    "karma-webpack": "^4.0.2",
     "npm": "^6.9.0",
     "prettier": "1.18.2",
     "style-loader": "^0.13.1",
@@ -40,7 +46,7 @@
     "webpack-cli": "^3.1.2"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node_modules/.bin/karma start"
   },
   "author": "Mahdy Khayyamian",
   "license": "ISC",

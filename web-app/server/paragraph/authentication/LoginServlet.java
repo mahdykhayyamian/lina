@@ -18,7 +18,7 @@ import com.google.gson.Gson;
 import lina.board.athentication.AuthenticationUtils;
 
 
-@WebServlet("/paragraph/login")
+@WebServlet("/src/paragraph/login")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -34,7 +34,7 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		String action = "/paragraph/authenticate";
+		String action = "/src/paragraph/authenticate";
 
 		String from = getFrom(request);
 
@@ -44,7 +44,7 @@ public class LoginServlet extends HttpServlet {
 
 		request.setAttribute("action", action);
 
-		RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/paragraph/authentication/login.jsp");
+		RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/src/paragraph/authentication/login.jsp");
 		RequetsDispatcherObj.forward(request, response);
 	}
 

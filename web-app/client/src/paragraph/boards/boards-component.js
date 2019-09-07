@@ -1,8 +1,8 @@
 import ajax from '@fdaciuk/ajax';
 
 import { Widget } from 'smartframes';
-import { BoardTypeSelector } from 'paragraph/boards/select-board-type.js';
-import { moduleLoader } from 'paragraph/module-loader.js';
+import { BoardTypeSelector } from 'src/paragraph/boards/select-board-type.js';
+import { moduleLoader } from 'src/paragraph/module-loader.js';
 
 const addBoardHeight = 40;
 const boardHeaderHeight = 50;
@@ -336,4 +336,4 @@ function getRoomNumberFromUrl() {
 }
 
 export { BoardsComponent };
-require('paragraph/boards/boards-component.css');
+require('src/paragraph/boards/boards-component.css');

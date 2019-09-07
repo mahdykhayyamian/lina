@@ -14,14 +14,14 @@ function getModuleByName(moduleName) {
 				return barChartModule;
 			}
 
-			barChartModule = import('paragraph/visualization/bar-chart');
+			barChartModule = import('src/paragraph/visualization/bar-chart');
 			return barChartModule;
 		case 'markdown':
 			if (markdownModule) {
 				return markdownModule;
 			}
 
-			markdownModule = import('paragraph/visualization/markdown');
+			markdownModule = import('src/paragraph/visualization/markdown');
 			return markdownModule;
 		case 'sequence-diagram':
 			if (sequenceDiagramModule) {
@@ -52,7 +52,7 @@ function getModuleByName(moduleName) {
 				})
 				.then(() => {
 					sequenceDiagramModule = import(
-						'paragraph/visualization/sequence-diagram'
+						'src/paragraph/visualization/sequence-diagram'
 					);
 					return sequenceDiagramModule;
 				});
@@ -68,7 +68,7 @@ function getModuleByName(moduleName) {
 			]).then(() => {
 				return new Promise((resolve, reject) => {
 					loadjs(['css!/katex/katex.css'], function() {
-						mathModule = import('paragraph/visualization/math');
+						mathModule = import('src/paragraph/visualization/math');
 						return resolve(mathModule);
 					});
 				});
@@ -78,7 +78,9 @@ function getModuleByName(moduleName) {
 				return vennDiagramModule;
 			}
 
-			vennDiagramModule = import('paragraph/visualization/venn-diagram');
+			vennDiagramModule = import(
+				'src/paragraph/visualization/venn-diagram'
+			);
 			return vennDiagramModule;
 		default:
 			return Promise.resolve(null);

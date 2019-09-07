@@ -3,7 +3,7 @@ import { WidgetContainer } from 'smartframes';
 import { WidgetTabDragController } from 'smartframes';
 import { WidgetResizeController } from 'smartframes';
 import { CONSTANTS } from 'smartframes';
-import { instructorWidget } from 'demo/smartframes/instructor-widget.js';
+import { instructorWidget } from 'src/demo/smartframes/instructor-widget.js';
 
 window.onload = function() {
 	const appDiv = document.getElementById('lina.app');
@@ -60,7 +60,7 @@ window.onload = function() {
 	]);
 
 	const screenSizeTrendImage = createImage(
-		'/resources/images/screen-size-trend.png'
+		'/src/resources/images/screen-size-trend.png'
 	);
 
 	const screenSizeAndSPAWidget = new Widget('screenSizeAndSPAWidget', [
@@ -134,9 +134,9 @@ window.onload = function() {
 		}
 	]);
 
-	const mahdyImage = createImage('/resources/images/mahdy.jpg');
+	const mahdyImage = createImage('/src/resources/images/mahdy.jpg');
 
-	const linaImage = createImage('/resources/images/lina.jpg');
+	const linaImage = createImage('/src/resources/images/lina.jpg');
 
 	const linaWidget = new Widget('lina', [
 		{
