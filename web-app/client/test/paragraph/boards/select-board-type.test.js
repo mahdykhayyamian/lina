@@ -4,9 +4,10 @@ import { assert } from 'chai';
 
 describe('board type selector', function() {
 	let boardTypeSelector;
+	let mockBoards;
 
 	beforeEach(() => {
-		const mockBoards = {
+		mockBoards = {
 			addBoardHeader: document.createElement('div')
 		};
 		const addBoardMock = () => {};
@@ -51,11 +52,17 @@ describe('board type selector', function() {
 		});
 	});
 
-	it('should be shown after render', done => {
+	it('should render content type options successfully', done => {
+
+		const expectedOptions = ['Bar Chart', 'Mark Down', 'Sequence Diagram', 'Math', 'Venn Diagram'];
+
 		assert.equal(boardTypeSelector.isShown(), false);
 		boardTypeSelector.render().then(() => {
 			// assert
 			assert.equal(boardTypeSelector.isShown(), true);
+			const optionNodes = mockBoards.addBoardHeader.querySelectorAll("div ul li");
+			const options = Array.prototype.slice.call(optionNodes).map(node=>node.textContent);
+			assert.deepEqual(options, expectedOptions);
 			done();
 		});
 	});
