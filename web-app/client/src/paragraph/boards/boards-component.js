@@ -224,24 +224,6 @@ function registerBoardOnClickHandler(boardDiv, boardsComponent) {
 	});
 }
 
-function scrollToBaord(boardIndex, boardsComponent) {
-	const boardsContainer = document.getElementById('board-container');
-	const boardElement = boardsComponent.boards[boardIndex].rootElement;
-	const boardStyle =
-		boardElement.currentStyle || window.getComputedStyle(boardElement);
-	const marginTop = parseInt(boardStyle.getPropertyValue('margin-top'), 10);
-	const marginBottom = parseInt(
-		boardStyle.getPropertyValue('margin-bottom'),
-		10
-	);
-
-	const marginTooSeeALittleBitOfBoardAbove = 25;
-	const scrollTop =
-		boardIndex * (boardElement.clientHeight + marginBottom + marginTop) -
-		marginTooSeeALittleBitOfBoardAbove;
-	boardsContainer.scrollTop = scrollTop;
-}
-
 function makeBoardSelected(boardIndex, boardsComponent) {
 	const selectedBoard = boardsComponent.boards[boardIndex];
 	const selectedBoardDiv = selectedBoard.rootElement;
@@ -257,8 +239,6 @@ function makeBoardSelected(boardIndex, boardsComponent) {
 	boardsComponent.commandsComponent.setCommands(selectedBoard.commands);
 	boardsComponent.commandsComponent.setSamples(selectedBoard.samples);
 	boardsComponent.commandsComponent.setBoard(selectedBoard);
-
-	scrollToBaord(boardIndex, boardsComponent);
 }
 
 function removeSelectedBoard(boardsComponent) {
