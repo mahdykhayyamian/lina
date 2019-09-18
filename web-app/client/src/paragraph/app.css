@@ -2,3 +2,7 @@
     padding-left: 15px;
     font-family: monospace;
 }
+
+body {
+	overflow-y: hidden;
+}
