@@ -235,10 +235,14 @@ function scrollToBaord(boardIndex, boardsComponent) {
 		10
 	);
 
+	let scrollTop = 0;
+	for (let i = 0; i < boardIndex; i++) {
+		const boardElement = boardsComponent.boards[i].rootElement;
+		scrollTop += boardElement.clientHeight + marginBottom + marginTop;
+	}
 	const marginTooSeeALittleBitOfBoardAbove = 25;
-	const scrollTop =
-		boardIndex * (boardElement.clientHeight + marginBottom + marginTop) -
-		marginTooSeeALittleBitOfBoardAbove;
+	scrollTop -= marginTooSeeALittleBitOfBoardAbove;
+
 	boardsContainer.scrollTop = scrollTop;
 }
 

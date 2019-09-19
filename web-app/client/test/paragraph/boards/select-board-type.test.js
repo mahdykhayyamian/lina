@@ -53,15 +53,24 @@ describe('board type selector', function() {
 	});
 
 	it('should render content type options successfully', done => {
-
-		const expectedOptions = ['Bar Chart', 'Mark Down', 'Sequence Diagram', 'Math', 'Venn Diagram'];
+		const expectedOptions = [
+			'Bar Chart',
+			'Mark Down',
+			'Sequence Diagram',
+			'Math',
+			'Venn Diagram'
+		];
 
 		assert.equal(boardTypeSelector.isShown(), false);
 		boardTypeSelector.render().then(() => {
 			// assert
 			assert.equal(boardTypeSelector.isShown(), true);
-			const optionNodes = mockBoards.addBoardHeader.querySelectorAll("div ul li");
-			const options = Array.prototype.slice.call(optionNodes).map(node=>node.textContent);
+			const optionNodes = mockBoards.addBoardHeader.querySelectorAll(
+				'div ul li'
+			);
+			const options = Array.prototype.slice
+				.call(optionNodes)
+				.map(node => node.textContent);
 			assert.deepEqual(options, expectedOptions);
 			done();
 		});

@@ -3,8 +3,8 @@ const MinifyPlugin = require('babel-minify-webpack-plugin');
 
 module.exports = {
     entry: {
-        smartframes: './web-app/client/demo/smartframes/demo.js',
-        paragraph: './web-app/client/paragraph/app.js',
+        smartframes: './web-app/client/src/demo/smartframes/demo.js',
+        paragraph: './web-app/client/src/paragraph/app.js',
     },
     output: {
         filename: '[name].js',
