@@ -224,6 +224,28 @@ function registerBoardOnClickHandler(boardDiv, boardsComponent) {
 	});
 }
 
+function scrollToBaord(boardIndex, boardsComponent) {
+	const boardsContainer = document.getElementById('board-container');
+	const boardElement = boardsComponent.boards[boardIndex].rootElement;
+	const boardStyle =
+		boardElement.currentStyle || window.getComputedStyle(boardElement);
+	const marginTop = parseInt(boardStyle.getPropertyValue('margin-top'), 10);
+	const marginBottom = parseInt(
+		boardStyle.getPropertyValue('margin-bottom'),
+		10
+	);
+
+	let scrollTop = 0;
+	for (let i = 0; i < boardIndex; i++) {
+		const boardElement = boardsComponent.boards[i].rootElement;
+		scrollTop += boardElement.clientHeight + marginBottom + marginTop;
+	}
+	const marginTooSeeALittleBitOfBoardAbove = 25;
+	scrollTop -= marginTooSeeALittleBitOfBoardAbove;
+
+	boardsContainer.scrollTop = scrollTop;
+}
+
 function makeBoardSelected(boardIndex, boardsComponent) {
 	const selectedBoard = boardsComponent.boards[boardIndex];
 	const selectedBoardDiv = selectedBoard.rootElement;
