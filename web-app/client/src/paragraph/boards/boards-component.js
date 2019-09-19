@@ -261,8 +261,6 @@ function makeBoardSelected(boardIndex, boardsComponent) {
 	boardsComponent.commandsComponent.setCommands(selectedBoard.commands);
 	boardsComponent.commandsComponent.setSamples(selectedBoard.samples);
 	boardsComponent.commandsComponent.setBoard(selectedBoard);
-
-	scrollToBaord(boardIndex, boardsComponent);
 }
 
 function removeSelectedBoard(boardsComponent) {
