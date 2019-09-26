@@ -2,7 +2,7 @@
     background-color: #FDF4E7;
 }
 
-#commandsTextArea {
+#commandsAceEditorContainer {
     position: absolute;
     border-style: ridge;
     border-width: 5px;
@@ -12,7 +12,7 @@
     resize: none;
 }
 
-#commandsTextArea:focus {
+#commandsAceEditorContainer:focus {
     outline: none;
 }
 
