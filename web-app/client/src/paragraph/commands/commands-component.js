@@ -57,7 +57,7 @@ CommandsComponent.prototype.createWidget = function() {
 					textEditorContainer.value = self.commands;
 				}
 
-				var buttons = document.querySelectorAll('.btn.run-command');
+				const buttons = document.querySelectorAll('.btn.run-command');
 				for (let i = 0; i < buttons.length; ++i) {
 					buttons[i].style.height = runButtonHeight + 'px';
 					buttons[i].style.top =
@@ -68,6 +68,10 @@ CommandsComponent.prototype.createWidget = function() {
 						'click',
 						runCommandClickEventHandler
 					);
+				}
+
+				if (self.commandsAceEditor) {
+					self.commandsAceEditor.resize(true);
 				}
 			}
 		},
@@ -156,6 +160,12 @@ function loadAceEditor() {
 		aceEditor.session.setMode('ace/mode/javascript');
 		aceEditor.session.setOption('useWorker', false);
 		aceEditor.setOption('showPrintMargin', false);
+		aceEditor.setOption('autoScrollEditorIntoView', true);
+		aceEditor.setOptions({
+			fontFamily: 'monaco',
+			fontSize: '10pt'
+		});
+		aceEditor.resize(true);
 		return aceEditor;
 	});
 }
