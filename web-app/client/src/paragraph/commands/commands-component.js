@@ -2,10 +2,11 @@ import { Widget } from 'smartframes';
 import { CONSTANTS } from 'src/paragraph/constants.js';
 import { moduleLoader } from 'src/paragraph/module-loader.js';
 import ajax from '@fdaciuk/ajax';
+import * as loadJSPromise from 'load-js';
 
 const CommandsComponent = function() {
 	this.commandsRoot = createDiv(`
-		<textarea id="${CONSTANTS.COMMANDS_TEXT_AREA_ID}" placeholder="Write commands to visualize..."></textarea>
+		<div id="${CONSTANTS.COMMANDS_ACE_EDITOR_CONTAINER}" placeholder="Write commands to visualize..."></div>
 		<input type="button" class="btn run-command" value="Run" />
 		`);
 	this.commandsRoot.id = 'commands-container';
@@ -18,6 +19,10 @@ const CommandsComponent = function() {
 	this.commands = '';
 	this.samples = [];
 	this.widget = null;
+
+	loadAceEditor().then(editor => {
+		this.commandsAceEditor = editor;
+	});
 };
 
 CommandsComponent.prototype.createWidget = function() {
@@ -35,28 +40,28 @@ CommandsComponent.prototype.createWidget = function() {
 				const runButtonHeight = 40;
 				const extraSpace = 4;
 
-				const commandsTextArea = document.getElementById(
-					CONSTANTS.COMMANDS_TEXT_AREA_ID
+				const textEditorContainer = document.getElementById(
+					CONSTANTS.COMMANDS_ACE_EDITOR_CONTAINER
 				);
-				if (commandsTextArea) {
-					commandsTextArea.style.setProperty(
+				if (textEditorContainer) {
+					textEditorContainer.style.setProperty(
 						'width',
-						commandsTextArea.parentNode.offsetWidth + 'px'
+						textEditorContainer.parentNode.offsetWidth + 'px'
 					);
-					commandsTextArea.style.setProperty(
+					textEditorContainer.style.setProperty(
 						'height',
-						commandsTextArea.parentNode.offsetHeight -
+						textEditorContainer.parentNode.offsetHeight -
 							(runButtonHeight + extraSpace) +
 							'px'
 					);
-					commandsTextArea.value = self.commands;
+					textEditorContainer.value = self.commands;
 				}
 
 				var buttons = document.querySelectorAll('.btn.run-command');
 				for (let i = 0; i < buttons.length; ++i) {
 					buttons[i].style.height = runButtonHeight + 'px';
 					buttons[i].style.top =
-						commandsTextArea.parentNode.offsetHeight -
+						textEditorContainer.parentNode.offsetHeight -
 						(runButtonHeight + extraSpace / 2) +
 						'px';
 					buttons[i].addEventListener(
@@ -97,11 +102,12 @@ CommandsComponent.prototype.setSamples = function(samples) {
 CommandsComponent.prototype.setCommands = function(commands) {
 	this.commands = commands;
 
-	const commandsTextArea = document.getElementById(
-		CONSTANTS.COMMANDS_TEXT_AREA_ID
+	const textEditorContainer = document.getElementById(
+		CONSTANTS.COMMANDS_ACE_EDITOR_CONTAINER
 	);
-	if (commandsTextArea) {
-		commandsTextArea.value = this.commands;
+	if (textEditorContainer) {
+		textEditorContainer.value = this.commands;
+		this.commandsAceEditor.setValue(this.commands, -1);
 	}
 };
 
@@ -110,9 +116,7 @@ CommandsComponent.prototype.runCommands = function() {
 		return;
 	}
 
-	this.commands = document.getElementById(
-		CONSTANTS.COMMANDS_TEXT_AREA_ID
-	).value;
+	this.commands = this.commandsAceEditor.getValue();
 
 	const request = ajax({
 		headers: {
@@ -126,8 +130,6 @@ CommandsComponent.prototype.runCommands = function() {
 			commands: this.commands
 		})
 		.then(() => {
-			console.log('board commands updated');
-
 			const moduleName = this.board.type;
 			this.board.commands = this.commands;
 
@@ -139,6 +141,21 @@ CommandsComponent.prototype.runCommands = function() {
 				});
 		});
 };
+
+function loadAceEditor() {
+	return loadJSPromise([
+		{
+			async: true,
+			url: '/ace/src-min-noconflict/ace.js'
+		}
+	]).then(() => {
+		const aceEditor = ace.edit(
+			`${CONSTANTS.COMMANDS_ACE_EDITOR_CONTAINER}`
+		);
+		aceEditor.setTheme('ace/theme/chrome');
+		return aceEditor;
+	});
+}
 
 function createDiv(innerHtml) {
 	const div = document.createElement('div');
