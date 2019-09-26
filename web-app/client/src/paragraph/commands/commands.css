@@ -2,7 +2,7 @@
     background-color: #FDF4E7;
 }
 
-#commandsTextArea {
+#commandsAceEditorContainer {
     position: absolute;
     border-style: ridge;
     border-width: 5px;
@@ -10,9 +10,10 @@
     box-sizing: border-box;
     font-size: 16px;
     resize: none;
+    overflow-y: scroll;
 }
 
-#commandsTextArea:focus {
+#commandsAceEditorContainer:focus {
     outline: none;
 }
 
