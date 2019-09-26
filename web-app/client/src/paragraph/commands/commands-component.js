@@ -153,6 +153,9 @@ function loadAceEditor() {
 			`${CONSTANTS.COMMANDS_ACE_EDITOR_CONTAINER}`
 		);
 		aceEditor.setTheme('ace/theme/chrome');
+		aceEditor.session.setMode('ace/mode/javascript');
+		aceEditor.session.setOption('useWorker', false);
+		aceEditor.setOption('showPrintMargin', false);
 		return aceEditor;
 	});
 }
