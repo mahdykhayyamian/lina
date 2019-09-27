@@ -119,14 +119,12 @@ BoardsComponent.prototype.loadBoardsFromServer = function() {
 	});
 
 	const roomNumber = getRoomNumberFromUrl();
-	console.log('Going to get boards with roomNumber : ' + roomNumber);
 
 	request
 		.get('/api/getRoomBoards?roomNumber=' + roomNumber)
 		.then(loadedBoards => {
 			for (let i = 0; i < loadedBoards.length; i++) {
 				const loadedBoard = loadedBoards[i];
-				console.log(loadedBoard);
 
 				let boardDiv = document.createElement('div');
 				boardDiv.setAttribute('class', 'board');
@@ -261,10 +259,11 @@ function makeBoardSelected(boardIndex, boardsComponent) {
 	boardsComponent.commandsComponent.setCommands(selectedBoard.commands);
 	boardsComponent.commandsComponent.setSamples(selectedBoard.samples);
 	boardsComponent.commandsComponent.setBoard(selectedBoard);
+
+	scrollToBaord(boardIndex, boardsComponent);
 }
 
 function removeSelectedBoard(boardsComponent) {
-	console.log(boardsComponent);
 	const board = boardsComponent.boards[boardsComponent.selectedBoardIndex];
 	const request = ajax({
 		headers: {
