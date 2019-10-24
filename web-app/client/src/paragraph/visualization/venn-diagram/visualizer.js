@@ -10,7 +10,7 @@ function visualizeBoardCommands(board) {
 	}
 
 	const container = document.createElement('div');
-	const uniqueId = 'id-' + String(Date.now());
+	const uniqueId = 'id-' + rootElement.id;
 	container.id = uniqueId;
 	board.rootElement.appendChild(container);
 

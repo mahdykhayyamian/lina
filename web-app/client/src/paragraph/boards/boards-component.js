@@ -128,6 +128,7 @@ BoardsComponent.prototype.loadBoardsFromServer = function() {
 
 				let boardDiv = document.createElement('div');
 				boardDiv.setAttribute('class', 'board');
+				boardDiv.setAttribute('id', loadedBoard.id);
 
 				const board = {
 					type: loadedBoard.contentType,
@@ -181,6 +182,7 @@ function addBoard(boardsComponent, boardType, typeId) {
 		.then(boardId => {
 			let newBoardDiv = document.createElement('div');
 			newBoardDiv.setAttribute('class', 'board');
+			newBoardDiv.setAttribute('id', boardId);
 
 			const newBoard = {
 				type: boardType,

@@ -7,13 +7,13 @@ function visualizeBoardCommands(board) {
 	}
 
 	const container = document.createElement('div');
-	const uniqueid = String(Date.now());
-	container.id = uniqueid;
+	const uniqueId = 'id-' + rootElement.id;
+	container.id = uniqueId;
 	board.rootElement.appendChild(container);
 
 	var d = Diagram.parse(commands);
 	var options = { theme: 'simple' };
-	d.drawSVG(uniqueid, options);
+	d.drawSVG(uniqueId, options);
 }
 
 const visualizer = {
