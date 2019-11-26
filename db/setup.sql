@@ -44,6 +44,8 @@ CREATE TABLE IF NOT EXISTS paragraph.BOARD (
     room_id INTEGER REFERENCES paragraph.ROOM(id),
     content_type_id INTEGER REFERENCES paragraph.CONTENT_TYPE(id),
     commands TEXT,
+    next_board_id INTEGER,
+    previous_board_id INTEGER,
     created TIMESTAMP NOT NULL,
     updated TIMESTAMP NOT NULL default CURRENT_TIMESTAMP
 );

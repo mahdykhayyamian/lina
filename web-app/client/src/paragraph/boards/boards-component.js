@@ -34,7 +34,7 @@ const BoardsComponent = function() {
 	this.boardHeaderDiv = null;
 	this.boardContainer = null;
 
-	this.boardTypeSelector = new BoardTypeSelector(this, addBoard);
+	this.boardTypeSelector = new BoardTypeSelector(this, appendBoard);
 };
 
 BoardsComponent.prototype.createWidget = function() {
@@ -134,7 +134,9 @@ BoardsComponent.prototype.loadBoardsFromServer = function() {
 					type: loadedBoard.contentType,
 					commands: loadedBoard.commands,
 					rootElement: boardDiv,
-					boardId: loadedBoard.id
+					boardId: loadedBoard.id,
+					previousBoardId: loadedBoard.previousBoardId,
+					nextBoardId: loadedBoard.nextBoardId
 				};
 
 				this.boards.push(board);
@@ -159,59 +161,81 @@ BoardsComponent.prototype.loadBoardsFromServer = function() {
 		});
 };
 
-function addBoard(boardsComponent, boardType, typeId) {
-	const loaderDiv = document.getElementById('boards-loader');
-	loaderDiv.style.display = 'block';
+function appendBoard(boardsComponent, boardType, typeId) {
+	const roomNumber = getRoomNumberFromUrl();
 
+	let previousBoardId = null;
+	let nextBoardId = null;
+	if (boardsComponent.boards.length > 0) {
+		previousBoardId =
+			boardsComponent.boards[boardsComponent.boards.length - 1].boardId;
+	}
+
+	return saveBoard(
+		roomNumber,
+		boardType,
+		typeId,
+		previousBoardId,
+		nextBoardId
+	).then(newBoardId => {
+		return renderNewBoard(boardsComponent, boardType, newBoardId);
+	});
+}
+
+function saveBoard(
+	roomNumber,
+	boardType,
+	typeId,
+	previousBoardId,
+	nextBoardId
+) {
 	const request = ajax({
 		headers: {
 			'content-type': 'application/json'
 		}
 	});
 
-	const roomNumber = getRoomNumberFromUrl();
-	request
-		.post('/api/addBoard', {
-			roomNumber,
-			boardPayload: {
-				boardType,
-				typeId,
-				commands: ''
-			}
-		})
-		.then(boardId => {
-			let newBoardDiv = document.createElement('div');
-			newBoardDiv.setAttribute('class', 'board');
-			newBoardDiv.setAttribute('id', boardId);
+	const boardPayload = {
+		boardType,
+		typeId,
+		commands: '',
+		previousBoardId,
+		nextBoardId
+	};
 
-			const newBoard = {
-				type: boardType,
-				commands: '',
-				rootElement: newBoardDiv,
-				boardId
-			};
+	return request.post('/api/addBoard', {
+		roomNumber,
+		boardPayload
+	});
+}
 
-			return getSamplesForType(boardType).then(samples => {
-				loaderDiv.style.display = 'none';
+function renderNewBoard(boardsComponent, boardType, newBoardId) {
+	const loaderDiv = document.getElementById('boards-loader');
+	loaderDiv.style.display = 'block';
 
-				newBoard.samples = samples;
-				boardsComponent.boards.push(newBoard);
+	let newBoardDiv = document.createElement('div');
+	newBoardDiv.setAttribute('class', 'board');
+	newBoardDiv.setAttribute('id', newBoardId);
 
-				registerBoardOnClickHandler(
-					newBoard.rootElement,
-					boardsComponent
-				);
-				boardsComponent.boardContainer.appendChild(
-					newBoard.rootElement
-				);
+	const newBoard = {
+		type: boardType,
+		commands: '',
+		rootElement: newBoardDiv,
+		boardId: newBoardId
+	};
 
-				makeBoardSelected(
-					boardsComponent.boards.length - 1,
-					boardsComponent
-				);
-				boardsComponent.boardTypeSelector.remove();
-			});
-		});
+	return getSamplesForType(boardType).then(samples => {
+		loaderDiv.style.display = 'none';
+
+		newBoard.samples = samples;
+		boardsComponent.boards.push(newBoard);
+
+		registerBoardOnClickHandler(newBoard.rootElement, boardsComponent);
+		boardsComponent.boardContainer.appendChild(newBoard.rootElement);
+
+		makeBoardSelected(boardsComponent.boards.length - 1, boardsComponent);
+		boardsComponent.boardTypeSelector.remove();
+	});
 }
 
 function registerBoardOnClickHandler(boardDiv, boardsComponent) {

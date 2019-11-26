@@ -62,12 +62,17 @@ public class AddBoardServlet extends HttpServlet {
             System.out.println(payload.boardPayload.type);
 
             Board board = Board.builder()
-                .roomId(Long.parseLong(payload.roomNumber))
-                .contentTypeId(Long.parseLong(payload.boardPayload.typeId))
+                .roomId(Integer.parseInt(payload.roomNumber))
+                .contentTypeId(Integer.parseInt(payload.boardPayload.typeId))
                 .commands(payload.boardPayload.commands)
+                .previousBoardId(payload.boardPayload.previousBoardId)
+                .nextBoardId(payload.boardPayload.nextBoardId)
             .build();
 
+            // ideally these three statement should be run inside one transaction, but we can live with it for now.
             int boardId = BoardRepository.createBoard(board);
+            BoardRepository.updateNextBoard(board.getPreviousBoardId(), boardId);
+            BoardRepository.updatePreviousBoard(board.getNextBoardId(), boardId);
 
             PrintWriter out = response.getWriter();
             response.setContentType("application/json");
@@ -95,4 +100,6 @@ class BoardPayload {
     String type;
     String typeId;
     String commands;
+    int previousBoardId;
+    int nextBoardId;
 }

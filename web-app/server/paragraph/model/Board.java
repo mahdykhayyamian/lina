@@ -7,11 +7,17 @@ import lombok.Data;
 @Data
 @Builder
 public class Board {
-    long id;
-    long roomId;
-    long contentTypeId;
+    int id;
+    int roomId;
+    int contentTypeId;
     String contentType;
     String commands;
+    int nextBoardId;
+    int previousBoardId;
     Date created;
     Date updated;
+
+    public String toString() {
+        return "(id = " + id + ", roomId = " + roomId + ", contentType = " + contentType + ", previousBoardId = " + previousBoardId + "\n)";
+    }
 }
