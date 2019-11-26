@@ -62,7 +62,11 @@ public class RemoveBoardServlet extends HttpServlet {
 		RemoveBoardPayload payload = gson.fromJson(data, RemoveBoardPayload.class);
 
 		try {
+			// ideally these db changes should happen inside one transaction, but we can live with it for now
+			Board board = BoardRepository.getBoard(payload.boardId);
 			BoardRepository.removeBoardFromRoom(payload.boardId, payload.roomNumber);
+			BoardRepository.updateNextBoard(board.getPreviousBoardId(), board.getNextBoardId());
+			BoardRepository.updatePreviousBoard(board.getNextBoardId(), board.getPreviousBoardId());
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
