@@ -3,11 +3,15 @@ import ajax from '@fdaciuk/ajax';
 import { Widget } from 'smartframes';
 import { BoardTypeSelector } from 'src/paragraph/boards/select-board-type.js';
 import { moduleLoader } from 'src/paragraph/module-loader.js';
+import { CONSTANTS } from 'src/paragraph/constants.js';
 
 const addBoardHeight = 40;
 const boardHeaderHeight = 50;
 
-const BoardsComponent = function() {
+const BoardsComponent = function(rtcClient) {
+	this.rtcClient = rtcClient;
+	this.rtcClient.subscribeMessageReceiver(onRecieveRTCMessage);
+
 	this.boardsRoot = createDiv(`
 		<div id="paragraph" class="spa-text">
 			<div id="boards-loader" style="display:none"><img src="/src/resources/images/spinner-grey.svg" width="80" alt=""></div>
@@ -111,6 +115,12 @@ BoardsComponent.prototype.setCommandsComponent = function(commandsComponent) {
 	this.commandsComponent = commandsComponent;
 };
 
+BoardsComponent.prototype.setRTCClient = function(rtcClient) {
+	this.rtcClient = rtcClient;
+	console.log('rtc client set to');
+	console.log(this.rtcClient);
+};
+
 BoardsComponent.prototype.loadBoardsFromServer = function() {
 	const request = ajax({
 		headers: {
@@ -161,6 +171,11 @@ BoardsComponent.prototype.loadBoardsFromServer = function() {
 		});
 };
 
+function onRecieveRTCMessage(rtcMessage) {
+	console.log('in onRecieveRTCMessage with message : ');
+	console.log(rtcMessage);
+}
+
 function appendBoard(boardsComponent, boardType, typeId) {
 	const roomNumber = getRoomNumberFromUrl();
 
@@ -178,7 +193,23 @@ function appendBoard(boardsComponent, boardType, typeId) {
 		previousBoardId,
 		nextBoardId
 	).then(newBoardId => {
-		return renderNewBoard(boardsComponent, boardType, newBoardId);
+		renderNewBoard(boardsComponent, boardType, newBoardId);
+
+		console.log('going to notify with rtc');
+		const messageObj = {
+			type: CONSTANTS.RTC_MESSAGE_TYPES.ADD_BOARD,
+			content: {
+				roomNumber,
+				boardType,
+				typeId,
+				previousBoardId,
+				nextBoardId
+			}
+		};
+
+		const messageStr = JSON.stringify(messageObj, null, 4);
+		boardsComponent.rtcClient.send(messageStr);
+		console.log('sent message : ' + messageStr);
 	});
 }
 

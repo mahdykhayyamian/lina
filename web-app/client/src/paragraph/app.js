@@ -6,12 +6,15 @@ import { CONSTANTS as SMARTFRAME_CONSTANTS } from 'smartframes';
 import { CommandsComponent } from './commands/commands-component.js';
 import { BoardsComponent } from 'src/paragraph/boards/boards-component.js';
 import { CONSTANTS } from 'src/paragraph/constants.js';
+import RTCClient from 'src/paragraph/rtc/rtc-client.js';
 
 window.onload = function() {
 	const appDiv = document.getElementById('lina.app');
 	appDiv.style.setProperty('position', 'absolute');
 
-	const boardsComponent = new BoardsComponent();
+	const rtcClient = new RTCClient();
+
+	const boardsComponent = new BoardsComponent(rtcClient);
 	const rootContainer = buildLayout(boardsComponent);
 
 	function onResize() {
