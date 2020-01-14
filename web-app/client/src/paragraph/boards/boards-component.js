@@ -10,7 +10,9 @@ const boardHeaderHeight = 50;
 
 const BoardsComponent = function(rtcClient) {
 	this.rtcClient = rtcClient;
-	this.rtcClient.subscribeMessageReceiver(onRecieveRTCMessage);
+	this.rtcClient.subscribeMessageReceiver(event => {
+		onRecieveRTCMessage(this, event);
+	});
 
 	this.boardsRoot = createDiv(`
 		<div id="paragraph" class="spa-text">
@@ -171,9 +173,19 @@ BoardsComponent.prototype.loadBoardsFromServer = function() {
 		});
 };
 
-function onRecieveRTCMessage(rtcMessage) {
+function onRecieveRTCMessage(boardsComponent, rtcMessage) {
 	console.log('in onRecieveRTCMessage with message : ');
 	console.log(rtcMessage);
+	console.log(boardsComponent);
+
+	const message = JSON.parse(rtcMessage);
+	console.log(message);
+
+	renderNewBoard(
+		boardsComponent,
+		message.content.boardType,
+		message.content.newBoardId
+	);
 }
 
 function appendBoard(boardsComponent, boardType, typeId) {
@@ -199,6 +211,7 @@ function appendBoard(boardsComponent, boardType, typeId) {
 		const messageObj = {
 			type: CONSTANTS.RTC_MESSAGE_TYPES.ADD_BOARD,
 			content: {
+				newBoardId,
 				roomNumber,
 				boardType,
 				typeId,
@@ -265,7 +278,10 @@ function renderNewBoard(boardsComponent, boardType, newBoardId) {
 		boardsComponent.boardContainer.appendChild(newBoard.rootElement);
 
 		makeBoardSelected(boardsComponent.boards.length - 1, boardsComponent);
-		boardsComponent.boardTypeSelector.remove();
+		if (boardsComponent.boardTypeSelector.isShown()) {
+			console.log(boardsComponent.boardTypeSelector);
+			boardsComponent.boardTypeSelector.remove();
+		}
 	});
 }
 
