@@ -15,7 +15,7 @@ window.onload = function() {
 	const rtcClient = new RTCClient();
 
 	const boardsComponent = new BoardsComponent(rtcClient);
-	const rootContainer = buildLayout(boardsComponent);
+	const rootContainer = buildLayout(boardsComponent, rtcClient);
 
 	function onResize() {
 		const width = window.innerWidth - 50;
@@ -46,16 +46,19 @@ function determineDisplayType() {
 	}
 }
 
-function buildLayout(boardsComponent) {
+function buildLayout(boardsComponent, rtcClient) {
 	const displaySize = determineDisplayType();
 	console.log(displaySize);
 	switch (displaySize) {
 		case CONSTANTS.DISPLAY_SIZE_SMALL:
-			return createLayoutForSmallSizeDisplays(boardsComponent);
+			return createLayoutForSmallSizeDisplays(boardsComponent, rtcClient);
 		case CONSTANTS.DISPLAY_SIZE_MEDIUM:
-			return createLayoutForMediumSizeDisplays(boardsComponent);
+			return createLayoutForMediumSizeDisplays(
+				boardsComponent,
+				rtcClient
+			);
 		case CONSTANTS.DISPLAY_SIZE_LARGE:
-			return createLayoutForLargeSizeDisplays(boardsComponent);
+			return createLayoutForLargeSizeDisplays(boardsComponent, rtcClient);
 		default:
 			return null;
 	}
@@ -80,9 +83,9 @@ function createChatWidget() {
 	return chatWidget;
 }
 
-function createLayoutForSmallSizeDisplays(boardsComponent) {
+function createLayoutForSmallSizeDisplays(boardsComponent, rtcClient) {
 	const chatWidget = createChatWidget();
-	const commandsComponent = new CommandsComponent();
+	const commandsComponent = new CommandsComponent(rtcClient);
 	const commandsWidget = commandsComponent.createWidget();
 
 	boardsComponent.setCommandsComponent(commandsComponent);
@@ -111,9 +114,9 @@ function createLayoutForSmallSizeDisplays(boardsComponent) {
 	return rootContainer;
 }
 
-function createLayoutForMediumSizeDisplays(boardsComponent) {
+function createLayoutForMediumSizeDisplays(boardsComponent, rtcClient) {
 	const chatWidget = createChatWidget();
-	const commandsComponent = new CommandsComponent();
+	const commandsComponent = new CommandsComponent(rtcClient);
 	const commandsWidget = commandsComponent.createWidget();
 
 	boardsComponent.setCommandsComponent(commandsComponent);
@@ -142,9 +145,9 @@ function createLayoutForMediumSizeDisplays(boardsComponent) {
 	return rootContainer;
 }
 
-function createLayoutForLargeSizeDisplays(boardsComponent) {
+function createLayoutForLargeSizeDisplays(boardsComponent, rtcClient) {
 	const chatWidget = createChatWidget();
-	const commandsComponent = new CommandsComponent();
+	const commandsComponent = new CommandsComponent(rtcClient);
 	const commandsWidget = commandsComponent.createWidget();
 
 	boardsComponent.setCommandsComponent(commandsComponent);

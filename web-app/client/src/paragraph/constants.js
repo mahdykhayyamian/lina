@@ -7,7 +7,8 @@ const CONSTANTS = {
 	DISPLAY_SIZE_LARGE: 'dispaly_size_large',
 
 	RTC_MESSAGE_TYPES: {
-		ADD_BOARD: 'ADD_BOARD'
+		ADD_BOARD: 'ADD_BOARD',
+		RUN_COMMANDS: 'RUN_COMMANDS'
 	}
 };
 

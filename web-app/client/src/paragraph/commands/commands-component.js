@@ -4,7 +4,9 @@ import { moduleLoader } from 'src/paragraph/module-loader.js';
 import ajax from '@fdaciuk/ajax';
 import * as loadJSPromise from 'load-js';
 
-const CommandsComponent = function() {
+const CommandsComponent = function(rtcClient) {
+	this.rtcClient = rtcClient;
+
 	this.commandsRoot = createDiv(`
 		<div id="${CONSTANTS.COMMANDS_ACE_EDITOR_CONTAINER}" placeholder="Write commands to visualize..."></div>
 		<input type="button" class="btn run-command" value="Run" />
@@ -142,6 +144,18 @@ CommandsComponent.prototype.runCommands = function() {
 				.then(visualizerModule => {
 					const visualizer = visualizerModule.default.visualizer;
 					visualizer.visualizeBoardCommands(this.board);
+
+					console.log('going to notify run commands with rtc');
+					const messageObj = {
+						type: CONSTANTS.RTC_MESSAGE_TYPES.RUN_COMMANDS,
+						content: {
+							board: this.board
+						}
+					};
+
+					const messageStr = JSON.stringify(messageObj, null, 4);
+					this.rtcClient.send(messageStr);
+					console.log('sent message : ' + messageStr);
 				});
 		});
 };

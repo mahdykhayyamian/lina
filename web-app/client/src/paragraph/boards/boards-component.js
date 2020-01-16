@@ -181,11 +181,47 @@ function onRecieveRTCMessage(boardsComponent, rtcMessage) {
 	const message = JSON.parse(rtcMessage);
 	console.log(message);
 
-	renderNewBoard(
-		boardsComponent,
-		message.content.boardType,
-		message.content.newBoardId
-	);
+	switch (message.type) {
+		case CONSTANTS.RTC_MESSAGE_TYPES.ADD_BOARD:
+			renderNewBoard(
+				boardsComponent,
+				message.content.boardType,
+				message.content.newBoardId
+			);
+			break;
+		case CONSTANTS.RTC_MESSAGE_TYPES.RUN_COMMANDS:
+			console.log('run commands message received');
+			runCommandsOnBoard(boardsComponent, message.content.board);
+			break;
+		default:
+			return;
+	}
+}
+
+function runCommandsOnBoard(boardsComponent, remoteBoard) {
+	console.log('in runCommandsOnBoard');
+
+	let board;
+	for (let i = 0; i < boardsComponent.boards.length; i++) {
+		if (boardsComponent.boards[i].boardId === remoteBoard.boardId) {
+			board = boardsComponent.boards[i];
+			break;
+		}
+	}
+
+	console.log('found board : ');
+	console.log(board);
+
+	if (board) {
+		board.commands = remoteBoard.commands;
+		const moduleName = board.type;
+		return moduleLoader
+			.getModuleByName(moduleName)
+			.then(visualizerModule => {
+				const visualizer = visualizerModule.default.visualizer;
+				visualizer.visualizeBoardCommands(board);
+			});
+	}
 }
 
 function appendBoard(boardsComponent, boardType, typeId) {
