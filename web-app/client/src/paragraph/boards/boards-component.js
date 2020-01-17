@@ -193,9 +193,33 @@ function onRecieveRTCMessage(boardsComponent, rtcMessage) {
 			console.log('run commands message received');
 			runCommandsOnBoard(boardsComponent, message.content.board);
 			break;
+		case CONSTANTS.RTC_MESSAGE_TYPES.REMOVE_BOARD:
+			console.log('remove board message received');
+			onRemoveBoardMessage(boardsComponent, message);
+			break;
 		default:
 			return;
 	}
+}
+
+function onRemoveBoardMessage(boardsComponent, message) {
+	const remoteBoardId = message.content.boardId;
+
+	let boardToRemove;
+	let boardIndex;
+	for (let i = 0; i < boardsComponent.boards.length; i++) {
+		if (boardsComponent.boards[i].boardId === remoteBoardId) {
+			boardToRemove = boardsComponent.boards[i];
+			boardIndex = i;
+			break;
+		}
+	}
+
+	console.log('boardToRemove');
+	console.log(boardToRemove);
+
+	boardToRemove.rootElement.remove();
+	boardsComponent.boards.splice(boardIndex, 1);
 }
 
 function runCommandsOnBoard(boardsComponent, remoteBoard) {
@@ -395,6 +419,18 @@ function removeSelectedBoard(boardsComponent) {
 				);
 				boardsComponent.selectedBoardIndex = null;
 				boardsComponent.selectedBoardDiv = null;
+
+				console.log('going to notify remove board');
+				const messageObj = {
+					type: CONSTANTS.RTC_MESSAGE_TYPES.REMOVE_BOARD,
+					content: {
+						boardId: board.boardId
+					}
+				};
+
+				const messageStr = JSON.stringify(messageObj, null, 4);
+				boardsComponent.rtcClient.send(messageStr);
+				console.log('sent message : ' + messageStr);
 			}
 		});
 }
