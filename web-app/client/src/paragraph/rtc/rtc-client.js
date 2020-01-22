@@ -1,6 +1,9 @@
 export default class RTCClient {
 	constructor() {
-		const wsUri = 'ws://' + window.location.host + '/broadcast';
+		const protocol =
+			window.location.hostname === 'localhost' ? 'ws://' : 'wss://';
+
+		const wsUri = protocol + window.location.host + '/broadcast';
 
 		this.webSocket = new WebSocket(wsUri);
 
