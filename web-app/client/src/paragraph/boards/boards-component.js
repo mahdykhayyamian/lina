@@ -3,11 +3,17 @@ import ajax from '@fdaciuk/ajax';
 import { Widget } from 'smartframes';
 import { BoardTypeSelector } from 'src/paragraph/boards/select-board-type.js';
 import { moduleLoader } from 'src/paragraph/module-loader.js';
+import { CONSTANTS } from 'src/paragraph/constants.js';
 
 const addBoardHeight = 40;
 const boardHeaderHeight = 50;
 
-const BoardsComponent = function() {
+const BoardsComponent = function(rtcClient) {
+	this.rtcClient = rtcClient;
+	this.rtcClient.subscribeMessageReceiver(event => {
+		onRecieveRTCMessage(this, event);
+	});
+
 	this.boardsRoot = createDiv(`
 		<div id="paragraph" class="spa-text">
 			<div id="boards-loader" style="display:none"><img src="/src/resources/images/spinner-grey.svg" width="80" alt=""></div>
@@ -111,6 +117,10 @@ BoardsComponent.prototype.setCommandsComponent = function(commandsComponent) {
 	this.commandsComponent = commandsComponent;
 };
 
+BoardsComponent.prototype.setRTCClient = function(rtcClient) {
+	this.rtcClient = rtcClient;
+};
+
 BoardsComponent.prototype.loadBoardsFromServer = function() {
 	const request = ajax({
 		headers: {
@@ -161,6 +171,66 @@ BoardsComponent.prototype.loadBoardsFromServer = function() {
 		});
 };
 
+function onRecieveRTCMessage(boardsComponent, rtcMessage) {
+	const message = JSON.parse(rtcMessage);
+
+	switch (message.type) {
+		case CONSTANTS.RTC_MESSAGE_TYPES.ADD_BOARD:
+			renderNewBoard(
+				boardsComponent,
+				message.content.boardType,
+				message.content.newBoardId
+			);
+			break;
+		case CONSTANTS.RTC_MESSAGE_TYPES.RUN_COMMANDS:
+			runCommandsOnBoard(boardsComponent, message.content.board);
+			break;
+		case CONSTANTS.RTC_MESSAGE_TYPES.REMOVE_BOARD:
+			onRemoveBoardMessage(boardsComponent, message);
+			break;
+		default:
+			return;
+	}
+}
+
+function onRemoveBoardMessage(boardsComponent, message) {
+	const remoteBoardId = message.content.boardId;
+
+	let boardToRemove;
+	let boardIndex;
+	for (let i = 0; i < boardsComponent.boards.length; i++) {
+		if (boardsComponent.boards[i].boardId === remoteBoardId) {
+			boardToRemove = boardsComponent.boards[i];
+			boardIndex = i;
+			break;
+		}
+	}
+
+	boardToRemove.rootElement.remove();
+	boardsComponent.boards.splice(boardIndex, 1);
+}
+
+function runCommandsOnBoard(boardsComponent, remoteBoard) {
+	let board;
+	for (let i = 0; i < boardsComponent.boards.length; i++) {
+		if (boardsComponent.boards[i].boardId === remoteBoard.boardId) {
+			board = boardsComponent.boards[i];
+			break;
+		}
+	}
+
+	if (board) {
+		board.commands = remoteBoard.commands;
+		const moduleName = board.type;
+		return moduleLoader
+			.getModuleByName(moduleName)
+			.then(visualizerModule => {
+				const visualizer = visualizerModule.default.visualizer;
+				visualizer.visualizeBoardCommands(board);
+			});
+	}
+}
+
 function appendBoard(boardsComponent, boardType, typeId) {
 	const roomNumber = getRoomNumberFromUrl();
 
@@ -178,7 +248,22 @@ function appendBoard(boardsComponent, boardType, typeId) {
 		previousBoardId,
 		nextBoardId
 	).then(newBoardId => {
-		return renderNewBoard(boardsComponent, boardType, newBoardId);
+		renderNewBoard(boardsComponent, boardType, newBoardId);
+
+		const messageObj = {
+			type: CONSTANTS.RTC_MESSAGE_TYPES.ADD_BOARD,
+			content: {
+				newBoardId,
+				roomNumber,
+				boardType,
+				typeId,
+				previousBoardId,
+				nextBoardId
+			}
+		};
+
+		const messageStr = JSON.stringify(messageObj, null, 4);
+		boardsComponent.rtcClient.send(messageStr);
 	});
 }
 
@@ -234,7 +319,9 @@ function renderNewBoard(boardsComponent, boardType, newBoardId) {
 		boardsComponent.boardContainer.appendChild(newBoard.rootElement);
 
 		makeBoardSelected(boardsComponent.boards.length - 1, boardsComponent);
-		boardsComponent.boardTypeSelector.remove();
+		if (boardsComponent.boardTypeSelector.isShown()) {
+			boardsComponent.boardTypeSelector.remove();
+		}
 	});
 }
 
@@ -312,6 +399,16 @@ function removeSelectedBoard(boardsComponent) {
 				);
 				boardsComponent.selectedBoardIndex = null;
 				boardsComponent.selectedBoardDiv = null;
+
+				const messageObj = {
+					type: CONSTANTS.RTC_MESSAGE_TYPES.REMOVE_BOARD,
+					content: {
+						boardId: board.boardId
+					}
+				};
+
+				const messageStr = JSON.stringify(messageObj, null, 4);
+				boardsComponent.rtcClient.send(messageStr);
 			}
 		});
 }
