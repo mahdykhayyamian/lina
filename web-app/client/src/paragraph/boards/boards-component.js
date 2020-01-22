@@ -119,8 +119,6 @@ BoardsComponent.prototype.setCommandsComponent = function(commandsComponent) {
 
 BoardsComponent.prototype.setRTCClient = function(rtcClient) {
 	this.rtcClient = rtcClient;
-	console.log('rtc client set to');
-	console.log(this.rtcClient);
 };
 
 BoardsComponent.prototype.loadBoardsFromServer = function() {
@@ -174,12 +172,7 @@ BoardsComponent.prototype.loadBoardsFromServer = function() {
 };
 
 function onRecieveRTCMessage(boardsComponent, rtcMessage) {
-	console.log('in onRecieveRTCMessage with message : ');
-	console.log(rtcMessage);
-	console.log(boardsComponent);
-
 	const message = JSON.parse(rtcMessage);
-	console.log(message);
 
 	switch (message.type) {
 		case CONSTANTS.RTC_MESSAGE_TYPES.ADD_BOARD:
@@ -190,11 +183,9 @@ function onRecieveRTCMessage(boardsComponent, rtcMessage) {
 			);
 			break;
 		case CONSTANTS.RTC_MESSAGE_TYPES.RUN_COMMANDS:
-			console.log('run commands message received');
 			runCommandsOnBoard(boardsComponent, message.content.board);
 			break;
 		case CONSTANTS.RTC_MESSAGE_TYPES.REMOVE_BOARD:
-			console.log('remove board message received');
 			onRemoveBoardMessage(boardsComponent, message);
 			break;
 		default:
@@ -215,16 +206,11 @@ function onRemoveBoardMessage(boardsComponent, message) {
 		}
 	}
 
-	console.log('boardToRemove');
-	console.log(boardToRemove);
-
 	boardToRemove.rootElement.remove();
 	boardsComponent.boards.splice(boardIndex, 1);
 }
 
 function runCommandsOnBoard(boardsComponent, remoteBoard) {
-	console.log('in runCommandsOnBoard');
-
 	let board;
 	for (let i = 0; i < boardsComponent.boards.length; i++) {
 		if (boardsComponent.boards[i].boardId === remoteBoard.boardId) {
@@ -232,9 +218,6 @@ function runCommandsOnBoard(boardsComponent, remoteBoard) {
 			break;
 		}
 	}
-
-	console.log('found board : ');
-	console.log(board);
 
 	if (board) {
 		board.commands = remoteBoard.commands;
@@ -267,7 +250,6 @@ function appendBoard(boardsComponent, boardType, typeId) {
 	).then(newBoardId => {
 		renderNewBoard(boardsComponent, boardType, newBoardId);
 
-		console.log('going to notify with rtc');
 		const messageObj = {
 			type: CONSTANTS.RTC_MESSAGE_TYPES.ADD_BOARD,
 			content: {
@@ -282,7 +264,6 @@ function appendBoard(boardsComponent, boardType, typeId) {
 
 		const messageStr = JSON.stringify(messageObj, null, 4);
 		boardsComponent.rtcClient.send(messageStr);
-		console.log('sent message : ' + messageStr);
 	});
 }
 
@@ -339,7 +320,6 @@ function renderNewBoard(boardsComponent, boardType, newBoardId) {
 
 		makeBoardSelected(boardsComponent.boards.length - 1, boardsComponent);
 		if (boardsComponent.boardTypeSelector.isShown()) {
-			console.log(boardsComponent.boardTypeSelector);
 			boardsComponent.boardTypeSelector.remove();
 		}
 	});
@@ -420,7 +400,6 @@ function removeSelectedBoard(boardsComponent) {
 				boardsComponent.selectedBoardIndex = null;
 				boardsComponent.selectedBoardDiv = null;
 
-				console.log('going to notify remove board');
 				const messageObj = {
 					type: CONSTANTS.RTC_MESSAGE_TYPES.REMOVE_BOARD,
 					content: {
@@ -430,7 +409,6 @@ function removeSelectedBoard(boardsComponent) {
 
 				const messageStr = JSON.stringify(messageObj, null, 4);
 				boardsComponent.rtcClient.send(messageStr);
-				console.log('sent message : ' + messageStr);
 			}
 		});
 }

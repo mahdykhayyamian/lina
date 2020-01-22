@@ -15,14 +15,7 @@ export default class RTCClient {
 		};
 
 		this.webSocket.onmessage = event => {
-			console.log('got rtc message: ');
-			console.log(event.data);
-
-			console.log(this.onRecieveCallbacks);
-
 			this.onRecieveCallbacks.forEach(callback => {
-				console.log('callback to call');
-				console.log(callback);
 				callback(event.data);
 			});
 		};
@@ -43,8 +36,6 @@ export default class RTCClient {
 	}
 
 	subscribeMessageReceiver(receiverCallback) {
-		console.log('in subscribeMessageReceiver');
 		this.onRecieveCallbacks.push(receiverCallback);
-		console.log(this.onRecieveCallbacks);
 	}
 }

@@ -145,7 +145,6 @@ CommandsComponent.prototype.runCommands = function() {
 					const visualizer = visualizerModule.default.visualizer;
 					visualizer.visualizeBoardCommands(this.board);
 
-					console.log('going to notify run commands with rtc');
 					const messageObj = {
 						type: CONSTANTS.RTC_MESSAGE_TYPES.RUN_COMMANDS,
 						content: {
@@ -155,7 +154,6 @@ CommandsComponent.prototype.runCommands = function() {
 
 					const messageStr = JSON.stringify(messageObj, null, 4);
 					this.rtcClient.send(messageStr);
-					console.log('sent message : ' + messageStr);
 				});
 		});
 };
