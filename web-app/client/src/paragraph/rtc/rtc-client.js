@@ -18,17 +18,12 @@ export default class RTCClient {
 			};
 
 			webSocket.onmessage = event => {
-				console.log('message received');
 				rtcClient.onRecieveCallbacks.forEach(callback => {
 					callback(event.data);
 				});
 			};
 
 			webSocket.onclose = event => {
-				console.log('WebSocket is closed now.');
-				console.log(event);
-
-				console.log('creating connection again');
 				rtcClient.webSocket = createSocket(rtcClient);
 			};
 
@@ -38,7 +33,6 @@ export default class RTCClient {
 
 			function onOpen(evt) {
 				console.log('Connection opened');
-				console.log(evt);
 			}
 			return webSocket;
 		}
@@ -46,7 +40,6 @@ export default class RTCClient {
 
 	send(message) {
 		console.log('going to send message');
-		console.log(this);
 		this.webSocket.send(message);
 	}
 
