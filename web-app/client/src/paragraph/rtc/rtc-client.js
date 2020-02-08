@@ -1,37 +1,45 @@
 export default class RTCClient {
 	constructor() {
-		const protocol =
-			window.location.hostname === 'localhost' ? 'ws://' : 'wss://';
-
-		const wsUri = protocol + window.location.host + '/broadcast';
-
-		this.webSocket = new WebSocket(wsUri);
-
-		this.webSocket.onerror = function(evt) {
-			onError(evt);
-		};
-		this.webSocket.onopen = function(evt) {
-			onOpen(evt);
-		};
-
-		this.webSocket.onmessage = event => {
-			this.onRecieveCallbacks.forEach(callback => {
-				callback(event.data);
-			});
-		};
-
-		function onError(evt) {
-			console.error(evt.data);
-		}
-
-		function onOpen() {
-			console.log('Connected to ' + wsUri);
-		}
-
+		this.webSocket = createSocket(this);
 		this.onRecieveCallbacks = [];
+
+		function createSocket(rtcClient) {
+			const protocol =
+				window.location.hostname === 'localhost' ? 'ws://' : 'wss://';
+			const wsUri = protocol + window.location.host + '/broadcast';
+			const webSocket = new WebSocket(wsUri);
+
+			webSocket.onerror = function(evt) {
+				onError(evt);
+			};
+
+			webSocket.onopen = function(evt) {
+				onOpen(evt);
+			};
+
+			webSocket.onmessage = event => {
+				rtcClient.onRecieveCallbacks.forEach(callback => {
+					callback(event.data);
+				});
+			};
+
+			webSocket.onclose = event => {
+				rtcClient.webSocket = createSocket(rtcClient);
+			};
+
+			function onError(evt) {
+				console.error(evt.data);
+			}
+
+			function onOpen(evt) {
+				console.log('Connection opened');
+			}
+			return webSocket;
+		}
 	}
 
 	send(message) {
+		console.log('going to send message');
 		this.webSocket.send(message);
 	}
 

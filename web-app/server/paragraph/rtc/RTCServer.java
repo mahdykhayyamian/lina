@@ -4,6 +4,7 @@ import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
+import javax.websocket.OnError;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import java.util.Set;
@@ -41,6 +42,12 @@ public class RTCServer {
     @OnClose
     public void onClose(Session session){
         System.out.println("Session " +session.getId()+" has ended");
+        peers.remove(session);
+    }
+
+    @OnError
+    public void error(Session session, Throwable t) {
+        System.out.println(t);
         peers.remove(session);
     }
 
