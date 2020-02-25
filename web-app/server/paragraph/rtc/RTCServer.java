@@ -10,11 +10,19 @@ import javax.websocket.server.ServerEndpoint;
 import java.util.Set;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.http.HttpSession;
+import javax.websocket.server.HandshakeRequest;
 
-@ServerEndpoint("/broadcast")
+
+@ServerEndpoint(value="/broadcast", configurator = GetHttpSessionConfigurator.class)
 public class RTCServer {
 
     private static Set<Session> peers = Collections.synchronizedSet(new HashSet<Session>());
+
+    private Session wsSession;
+    private HttpSession httpSession;
 
     @OnMessage
     public void onMessage(Session session, String msg) {
@@ -35,7 +43,28 @@ public class RTCServer {
     @OnOpen
     public void open(Session session, EndpointConfig conf) {
 
-        System.out.println(session.getId() + " has opened a connection");
+        HandshakeRequest req = (HandshakeRequest) conf.getUserProperties()
+                                                      .get("handshakereq");
+        System.out.println("headers ");
+        Map<String,List<String>> headers = req.getHeaders();
+        for (String key: headers.keySet()) {
+            System.out.println(key);
+
+            for (String value: headers.get(key)) {
+                System.out.println("\t value = " + value);
+            }
+        }
+
+        System.out.println("params");
+        Map<String,List<String>> params = req.getParameterMap();
+        for (String key: params.keySet()) {
+            System.out.println(key);
+
+            for (String value: params.get(key)) {
+                System.out.println("\t value = " + value);
+            }
+        }
+
         peers.add(session);
     }
 

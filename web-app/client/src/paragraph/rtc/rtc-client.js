@@ -1,12 +1,16 @@
 export default class RTCClient {
-	constructor() {
+	constructor(roomNumber) {
+		this.roomNumber = roomNumber;
 		this.webSocket = createSocket(this);
 		this.onRecieveCallbacks = [];
 
 		function createSocket(rtcClient) {
 			const protocol =
 				window.location.hostname === 'localhost' ? 'ws://' : 'wss://';
-			const wsUri = protocol + window.location.host + '/broadcast';
+			const wsUri =
+				protocol +
+				window.location.host +
+				`/broadcast?roomNumber=${roomNumber}`;
 			const webSocket = new WebSocket(wsUri);
 
 			webSocket.onerror = function(evt) {
