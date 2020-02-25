@@ -16,6 +16,7 @@ import lina.paragraph.model.ContentType;
 import com.google.gson.Gson;
 import java.io.PrintWriter;
 import lina.board.athentication.AuthenticationUtils;
+import lina.board.athentication.AuthenticationCookies;
 
 @WebServlet("/api/getContentTypes")
 public class GetContentTypesServlet extends HttpServlet {
@@ -36,7 +37,8 @@ public class GetContentTypesServlet extends HttpServlet {
 
 		boolean authenticated = false;
 		try {
-			authenticated = AuthenticationUtils.authenticated(request, response);
+            AuthenticationCookies authCookies = AuthenticationUtils.getAuthCookies(request);
+            authenticated = AuthenticationUtils.authenticate(authCookies);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 		}

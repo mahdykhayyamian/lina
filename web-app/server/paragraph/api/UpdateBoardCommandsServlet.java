@@ -16,6 +16,7 @@ import lina.paragraph.model.Board;
 import lina.paragraph.persistence.BoardRepository;
 import lina.board.utils.ServletUtils;
 import lina.board.athentication.AuthenticationUtils;
+import lina.board.athentication.AuthenticationCookies;
 
 @WebServlet("/api/updateBoardCommands")
 public class UpdateBoardCommandsServlet extends HttpServlet {
@@ -42,7 +43,8 @@ public class UpdateBoardCommandsServlet extends HttpServlet {
 
 		boolean authenticated = false;
 		try {
-			authenticated = AuthenticationUtils.authenticated(request, response);
+            AuthenticationCookies authCookies = AuthenticationUtils.getAuthCookies(request);
+            authenticated = AuthenticationUtils.authenticate(authCookies);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 		}

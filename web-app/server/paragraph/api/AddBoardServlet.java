@@ -14,6 +14,7 @@ import lombok.Data;
 import lina.paragraph.model.Board;
 import lina.paragraph.persistence.BoardRepository;
 import lina.board.athentication.AuthenticationUtils;
+import lina.board.athentication.AuthenticationCookies;
 import lina.board.utils.ServletUtils;
 import java.io.PrintWriter;
 
@@ -43,7 +44,8 @@ public class AddBoardServlet extends HttpServlet {
 
 		boolean authenticated = false;
 		try {
-			authenticated = AuthenticationUtils.authenticated(request, response);
+            AuthenticationCookies authCookies = AuthenticationUtils.getAuthCookies(request);
+			authenticated = AuthenticationUtils.authenticate(authCookies);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
