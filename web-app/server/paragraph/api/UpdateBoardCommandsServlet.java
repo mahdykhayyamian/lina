@@ -16,17 +16,18 @@ import lina.paragraph.model.Board;
 import lina.paragraph.persistence.BoardRepository;
 import lina.board.utils.ServletUtils;
 import lina.board.athentication.AuthenticationUtils;
+import lina.board.athentication.AuthenticationCookies;
 
 @WebServlet("/api/updateBoardCommands")
 public class UpdateBoardCommandsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public UpdateBoardCommandsServlet() {
-        super();
-    }
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public UpdateBoardCommandsServlet() {
+		super();
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -42,29 +43,30 @@ public class UpdateBoardCommandsServlet extends HttpServlet {
 
 		boolean authenticated = false;
 		try {
-			authenticated = AuthenticationUtils.authenticated(request, response);
+			AuthenticationCookies authCookies = AuthenticationUtils.getAuthCookies(request);
+			authenticated = AuthenticationUtils.authenticate(authCookies);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
 
-        if (!authenticated) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
-        }
+		if (!authenticated) {
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			return;
+		}
 
-        try {
-            String data = ServletUtils.getPostBody(request);
-            System.out.println(data);
+		try {
+			String data = ServletUtils.getPostBody(request);
+			System.out.println(data);
 
-            Gson gson = new Gson();
-            UpdateBoardCommandsPayload payload = gson.fromJson(data, UpdateBoardCommandsPayload.class);
+			Gson gson = new Gson();
+			UpdateBoardCommandsPayload payload = gson.fromJson(data, UpdateBoardCommandsPayload.class);
 
-            BoardRepository.updateBoardCommands(payload.boardId, payload.commands);
-        } catch (Exception e) {
-            e.printStackTrace();
+			BoardRepository.updateBoardCommands(payload.boardId, payload.commands);
+		} catch (Exception e) {
+			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }
-    }
+		}
+	}
 }
 
 @Data

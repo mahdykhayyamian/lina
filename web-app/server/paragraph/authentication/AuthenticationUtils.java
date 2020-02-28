@@ -20,10 +20,17 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lina.board.athentication.GoogleAuthHelper;
 import lina.board.athentication.ParsedGoogleToken;
+import lina.board.athentication.AuthenticationCookies;
+import lina.board.athentication.AuthenticationUtils;
+import javax.websocket.server.HandshakeRequest;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+
 public class AuthenticationUtils {
 
-	public static boolean authenticated(ServletRequest request, ServletResponse response) {
-		System.out.println("authenticating...");
+	public static AuthenticationCookies getAuthCookies(ServletRequest request) {
+
 		Cookie[] cookies = ((HttpServletRequest)request).getCookies();
 
 		String authType = null;
@@ -41,19 +48,38 @@ public class AuthenticationUtils {
 					authToken = cookie.getValue();
 				}
 			}
+		}
 
-			if (authType == null || authToken == null) {
-				System.out.println("authType or authToken not provided, auth failed.");
+		return AuthenticationCookies.builder().authType(authType).authToken(authToken).build();
+	}
+
+	public static AuthenticationCookies getAuthCookies(HandshakeRequest req) {
+		Map<String,List<String>> headers = req.getHeaders();
+		Map<String, String> cookies = AuthenticationUtils.parseCookies(headers.get("cookie").get(0));
+
+		String authType = cookies.get("auth-type");
+		String authToken = cookies.get("auth-token");
+
+		return AuthenticationCookies.builder().authType(authType).authToken(authToken).build();
+	}
+
+	public static boolean authenticate(AuthenticationCookies authCookies) {
+		System.out.println("authenticating...");
+
+		String authType = authCookies.authType;
+		String authToken = authCookies.authToken;
+
+		if (authType == null || authToken == null) {
+			System.out.println("authType or authToken not provided, auth failed.");
+			return false;
+		}
+
+		if (authType.equals("googleAuth")) {
+			ParsedGoogleToken parsedGoogleToken = GoogleAuthHelper.validateGoogleToken(authToken);
+			if (parsedGoogleToken != null) {
+				return true;
+			} else {
 				return false;
-			}
-
-			if (authType.equals("googleAuth")) {
-				ParsedGoogleToken parsedGoogleToken = GoogleAuthHelper.validateGoogleToken(authToken);
-				if (parsedGoogleToken != null) {
-					return true;
-				} else {
-					return false;
-				}
 			}
 		}
 
@@ -72,11 +98,23 @@ public class AuthenticationUtils {
 		return null;
 	}
 
-    public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
-        Cookie cookie = getCookie(request, name);
-        cookie.setValue("");
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
-        response.addCookie(cookie);
-    }
+	public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
+		Cookie cookie = getCookie(request, name);
+		cookie.setValue("");
+		cookie.setMaxAge(0);
+		cookie.setPath("/");
+		response.addCookie(cookie);
+	}
+
+	public static Map<String, String> parseCookies(String rawCookie) {
+		Map<String, String> cookiesMap = new HashMap<String, String>();
+
+		String[] rawCookieParams = rawCookie.split(";");
+		for(String rawCookieNameAndValue :rawCookieParams)	{
+			String[] rawCookieNameAndValuePair = rawCookieNameAndValue.split("=");
+			cookiesMap.put(rawCookieNameAndValuePair[0].trim(), rawCookieNameAndValuePair[1].trim());
+		}
+
+		return cookiesMap;
+	}
 }

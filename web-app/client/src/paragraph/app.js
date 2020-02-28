@@ -7,12 +7,14 @@ import { CommandsComponent } from './commands/commands-component.js';
 import { BoardsComponent } from 'src/paragraph/boards/boards-component.js';
 import { CONSTANTS } from 'src/paragraph/constants.js';
 import RTCClient from 'src/paragraph/rtc/rtc-client.js';
+import { getRoomNumberFromUrl } from 'src/paragraph/utils.js';
 
 window.onload = function() {
 	const appDiv = document.getElementById('lina.app');
 	appDiv.style.setProperty('position', 'absolute');
 
-	const rtcClient = new RTCClient();
+	const roomNumber = getRoomNumberFromUrl();
+	const rtcClient = new RTCClient(roomNumber);
 
 	const boardsComponent = new BoardsComponent(rtcClient);
 	const rootContainer = buildLayout(boardsComponent, rtcClient);

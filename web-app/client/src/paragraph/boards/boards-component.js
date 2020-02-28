@@ -4,6 +4,7 @@ import { Widget } from 'smartframes';
 import { BoardTypeSelector } from 'src/paragraph/boards/select-board-type.js';
 import { moduleLoader } from 'src/paragraph/module-loader.js';
 import { CONSTANTS } from 'src/paragraph/constants.js';
+import { getRoomNumberFromUrl } from 'src/paragraph/utils.js';
 
 const addBoardHeight = 40;
 const boardHeaderHeight = 50;
@@ -451,12 +452,6 @@ function getSamplesForType(type) {
 		default:
 			return Promise.resolve([]);
 	}
-}
-
-function getRoomNumberFromUrl() {
-	const url = new URL(window.location.href);
-	const roomNumber = url.searchParams.get('roomNumber');
-	return roomNumber;
 }
 
 export { BoardsComponent };
