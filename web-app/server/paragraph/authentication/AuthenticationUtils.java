@@ -21,6 +21,11 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lina.board.athentication.GoogleAuthHelper;
 import lina.board.athentication.ParsedGoogleToken;
 import lina.board.athentication.AuthenticationCookies;
+import lina.board.athentication.AuthenticationUtils;
+import javax.websocket.server.HandshakeRequest;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
 
 public class AuthenticationUtils {
 
@@ -44,6 +49,16 @@ public class AuthenticationUtils {
 				}
 			}
 		}
+
+		return AuthenticationCookies.builder().authType(authType).authToken(authToken).build();
+	}
+
+	public static AuthenticationCookies getAuthCookies(HandshakeRequest req) {
+        Map<String,List<String>> headers = req.getHeaders();
+        Map<String, String> cookies = AuthenticationUtils.parseCookies(headers.get("cookie").get(0));
+
+        String authType = cookies.get("auth-type");
+        String authToken = cookies.get("auth-token");
 
 		return AuthenticationCookies.builder().authType(authType).authToken(authToken).build();
 	}
@@ -90,4 +105,17 @@ public class AuthenticationUtils {
         cookie.setPath("/");
         response.addCookie(cookie);
     }
+
+    public static Map<String, String> parseCookies(String rawCookie) {
+    	Map<String, String> cookiesMap = new HashMap<String, String>();
+
+		String[] rawCookieParams = rawCookie.split(";");
+		for(String rawCookieNameAndValue :rawCookieParams)	{
+			String[] rawCookieNameAndValuePair = rawCookieNameAndValue.split("=");
+			cookiesMap.put(rawCookieNameAndValuePair[0].trim(), rawCookieNameAndValuePair[1].trim());
+		}
+
+		return cookiesMap;
+    }
+
 }
