@@ -54,11 +54,11 @@ public class AuthenticationUtils {
 	}
 
 	public static AuthenticationCookies getAuthCookies(HandshakeRequest req) {
-        Map<String,List<String>> headers = req.getHeaders();
-        Map<String, String> cookies = AuthenticationUtils.parseCookies(headers.get("cookie").get(0));
+		Map<String,List<String>> headers = req.getHeaders();
+		Map<String, String> cookies = AuthenticationUtils.parseCookies(headers.get("cookie").get(0));
 
-        String authType = cookies.get("auth-type");
-        String authToken = cookies.get("auth-token");
+		String authType = cookies.get("auth-type");
+		String authToken = cookies.get("auth-token");
 
 		return AuthenticationCookies.builder().authType(authType).authToken(authToken).build();
 	}
@@ -98,16 +98,16 @@ public class AuthenticationUtils {
 		return null;
 	}
 
-    public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
-        Cookie cookie = getCookie(request, name);
-        cookie.setValue("");
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
-        response.addCookie(cookie);
-    }
+	public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
+		Cookie cookie = getCookie(request, name);
+		cookie.setValue("");
+		cookie.setMaxAge(0);
+		cookie.setPath("/");
+		response.addCookie(cookie);
+	}
 
-    public static Map<String, String> parseCookies(String rawCookie) {
-    	Map<String, String> cookiesMap = new HashMap<String, String>();
+	public static Map<String, String> parseCookies(String rawCookie) {
+		Map<String, String> cookiesMap = new HashMap<String, String>();
 
 		String[] rawCookieParams = rawCookie.split(";");
 		for(String rawCookieNameAndValue :rawCookieParams)	{
@@ -116,6 +116,5 @@ public class AuthenticationUtils {
 		}
 
 		return cookiesMap;
-    }
-
+	}
 }

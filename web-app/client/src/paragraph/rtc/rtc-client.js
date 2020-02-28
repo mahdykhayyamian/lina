@@ -34,10 +34,6 @@ export default class RTCClient {
 				});
 			};
 
-			webSocket.onclose = event => {
-				//rtcClient.webSocket = createSocket(rtcClient);
-			};
-
 			function onError(evt) {
 				console.error(evt.data);
 			}

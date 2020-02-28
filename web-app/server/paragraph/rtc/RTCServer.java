@@ -84,7 +84,7 @@ public class RTCServer {
                 session.close();
                 return;
             } catch (IOException e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
         }
 
