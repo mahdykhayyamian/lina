@@ -23,7 +23,6 @@ import lina.board.athentication.AuthenticationCookies;
 public class RTCServer {
 
     public static final String WS_KEEP_ALIVE_MESSAGE = "WS_KEEP_ALIVE_MESSAGE";
-    private static Set<Session> peers = Collections.synchronizedSet(new HashSet<Session>());
     private static Map<Integer, List<Session>> roomNumToWSSessionsMap = Collections.synchronizedMap(new HashMap<Integer, List<Session>>());
     private static Map<String, Integer> sessionIdToBoardNumMap = Collections.synchronizedMap(new HashMap<String, Integer>());
 
@@ -36,18 +35,38 @@ public class RTCServer {
             return;
         }
 
-        System.out.println("peers size" + peers.size());
-        int roomNumber = sessionIdToBoardNumMap.get(session.getId());
+        Integer roomNumber = sessionIdToBoardNumMap.get(session.getId());
+        System.out.println("Room number from session : " + roomNumber);
+
+        Set<String> closedSessionIds = new HashSet<String>();
 
         try {
-            for (Session peer : roomNumToWSSessionsMap.get(roomNumber)) {
-                if (!peer.equals(session)) {
-                    peer.getBasicRemote().sendText(msg);
+            for (Session peerSession : roomNumToWSSessionsMap.get(roomNumber)) {
+                System.out.println("session id for peer : " + peerSession.getId());
+                if (peerSession.isOpen()) {
+                if (!peerSession.equals(session)) {
+                        peerSession.getBasicRemote().sendText(msg);
+                    }                    
+                } else {
+                    closedSessionIds.add(peerSession.getId());
                 }
             }
         } catch (IOException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
+
+        // remove closed sessions from maps
+        for (String closedSessionId: closedSessionIds) {
+            sessionIdToBoardNumMap.remove(closedSessionId);            
+        }
+
+        List<Session> openSessions = new ArrayList<Session>();
+        for (Session peerSession : roomNumToWSSessionsMap.get(roomNumber)) {
+            if (!closedSessionIds.contains(peerSession.getId())) {
+                openSessions.add(peerSession);
+            } 
+        }
+        roomNumToWSSessionsMap.put(roomNumber, openSessions);
     }
 
     @OnOpen
@@ -56,8 +75,6 @@ public class RTCServer {
         HandshakeRequest req = (HandshakeRequest) conf.getUserProperties()
                                                       .get("handshakereq");
         AuthenticationCookies authCookies = AuthenticationUtils.getAuthCookies(req);
-        System.out.println("authCookies.authType : " + authCookies.getAuthType());
-        System.out.println("authCookies.authToken : " + authCookies.getAuthToken());
 
         boolean isAuthentic = AuthenticationUtils.authenticate(authCookies);
         System.out.println("auth result : " + isAuthentic);
@@ -71,7 +88,8 @@ public class RTCServer {
             }
         }
 
-        Integer roomNumber = getRoomIdParam(req);
+        Integer roomNumber = getRoomNumberParam(req);
+        System.out.println("Room number from param : " + roomNumber);
 
         sessionIdToBoardNumMap.put(session.getId(), roomNumber);
 
@@ -79,6 +97,7 @@ public class RTCServer {
             List<Session> roomSessions = roomNumToWSSessionsMap.get(roomNumber);
             if (roomSessions == null) {
                 roomSessions = new ArrayList<Session>();
+                roomNumToWSSessionsMap.put(roomNumber, roomSessions);
             }
 
             roomSessions.add(session);
@@ -87,17 +106,15 @@ public class RTCServer {
 
     @OnClose
     public void onClose(Session session){
-        System.out.println("Session " +session.getId()+" has ended");
-        peers.remove(session);
+        System.out.println("Session " + session.getId()+" has ended");
     }
 
     @OnError
     public void error(Session session, Throwable t) {
         System.out.println(t);
-        peers.remove(session);
     }
 
-    private static Integer getRoomIdParam(HandshakeRequest req) {
+    private static Integer getRoomNumberParam(HandshakeRequest req) {
         System.out.println("params");
         Map<String,List<String>> params = req.getParameterMap();
         for (String key: params.keySet()) {
