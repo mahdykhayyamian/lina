@@ -50,6 +50,7 @@ public class RTCServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        roomNumToWSSessionsMap.put(roomNumber, openSessions);
     }
 
     @OnOpen
@@ -109,7 +110,7 @@ public class RTCServer {
         System.out.println(t);
     }
 
-    private static Integer getRoomNumberParam(HandshakeRequest req)  {
+    private static Integer getRoomNumberParam(HandshakeRequest req) {
         System.out.println("params");
         Map<String,List<String>> params = req.getParameterMap();
         for (String key: params.keySet()) {
