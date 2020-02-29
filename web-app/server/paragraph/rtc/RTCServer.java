@@ -38,35 +38,18 @@ public class RTCServer {
         Integer roomNumber = sessionIdToBoardNumMap.get(session.getId());
         System.out.println("Room number from session : " + roomNumber);
 
-        Set<String> closedSessionIds = new HashSet<String>();
-
         try {
             for (Session peerSession : roomNumToWSSessionsMap.get(roomNumber)) {
                 System.out.println("session id for peer : " + peerSession.getId());
                 if (peerSession.isOpen()) {
-                if (!peerSession.equals(session)) {
+                    if (!peerSession.equals(session)) {
                         peerSession.getBasicRemote().sendText(msg);
                     }                    
-                } else {
-                    closedSessionIds.add(peerSession.getId());
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        // remove closed sessions from maps
-        for (String closedSessionId: closedSessionIds) {
-            sessionIdToBoardNumMap.remove(closedSessionId);            
-        }
-
-        List<Session> openSessions = new ArrayList<Session>();
-        for (Session peerSession : roomNumToWSSessionsMap.get(roomNumber)) {
-            if (!closedSessionIds.contains(peerSession.getId())) {
-                openSessions.add(peerSession);
-            } 
-        }
-        roomNumToWSSessionsMap.put(roomNumber, openSessions);
     }
 
     @OnOpen
@@ -105,8 +88,20 @@ public class RTCServer {
     }
 
     @OnClose
-    public void onClose(Session session){
-        System.out.println("Session " + session.getId()+" has ended");
+    public void onClose(Session closedSession) {
+        System.out.println("Session " + closedSession.getId()+" has ended");
+
+        Integer roomNumber = sessionIdToBoardNumMap.get(closedSession.getId());
+        sessionIdToBoardNumMap.remove(closedSession.getId());
+
+        List<Session> openSessions = new ArrayList<Session>();
+        for (Session peerSession : roomNumToWSSessionsMap.get(roomNumber)) {
+            if (!closedSession.getId().equals(peerSession.getId())) {
+                openSessions.add(peerSession);
+            }
+        }
+
+        roomNumToWSSessionsMap.put(roomNumber, openSessions);
     }
 
     @OnError
@@ -114,7 +109,7 @@ public class RTCServer {
         System.out.println(t);
     }
 
-    private static Integer getRoomNumberParam(HandshakeRequest req) {
+    private static Integer getRoomNumberParam(HandshakeRequest req)  {
         System.out.println("params");
         Map<String,List<String>> params = req.getParameterMap();
         for (String key: params.keySet()) {
