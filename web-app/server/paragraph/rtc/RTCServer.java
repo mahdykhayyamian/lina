@@ -50,7 +50,6 @@ public class RTCServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        roomNumToWSSessionsMap.put(roomNumber, openSessions);
     }
 
     @OnOpen
