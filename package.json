@@ -14,9 +14,10 @@
     "phosphor-dockpanel": "^0.9.7",
     "phosphor-messaging": "^1.0.6",
     "phosphor-widget": "^1.0.0-rc.1",
-    "showdown": "^1.9.0",
+    "showdown": "^1.9.1",
     "smartframes": "mahdykhayyamian/smartframes#master",
-    "venn.js": "^0.2.20"
+    "venn.js": "^0.2.20",
+    "vis-network": "^7.3.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.5",
@@ -36,14 +37,14 @@
     "karma-jasmine": "^2.0.1",
     "karma-spec-reporter": "0.0.32",
     "karma-webpack": "^4.0.2",
-    "npm": "^6.9.0",
+    "npm": "^6.14.2",
     "prettier": "1.18.2",
     "puppeteer": "^1.19.0",
     "style-loader": "^0.13.1",
     "uglify-es": "^3.3.9",
     "uglifyjs-webpack-plugin": "^2.1.1",
     "url-loader": "^0.6.2",
-    "webpack": "^4.25.1",
+    "webpack": "^4.42.0",
     "webpack-cli": "^3.1.2"
   },
   "scripts": {
