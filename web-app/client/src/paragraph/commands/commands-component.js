@@ -84,9 +84,7 @@ CommandsComponent.prototype.createWidget = function() {
 			contentNode: this.samplesRoot,
 
 			onRenderCallback: widget => {
-				console.log('sample on render');
 				this.samplesRoot.style.height = widget.contentHeight;
-				this.setSamples(this.samples);
 			}
 		}
 	]);
@@ -100,13 +98,8 @@ CommandsComponent.prototype.setBoard = function(board) {
 };
 
 CommandsComponent.prototype.setSamples = function(samples) {
-	console.log('in setSamples');
 	this.samples = samples;
-	const samplesDiv = document.getElementById(CONSTANTS.SAMPLE_COMMANDS_ID);
-
-	if (samplesDiv) {
-		refreshSamples(samplesDiv, samples);
-	}
+	refreshSamples(this.samplesRoot, samples);
 };
 
 CommandsComponent.prototype.setCommands = function(commands) {
@@ -243,7 +236,7 @@ function refreshSamples(samplesDiv, samples) {
 		const id = `sample-command-${i}`;
 		sampleDivCommands.id = id;
 		sampleDivCommands.classList.add('sampleEditorContainer');
-		attachAceEditor(id).then(sampleAceEditor => {
+		attachAceEditor(sampleDivCommands).then(sampleAceEditor => {
 			sampleAceEditor.setValue(samples[i], -1);
 		});
 
