@@ -171,7 +171,6 @@ function loadAceEditorCode() {
 }
 
 function attachAceEditor(containerId) {
-	console.log('in attachAceEditor');
 	return loadAceEditorCode().then(() => {
 		const aceEditor = ace.edit(containerId);
 		aceEditor.setTheme('ace/theme/chrome');
@@ -221,8 +220,6 @@ function copyToClipboard(text) {
 }
 
 function refreshSamples(samplesDiv, samples) {
-	console.log('in refreshSamples');
-
 	// remove current samples if any
 	while (samplesDiv.firstChild) {
 		samplesDiv.removeChild(samplesDiv.firstChild);
