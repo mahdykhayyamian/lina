@@ -13,6 +13,17 @@
     overflow-y: scroll;
 }
 
+.sampleEditorContainer {
+    border-style: ridge;
+    border-width: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    font-size: 16px;
+    resize: none;
+    overflow-y: scroll;
+    height: 300px;
+}
+
 #commandsAceEditorContainer:focus {
     outline: none;
 }
@@ -44,9 +55,9 @@
 .copy-to-clipboard-button-holder {
     height: 30px;
     margin: 10px 0px 0px 0px;
-    border-top:solid;
+    border-bottom:solid;
     border-color:#e2ddd2;
-    padding-top:1px;
+    padding-bottom:1px;
     border-width: 1px;
 }
 
@@ -57,8 +68,6 @@
 .sample-command {
     font-family: monospace;
     font-size: 16px;
-    border-style: ridge;
-    border-width: 2px;
     padding: 10px 10px 0px 10px;
     box-sizing: border-box;
     resize: none;

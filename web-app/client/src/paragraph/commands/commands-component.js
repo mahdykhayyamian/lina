@@ -22,9 +22,11 @@ const CommandsComponent = function(rtcClient) {
 	this.samples = [];
 	this.widget = null;
 
-	loadAceEditor().then(editor => {
-		this.commandsAceEditor = editor;
-	});
+	attachAceEditor(`${CONSTANTS.COMMANDS_ACE_EDITOR_CONTAINER}`).then(
+		editor => {
+			this.commandsAceEditor = editor;
+		}
+	);
 };
 
 CommandsComponent.prototype.createWidget = function() {
@@ -83,7 +85,6 @@ CommandsComponent.prototype.createWidget = function() {
 
 			onRenderCallback: widget => {
 				this.samplesRoot.style.height = widget.contentHeight;
-				this.setSamples(this.samples);
 			}
 		}
 	]);
@@ -98,11 +99,7 @@ CommandsComponent.prototype.setBoard = function(board) {
 
 CommandsComponent.prototype.setSamples = function(samples) {
 	this.samples = samples;
-	const samplesDiv = document.getElementById(CONSTANTS.SAMPLE_COMMANDS_ID);
-
-	if (samplesDiv) {
-		refreshSamples(samplesDiv, samples);
-	}
+	refreshSamples(this.samplesRoot, samples);
 };
 
 CommandsComponent.prototype.setCommands = function(commands) {
@@ -158,16 +155,24 @@ CommandsComponent.prototype.runCommands = function() {
 		});
 };
 
-function loadAceEditor() {
+function loadAceEditorCode() {
+	if (loadAceEditorCode.loaded) {
+		return Promise.resolve();
+	}
+
 	return loadJSPromise([
 		{
 			async: true,
 			url: '/ace/src-min-noconflict/ace.js'
 		}
 	]).then(() => {
-		const aceEditor = ace.edit(
-			`${CONSTANTS.COMMANDS_ACE_EDITOR_CONTAINER}`
-		);
+		loadAceEditorCode.loaded = true;
+	});
+}
+
+function attachAceEditor(containerId) {
+	return loadAceEditorCode().then(() => {
+		const aceEditor = ace.edit(containerId);
 		aceEditor.setTheme('ace/theme/chrome');
 		aceEditor.session.setMode('ace/mode/javascript');
 		aceEditor.session.setOption('useWorker', false);
@@ -225,7 +230,14 @@ function refreshSamples(samplesDiv, samples) {
 		sampleDiv.classList.add('sample-command');
 
 		const sampleDivCommands = document.createElement('div');
-		sampleDivCommands.innerText = samples[i];
+		const id = `sample-command-${i}`;
+		sampleDivCommands.id = id;
+		sampleDivCommands.classList.add('sampleEditorContainer');
+		attachAceEditor(sampleDivCommands).then(sampleAceEditor => {
+			sampleAceEditor.setValue(samples[i], -1);
+		});
+
+		// sampleDivCommands.innerText = samples[i];
 		sampleDiv.appendChild(sampleDivCommands);
 
 		const sampleDivButton = document.createElement('div');

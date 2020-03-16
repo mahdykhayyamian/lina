@@ -449,6 +449,11 @@ function getSamplesForType(type) {
 			return vennDiagramModule.then(vennDiagramModule => {
 				return vennDiagramModule.default.samples;
 			});
+		case 'graph':
+			const graphModule = moduleLoader.getModuleByName(type);
+			return graphModule.then(graphModule => {
+				return graphModule.default.samples;
+			});
 		default:
 			return Promise.resolve([]);
 	}
