@@ -75,10 +75,10 @@ function addJSBundles {
 	if [ ${env} == "prod" ]
 	then
 		echoGreen "packing for prod env"
-		node_modules/.bin/webpack --config webpack.prod.config.js
+		node_modules/.bin/webpack --config webpack.prod.config.js || { echo 'webpack failed' ; exit 1; }
 	else
 		echoGreen "packing for dev env"
-		node_modules/.bin/webpack --config webpack.config.js
+		node_modules/.bin/webpack --config webpack.config.js || { echo 'webpack failed' ; exit 1; }
 	fi
 	cp ${LINA_ROOT}/temp/*.js  ${LINA_ROOT}/deploy
 }
