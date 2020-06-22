@@ -5,6 +5,7 @@ import { WidgetResizeController } from 'smartframes';
 import { CONSTANTS as SMARTFRAME_CONSTANTS } from 'smartframes';
 import { CommandsComponent } from './commands/commands-component.js';
 import { BoardsComponent } from 'src/paragraph/boards/boards-component.js';
+import { ChatComponent } from 'src/paragraph/chat/chat-component.js';
 import { CONSTANTS } from 'src/paragraph/constants.js';
 import RTCClient from 'src/paragraph/rtc/rtc-client.js';
 import { getRoomNumberFromUrl } from 'src/paragraph/utils.js';
@@ -66,27 +67,10 @@ function buildLayout(boardsComponent, rtcClient) {
 	}
 }
 
-function createChatWidget() {
-	function createDiv(innerHtml) {
-		const div = document.createElement('div');
-		div.style.setProperty('width', '100%');
-		div.style.setProperty('height', '100%');
-		div.innerHTML = innerHtml;
-		return div;
-	}
-
-	const chatWidget = new Widget('chatWidget', [
-		{
-			title: 'Chat',
-			contentNode: createDiv(`<div id="chat" class="spa-text"></div>`)
-		}
-	]);
-
-	return chatWidget;
-}
-
 function createLayoutForSmallSizeDisplays(boardsComponent, rtcClient) {
-	const chatWidget = createChatWidget();
+	const chatComponent = new ChatComponent();
+	const chatWidget = chatComponent.createWidget();
+
 	const commandsComponent = new CommandsComponent(rtcClient);
 	const commandsWidget = commandsComponent.createWidget();
 
@@ -117,7 +101,9 @@ function createLayoutForSmallSizeDisplays(boardsComponent, rtcClient) {
 }
 
 function createLayoutForMediumSizeDisplays(boardsComponent, rtcClient) {
-	const chatWidget = createChatWidget();
+	const chatComponent = new ChatComponent();
+	const chatWidget = chatComponent.createWidget();
+
 	const commandsComponent = new CommandsComponent(rtcClient);
 	const commandsWidget = commandsComponent.createWidget();
 
@@ -148,7 +134,9 @@ function createLayoutForMediumSizeDisplays(boardsComponent, rtcClient) {
 }
 
 function createLayoutForLargeSizeDisplays(boardsComponent, rtcClient) {
-	const chatWidget = createChatWidget();
+	const chatComponent = new ChatComponent();
+	const chatWidget = chatComponent.createWidget();
+
 	const commandsComponent = new CommandsComponent(rtcClient);
 	const commandsWidget = commandsComponent.createWidget();
 
