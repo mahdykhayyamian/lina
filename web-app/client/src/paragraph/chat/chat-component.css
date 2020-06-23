@@ -31,7 +31,7 @@
 	color: white;
 }
 
-.send-button {
+#send-button {
     background-color: #6764E8;
     font-size: 16px;
     font-family: monospace;
