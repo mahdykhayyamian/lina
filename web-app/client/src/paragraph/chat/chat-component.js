@@ -1,5 +1,16 @@
 import { Widget } from 'smartframes';
-const ChatComponent = function() {
+
+import { CONSTANTS } from 'src/paragraph/constants.js';
+
+import { getUserName } from 'src/paragraph/utils.js';
+
+const ChatComponent = function(rtcClient) {
+	this.rtcClient = rtcClient;
+
+	this.rtcClient.subscribeMessageReceiver(event => {
+		onRecieveRTCMessage(this, event);
+	});
+
 	this.rootNode = document.createElement('div');
 	this.rootNode.innerHTML = `<div id="chat-container" class="spa-text">
 			<div id="chat-messages">
@@ -26,12 +37,32 @@ const ChatComponent = function() {
 
 	this.sendButton.addEventListener('click', () => {
 		console.log('in send button click...');
+
+		const textAreaDiv = document.getElementById('chat-compose-text-area');
+		const chatMessage = textAreaDiv.value;
+
+		console.log(chatMessage);
+
+		const sender = getUserName();
+
+		const messageObj = {
+			type: CONSTANTS.RTC_MESSAGE_TYPES.CHAT_MESSAGE,
+			content: {
+				chatMessage,
+				sender
+			}
+		};
+		const messageStr = JSON.stringify(messageObj, null, 4);
+
+		this.rtcClient.send(messageStr);
+		this.addChatMessage(chatMessage, sender);
+		textAreaDiv.value = '';
 	});
+
 	this.rootNode.appendChild(this.sendButton);
 };
 
 ChatComponent.prototype.createWidget = function() {
-	console.log(this.rootNode);
 	const chatWidget = new Widget('chatWidget', [
 		{
 			title: 'Chat',
@@ -41,6 +72,31 @@ ChatComponent.prototype.createWidget = function() {
 
 	return chatWidget;
 };
+
+ChatComponent.prototype.addChatMessage = function(content, sender) {
+	const chatMessageNodes = document.getElementById('chat-messages');
+	const chatMessageDiv = document.createElement('div');
+	chatMessageDiv.classList.add('chat-message');
+
+	chatMessageDiv.innerHTML = `<div class="chat-sender"> ${sender} </div> <div class="chat-content"> ${content} </div>`;
+	chatMessageNodes.appendChild(chatMessageDiv);
+};
+
+function onRecieveRTCMessage(chatComponent, rtcMessage) {
+	const message = JSON.parse(rtcMessage);
+
+	switch (message.type) {
+		case CONSTANTS.RTC_MESSAGE_TYPES.CHAT_MESSAGE:
+			console.log('got chat rtc message');
+			chatComponent.addChatMessage(
+				message.content.chatMessage,
+				message.content.sender
+			);
+			break;
+		default:
+			return;
+	}
+}
 
 export { ChatComponent };
 require('src/paragraph/chat/chat-component.css');

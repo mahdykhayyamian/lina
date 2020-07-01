@@ -68,7 +68,7 @@ function buildLayout(boardsComponent, rtcClient) {
 }
 
 function createLayoutForSmallSizeDisplays(boardsComponent, rtcClient) {
-	const chatComponent = new ChatComponent();
+	const chatComponent = new ChatComponent(rtcClient);
 	const chatWidget = chatComponent.createWidget();
 
 	const commandsComponent = new CommandsComponent(rtcClient);
@@ -101,7 +101,7 @@ function createLayoutForSmallSizeDisplays(boardsComponent, rtcClient) {
 }
 
 function createLayoutForMediumSizeDisplays(boardsComponent, rtcClient) {
-	const chatComponent = new ChatComponent();
+	const chatComponent = new ChatComponent(rtcClient);
 	const chatWidget = chatComponent.createWidget();
 
 	const commandsComponent = new CommandsComponent(rtcClient);
@@ -134,7 +134,7 @@ function createLayoutForMediumSizeDisplays(boardsComponent, rtcClient) {
 }
 
 function createLayoutForLargeSizeDisplays(boardsComponent, rtcClient) {
-	const chatComponent = new ChatComponent();
+	const chatComponent = new ChatComponent(rtcClient);
 	const chatWidget = chatComponent.createWidget();
 
 	const commandsComponent = new CommandsComponent(rtcClient);

@@ -173,6 +173,9 @@ BoardsComponent.prototype.loadBoardsFromServer = function() {
 };
 
 function onRecieveRTCMessage(boardsComponent, rtcMessage) {
+	console.log('hey rtcMessage');
+	console.log(rtcMessage);
+
 	const message = JSON.parse(rtcMessage);
 
 	switch (message.type) {
