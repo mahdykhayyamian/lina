@@ -4,6 +4,10 @@ export const getRoomNumberFromUrl = function() {
 	return roomNumber;
 };
 
+export const getUserEmail = function() {
+	return getCookie('email');
+};
+
 export const getGivenName = function() {
 	return getCookie('given-name');
 };

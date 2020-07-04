@@ -68,8 +68,9 @@ CREATE TABLE IF NOT EXISTS paragraph.ROOM_USERS (
 
 CREATE TABLE IF NOT EXISTS paragraph.CHAT_MESSAGE (
     id SERIAL PRIMARY KEY NOT NULL,
-    lina_user_id INTEGER REFERENCES paragraph.LINA_USER(id),
     room_id INTEGER REFERENCES paragraph.ROOM(id),
+    sender_email TEXT,
+    sender_given_name TEXT,
     text_content TEXT,
     created TIMESTAMP NOT NULL,
     updated TIMESTAMP NOT NULL default CURRENT_TIMESTAMP

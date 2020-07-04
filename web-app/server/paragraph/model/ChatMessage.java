@@ -9,12 +9,13 @@ import lombok.Data;
 public class ChatMessage {
     int id;
     int roomId;
-    String linaUserId;
+    String senderEmail;
+    String senderGivenName;
     String textContent;
     Date created;
     Date updated;
 
     public String toString() {
-        return "(id = " + id + ", roomId = " + roomId + ", linaUserId = " + linaUserId + ", textContent = " + textContent + "\n)";
+        return "(id = " + id + ", roomId = " + roomId +  ", senderGivenName = " + senderGivenName + ", senderEmail = " + senderEmail + ", textContent = " + textContent + "\n)";
     }
 }

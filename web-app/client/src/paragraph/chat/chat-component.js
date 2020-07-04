@@ -4,7 +4,11 @@ import { Widget } from 'smartframes';
 
 import { CONSTANTS } from 'src/paragraph/constants.js';
 
-import { getGivenName, getRoomNumberFromUrl } from 'src/paragraph/utils.js';
+import {
+	getUserEmail,
+	getGivenName,
+	getRoomNumberFromUrl
+} from 'src/paragraph/utils.js';
 
 const ChatComponent = function(rtcClient) {
 	this.rtcClient = rtcClient;
@@ -36,7 +40,9 @@ const ChatComponent = function(rtcClient) {
 
 		console.log(chatMessage);
 
-		const sender = getGivenName();
+		const senderEmail = getUserEmail();
+		const senderGivenName = getGivenName();
+
 		const roomNumber = getRoomNumberFromUrl();
 
 		const request = ajax({
@@ -48,7 +54,8 @@ const ChatComponent = function(rtcClient) {
 		request
 			.post('/api/addChatMessage', {
 				roomNumber,
-				linaUserId: sender,
+				senderEmail,
+				senderGivenName,
 				textContent: chatMessage
 			})
 			.then(result => {
@@ -57,13 +64,14 @@ const ChatComponent = function(rtcClient) {
 					type: CONSTANTS.RTC_MESSAGE_TYPES.CHAT_MESSAGE,
 					content: {
 						chatMessage,
-						sender
+						senderGivenName,
+						senderEmail
 					}
 				};
 				const messageStr = JSON.stringify(messageObj, null, 4);
 
 				this.rtcClient.send(messageStr);
-				this.addChatMessage(chatMessage, sender);
+				this.addChatMessage(chatMessage, senderGivenName);
 				textAreaDiv.value = '';
 			});
 	});
@@ -82,12 +90,12 @@ ChatComponent.prototype.createWidget = function() {
 	return chatWidget;
 };
 
-ChatComponent.prototype.addChatMessage = function(content, sender) {
+ChatComponent.prototype.addChatMessage = function(content, senderGivenName) {
 	const chatMessageNodes = document.getElementById('chat-messages');
 	const chatMessageDiv = document.createElement('div');
 	chatMessageDiv.classList.add('chat-message');
 
-	chatMessageDiv.innerHTML = `<div class="chat-sender"> ${sender} </div> <div class="chat-content"> ${content} </div>`;
+	chatMessageDiv.innerHTML = `<div class="chat-sender"> ${senderGivenName} </div> <div class="chat-content"> ${content} </div>`;
 	chatMessageNodes.appendChild(chatMessageDiv);
 };
 
@@ -99,7 +107,7 @@ function onRecieveRTCMessage(chatComponent, rtcMessage) {
 			console.log('got chat rtc message');
 			chatComponent.addChatMessage(
 				message.content.chatMessage,
-				message.content.sender
+				message.content.senderGivenName
 			);
 			break;
 		default:
