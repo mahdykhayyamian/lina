@@ -15,7 +15,7 @@
 
 	<body>
 		<div class="account-info">
-			Welcome <%= request.getAttribute("user-name") %>!  	<a href="#" onclick="signOut();">Sign out</a>
+			Welcome <%= request.getAttribute("given-name") %>!  	<a href="#" onclick="signOut();">Sign out</a>
 		</div>
 		<div id="lina.app"></div>
 	</body>

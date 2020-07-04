@@ -18,6 +18,8 @@ import com.google.gson.Gson;
 import lina.board.athentication.AuthenticationUtils;
 import lina.board.athentication.GoogleAuthHelper;
 
+import lina.board.athentication.ParsedGoogleToken;
+
 
 @WebServlet("/src/paragraph/authenticate")
 public class AuthenticationServlet extends HttpServlet {
@@ -41,15 +43,13 @@ public class AuthenticationServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		String userName = request.getParameter("userName");
 		String googleAuthToken = request.getParameter("googleAuthToken");
+		ParsedGoogleToken parsedGoogleToken = authenticate(googleAuthToken);
 
-		if (authenticate(userName, googleAuthToken)) {
-
+		if (parsedGoogleToken != null) {
 			System.out.println("authenticated, going to set cookies");
 
 			if (googleAuthToken != null) {
-
 				Cookie authTypeCookie = new Cookie("auth-type", "googleAuth");
 				authTypeCookie.setMaxAge(60*60); //1 hour
 				authTypeCookie.setPath("/");
@@ -60,7 +60,12 @@ public class AuthenticationServlet extends HttpServlet {
 				authTokenCookie.setPath("/");
 				response.addCookie(authTokenCookie);
 
-				Cookie userNameCookie = new Cookie("user-name", userName);
+				Cookie emailCookie = new Cookie("email", parsedGoogleToken.email);
+				emailCookie.setMaxAge(60*60); //1 hour
+				emailCookie.setPath("/");
+				response.addCookie(emailCookie);
+
+				Cookie userNameCookie = new Cookie("given-name", parsedGoogleToken.givenName);
 				userNameCookie.setMaxAge(60*60); //1 hour
 				userNameCookie.setPath("/");
 				response.addCookie(userNameCookie);
@@ -81,16 +86,12 @@ public class AuthenticationServlet extends HttpServlet {
 		}
 	}
 
-	private boolean authenticate(String userName, String googleAuthToken) {
+	private ParsedGoogleToken authenticate(String googleAuthToken) {
 		if (googleAuthToken != null) {
 			ParsedGoogleToken parsedGoogleToken = GoogleAuthHelper.validateGoogleToken(googleAuthToken);
-			if (parsedGoogleToken != null) {
-				return true;
-			} else {
-				return false;
-			}
+			return parsedGoogleToken;
 		}
-		return false;
+		return null;
 	}
 
 	private String getFrom(HttpServletRequest request) {

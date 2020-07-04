@@ -4,7 +4,7 @@ import { Widget } from 'smartframes';
 
 import { CONSTANTS } from 'src/paragraph/constants.js';
 
-import { getUserName } from 'src/paragraph/utils.js';
+import { getGivenName, getRoomNumberFromUrl } from 'src/paragraph/utils.js';
 
 const ChatComponent = function(rtcClient) {
 	this.rtcClient = rtcClient;
@@ -36,7 +36,8 @@ const ChatComponent = function(rtcClient) {
 
 		console.log(chatMessage);
 
-		const sender = getUserName();
+		const sender = getGivenName();
+		const roomNumber = getRoomNumberFromUrl();
 
 		const request = ajax({
 			headers: {
@@ -44,22 +45,27 @@ const ChatComponent = function(rtcClient) {
 			}
 		});
 
-		request.post('/api/addChatMessage').then(result => {
-			console.log(result);
+		request
+			.post('/api/addChatMessage', {
+				roomNumber,
+				linaUserId: sender,
+				textContent: chatMessage
+			})
+			.then(result => {
+				console.log(result);
+				const messageObj = {
+					type: CONSTANTS.RTC_MESSAGE_TYPES.CHAT_MESSAGE,
+					content: {
+						chatMessage,
+						sender
+					}
+				};
+				const messageStr = JSON.stringify(messageObj, null, 4);
 
-			const messageObj = {
-				type: CONSTANTS.RTC_MESSAGE_TYPES.CHAT_MESSAGE,
-				content: {
-					chatMessage,
-					sender
-				}
-			};
-			const messageStr = JSON.stringify(messageObj, null, 4);
-
-			this.rtcClient.send(messageStr);
-			this.addChatMessage(chatMessage, sender);
-			textAreaDiv.value = '';
-		});
+				this.rtcClient.send(messageStr);
+				this.addChatMessage(chatMessage, sender);
+				textAreaDiv.value = '';
+			});
 	});
 
 	this.rootNode.appendChild(this.sendButton);

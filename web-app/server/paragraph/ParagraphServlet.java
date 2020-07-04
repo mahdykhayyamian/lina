@@ -58,10 +58,10 @@ public class ParagraphServlet extends HttpServlet {
 
 		String sessionId = null;
 
-		Cookie userNameCookie = AuthenticationUtils.getCookie(request, "user-name");
+		Cookie givenNameCookie = AuthenticationUtils.getCookie(request, "given-name");
 
-		String userName = userNameCookie.getValue();
-		request.setAttribute("user-name", userName);
+		String givenName = givenNameCookie.getValue();
+		request.setAttribute("given-name", givenName);
 
 		String roomNumber = null;
 

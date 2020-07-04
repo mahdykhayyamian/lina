@@ -4,8 +4,8 @@ export const getRoomNumberFromUrl = function() {
 	return roomNumber;
 };
 
-export const getUserName = function() {
-	return getCookie('user-name');
+export const getGivenName = function() {
+	return getCookie('given-name');
 };
 
 function getCookie(name) {
