@@ -77,6 +77,8 @@ const ChatComponent = function(rtcClient) {
 	});
 
 	this.rootNode.appendChild(this.sendButton);
+
+	loadChatsFromServer(this);
 };
 
 ChatComponent.prototype.createWidget = function() {
@@ -98,6 +100,31 @@ ChatComponent.prototype.addChatMessage = function(content, senderGivenName) {
 	chatMessageDiv.innerHTML = `<div class="chat-sender"> ${senderGivenName} </div> <div class="chat-content"> ${content} </div>`;
 	chatMessageNodes.appendChild(chatMessageDiv);
 };
+
+function loadChatsFromServer(chatComponent) {
+	const request = ajax({
+		headers: {
+			'content-type': 'application/json'
+		}
+	});
+
+	const roomNumber = getRoomNumberFromUrl();
+
+	request
+		.get('/api/getChatMessages?roomNumber=' + roomNumber)
+		.then(chatMessages => {
+			console.log('loaded chat messages');
+			console.log(chatMessages);
+
+			for (let i = 0; i < chatMessages.length; i++) {
+				const chatMessage = chatMessages[i];
+				chatComponent.addChatMessage(
+					chatMessage.textContent,
+					chatMessage.senderGivenName
+				);
+			}
+		});
+}
 
 function onRecieveRTCMessage(chatComponent, rtcMessage) {
 	const message = JSON.parse(rtcMessage);
