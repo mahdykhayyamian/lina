@@ -9,6 +9,7 @@
 #chat-container {
 	display: flex;
 	flex-direction: column;
+    font-family: monospace;
 }
 
 #chat-messages {
@@ -19,6 +20,10 @@
 .chat-message {
 	display: flex;
 	flex-direction: row;
+    border-bottom: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: beige;
+    padding: 1px;
 }
 
 .chat-content {
@@ -26,9 +31,11 @@
 }
 
 .chat-sender {
-	background-color: salmon;
+	background-color: darkcyan;
 	margin: 6px;
 	color: white;
+    padding: 4px;
+    height: 15px;
 }
 
 #send-button {
