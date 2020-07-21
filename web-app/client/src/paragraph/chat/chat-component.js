@@ -117,6 +117,7 @@ ChatComponent.prototype.addChatMessage = function(content, senderGivenName) {
 
 	chatMessageDiv.innerHTML = `<div class="chat-sender"> ${senderGivenName} </div> <div class="chat-content"> ${content} </div>`;
 	chatMessageNodes.appendChild(chatMessageDiv);
+	chatMessageNodes.scrollTop = chatMessageNodes.scrollHeight;
 };
 
 function loadChatsFromServer(chatComponent) {
