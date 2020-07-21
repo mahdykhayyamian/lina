@@ -51,7 +51,6 @@ function determineDisplayType() {
 
 function buildLayout(boardsComponent, rtcClient) {
 	const displaySize = determineDisplayType();
-	console.log(displaySize);
 	switch (displaySize) {
 		case CONSTANTS.DISPLAY_SIZE_SMALL:
 			return createLayoutForSmallSizeDisplays(boardsComponent, rtcClient);
@@ -81,7 +80,7 @@ function createLayoutForSmallSizeDisplays(boardsComponent, rtcClient) {
 		[commandsWidget, chatWidget],
 		SMARTFRAME_CONSTANTS.TOP_TO_BOTTOM
 	);
-	leftContainer.childrenRatios = [0.7, 0.3];
+	leftContainer.childrenRatios = [0.5, 0.5];
 	commandsWidget.widgetContainer = leftContainer;
 	chatWidget.widgetContainer = leftContainer;
 

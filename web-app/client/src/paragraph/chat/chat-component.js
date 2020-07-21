@@ -131,7 +131,6 @@ function loadChatsFromServer(chatComponent) {
 	request
 		.get('/api/getChatMessages?roomNumber=' + roomNumber)
 		.then(chatMessages => {
-
 			for (let i = 0; i < chatMessages.length; i++) {
 				const chatMessage = chatMessages[i];
 				chatComponent.addChatMessage(

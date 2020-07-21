@@ -3,7 +3,10 @@
     width: -moz-available;          /* WebKit-based browsers will ignore this. */
     width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
     width: fill-available;	
-    height: 150px;
+    height: 100px;
+    margin: 5px;
+    border-width: 1px;
+    border-color: blue;
 }
 
 #chat-container {
