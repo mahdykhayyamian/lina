@@ -25,16 +25,24 @@ const ChatComponent = function(rtcClient) {
 	this.rootNode.innerHTML = `
 		<div id="chat-messages">
 		</div>
-		<div id="chat-compose">
-			<textArea id="chat-compose-text-area"></textArea>
-		</div>
 	`;
 
 	this.rootNode.style.setProperty('width', '100%');
 
+	this.chatCompose = document.createElement('div');
+	this.chatCompose.id = 'chat-compose';
+
+	this.textArea = document.createElement('textArea');
+	this.textArea.id = 'chat-compose-text-area';
+
+	this.chatCompose.appendChild(this.textArea);
+
 	this.sendButton = document.createElement('div');
 	this.sendButton.id = 'send-button';
 	this.sendButton.innerHTML = `<div class="btn">Send</div>`;
+
+	this.chatCompose.appendChild(this.sendButton);
+	this.rootNode.appendChild(this.chatCompose);
 
 	this.sendButton.addEventListener('click', () => {
 		console.log('in send button click...');
@@ -79,8 +87,6 @@ const ChatComponent = function(rtcClient) {
 				textAreaDiv.value = '';
 			});
 	});
-
-	this.rootNode.appendChild(this.sendButton);
 
 	loadChatsFromServer(this);
 };
