@@ -18,15 +18,19 @@ const ChatComponent = function(rtcClient) {
 	});
 
 	this.rootNode = document.createElement('div');
-	this.rootNode.innerHTML = `<div id="chat-container" class="spa-text">
-			<div id="chat-messages">
-			</div>
-			<div id="chat-compose">
-				<textArea id="chat-compose-text-area"></textArea>
-			</div>
-		</div>`;
+
+	this.rootNode.id = 'chat-container';
+	this.rootNode.classList.add('spa-text');
+
+	this.rootNode.innerHTML = `
+		<div id="chat-messages">
+		</div>
+		<div id="chat-compose">
+			<textArea id="chat-compose-text-area"></textArea>
+		</div>
+	`;
+
 	this.rootNode.style.setProperty('width', '100%');
-	this.rootNode.style.setProperty('height', '100%');
 
 	this.sendButton = document.createElement('div');
 	this.sendButton.id = 'send-button';
@@ -85,7 +89,22 @@ ChatComponent.prototype.createWidget = function() {
 	const chatWidget = new Widget('chatWidget', [
 		{
 			title: 'Chat',
-			contentNode: this.rootNode
+			contentNode: this.rootNode,
+			onRenderCallback: widget => {
+				console.log('render chat widget...');
+				const chatContainerDiv = this.rootNode;
+				console.log(chatContainerDiv);
+				if (chatContainerDiv) {
+					chatContainerDiv.style.setProperty(
+						'width',
+						widget.width + 'px'
+					);
+					chatContainerDiv.style.setProperty(
+						'height',
+						widget.contentHeight + 'px'
+					);
+				}
+			}
 		}
 	]);
 
