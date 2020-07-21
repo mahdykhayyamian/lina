@@ -65,6 +65,7 @@
     display: inline-table;
     border-width: 0px;
     align-self: center;
+    flex-shrink: 0;
 }
 
 .board.selected {

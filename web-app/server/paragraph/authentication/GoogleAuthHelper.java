@@ -43,7 +43,8 @@ public class GoogleAuthHelper {
 				String givenName = (String) payload.get("given_name");
 				
 				System.out.println("validated token successfully");
-				return ParsedGoogleToken.builder()
+
+				 ParsedGoogleToken token = ParsedGoogleToken.builder()
 					.userId(userId)
 					.email(email)
 					.name(name)
@@ -52,6 +53,11 @@ public class GoogleAuthHelper {
 					.familyName(familyName)
 					.givenName(givenName)
 				.build();
+
+				System.out.println(token);
+
+				return token;
+
 			} else {
 			  System.out.println("Invalid ID token.");
 			  return null;

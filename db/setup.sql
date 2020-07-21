@@ -66,6 +66,16 @@ CREATE TABLE IF NOT EXISTS paragraph.ROOM_USERS (
     updated TIMESTAMP NOT NULL default CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS paragraph.CHAT_MESSAGE (
+    id SERIAL PRIMARY KEY NOT NULL,
+    room_id INTEGER REFERENCES paragraph.ROOM(id),
+    sender_email TEXT,
+    sender_given_name TEXT,
+    text_content TEXT,
+    created TIMESTAMP NOT NULL,
+    updated TIMESTAMP NOT NULL default CURRENT_TIMESTAMP
+);
+
 GRANT USAGE ON SCHEMA paragraph TO lina_app;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA paragraph TO lina_app;
 GRANT USAGE ON ALL SEQUENCES IN SCHEMA paragraph TO lina_app;

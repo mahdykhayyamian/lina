@@ -6,8 +6,8 @@ function onSuccess(googleUser) {
 	console.log('given name :' + profile.getGivenName());
 	console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 
-	const userName = document.getElementById('user-name');
-	userName.value = profile.getGivenName();
+	const givenName = document.getElementById('given-name');
+	givenName.value = profile.getGivenName();
 
 	const googleAuthToken = document.getElementById('google-auth-token');
 	googleAuthToken.value = googleUser.getAuthResponse().id_token;
