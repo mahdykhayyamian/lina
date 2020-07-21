@@ -45,12 +45,8 @@ const ChatComponent = function(rtcClient) {
 	this.rootNode.appendChild(this.chatCompose);
 
 	this.sendButton.addEventListener('click', () => {
-		console.log('in send button click...');
-
 		const textAreaDiv = document.getElementById('chat-compose-text-area');
 		const chatMessage = textAreaDiv.value;
-
-		console.log(chatMessage);
 
 		const senderEmail = getUserEmail();
 		const senderGivenName = getGivenName();
@@ -71,7 +67,6 @@ const ChatComponent = function(rtcClient) {
 				textContent: chatMessage
 			})
 			.then(result => {
-				console.log(result);
 				const messageObj = {
 					type: CONSTANTS.RTC_MESSAGE_TYPES.CHAT_MESSAGE,
 					content: {
@@ -97,9 +92,7 @@ ChatComponent.prototype.createWidget = function() {
 			title: 'Chat',
 			contentNode: this.rootNode,
 			onRenderCallback: widget => {
-				console.log('render chat widget...');
 				const chatContainerDiv = this.rootNode;
-				console.log(chatContainerDiv);
 				if (chatContainerDiv) {
 					chatContainerDiv.style.setProperty(
 						'width',
@@ -138,8 +131,6 @@ function loadChatsFromServer(chatComponent) {
 	request
 		.get('/api/getChatMessages?roomNumber=' + roomNumber)
 		.then(chatMessages => {
-			console.log('loaded chat messages');
-			console.log(chatMessages);
 
 			for (let i = 0; i < chatMessages.length; i++) {
 				const chatMessage = chatMessages[i];
@@ -156,7 +147,6 @@ function onRecieveRTCMessage(chatComponent, rtcMessage) {
 
 	switch (message.type) {
 		case CONSTANTS.RTC_MESSAGE_TYPES.CHAT_MESSAGE:
-			console.log('got chat rtc message');
 			chatComponent.addChatMessage(
 				message.content.chatMessage,
 				message.content.senderGivenName
