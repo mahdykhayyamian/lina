@@ -25,6 +25,24 @@ public class RoomRepository {
         return id;
     }
 
+    public static boolean roomExist(String roomNumber) throws Exception {
+        System.out.println("Check if room exist");
+        Connection conn = DBManager.getConnection();
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery("select * from lina.paragraph.room where id = " + roomNumber);
+
+        while (rs.next()) {
+            System.out.print("Column 1 returned ");
+            System.out.println(rs.getString(1));
+            return true;
+        }
+
+        rs.close();
+        st.close();
+
+        return false;
+    }
+
     public static java.sql.Timestamp getCurrentTimeStamp() {
         java.util.Date today = new java.util.Date();
         return new java.sql.Timestamp(today.getTime());
