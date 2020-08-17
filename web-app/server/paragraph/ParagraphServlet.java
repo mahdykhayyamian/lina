@@ -65,19 +65,28 @@ public class ParagraphServlet extends HttpServlet {
 
 		String roomNumber = null;
 
-		if (roomNumberParam != null) {
-			System.out.println("need to load room from roomNumber in param : " + roomNumberParam);
-			RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/src/paragraph/app.jsp");
-			RequetsDispatcherObj.forward(request, response);
-		} else {
-			try{
+		try {
+			if (roomNumberParam != null) {
+				boolean roomExist = RoomRepository.roomExist(roomNumberParam);
+
+				if (roomExist) {
+					System.out.println("need to load room from roomNumber in param : " + roomNumberParam);
+					RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/src/paragraph/app.jsp");
+					RequetsDispatcherObj.forward(request, response);
+				} else {
+					System.out.println("room does not exist");
+					RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/src/paragraph/create-room.jsp");
+					RequetsDispatcherObj.forward(request, response);
+				}
+
+			} else {
 				System.out.println("no room Number in param, we need to create a new board");
 				int roomNum = RoomRepository.createRoom();
 				roomNumber = Integer.toString(roomNum);
 				response.sendRedirect("/paragraph?roomNumber=" + roomNumber);
-			} catch(Exception e) {
-				e.printStackTrace();
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

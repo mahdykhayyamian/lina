@@ -129,7 +129,7 @@ function isTomcatRunning {
 function shutDownTomcat {
 	echoGreen "shutting down tomcat..."
 	cd ${CATALINA_HOME}/bin
-	./shutdown.sh
+	pkill -9 -f tomcat
 }
 
 function createWarFile {
