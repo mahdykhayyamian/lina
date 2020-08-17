@@ -78,7 +78,6 @@ public class ParagraphServlet extends HttpServlet {
 					RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/src/paragraph/create-room.jsp");
 					RequetsDispatcherObj.forward(request, response);
 				}
-
 			} else {
 				System.out.println("no room Number in param, we need to create a new board");
 				int roomNum = RoomRepository.createRoom();

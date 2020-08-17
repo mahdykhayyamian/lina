@@ -1,0 +1,22 @@
+.new-room-container {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	position: fixed;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	font-family: monospace;
+	font-size: 18px;
+}
+
+.new-room-button {
+    background-color: #6764E8;
+    font-family: monospace;
+    font-size: 18px;
+    width: 200px;
+    border-color: beige;
+    margin-left: 10px;
+    border-radius: 5px;
+    color:white;
+}
