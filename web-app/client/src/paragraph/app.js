@@ -178,7 +178,9 @@ function addFeedbackLink(rootContainer) {
 		console.log('feedback clicked...');
 
 		// const linaAppDiv = document.getElementById('lina.app');
-		html2canvas(rootContainer.rootDiv, {}).then(function(canvas) {
+		html2canvas(rootContainer.rootDiv, { useCORS: true }).then(function(
+			canvas
+		) {
 			const feedbackModal = document.createElement('div');
 			feedbackModal.className = 'modal';
 
