@@ -9,8 +9,10 @@ import { ChatComponent } from 'src/paragraph/chat/chat-component.js';
 import { CONSTANTS } from 'src/paragraph/constants.js';
 import RTCClient from 'src/paragraph/rtc/rtc-client.js';
 import { getRoomNumberFromUrl } from 'src/paragraph/utils.js';
+import * as html2canvas from 'html2canvas';
 
 window.onload = function() {
+	console.log('onload running...');
 	const appDiv = document.getElementById('lina.app');
 	appDiv.style.setProperty('position', 'absolute');
 
@@ -37,6 +39,8 @@ window.onload = function() {
 	window.onresize = onResize;
 	onResize();
 	boardsComponent.loadBoardsFromServer();
+
+	addFeedbackLink(rootContainer);
 };
 
 function determineDisplayType() {
@@ -156,4 +160,43 @@ function createLayoutForLargeSizeDisplays(boardsComponent, rtcClient) {
 	chatWidget.widgetContainer = rootContainer;
 
 	return rootContainer;
+}
+
+function addFeedbackLink(rootContainer) {
+	console.log('addFeedbackLink...');
+	console.log('html2canvas');
+	console.log(html2canvas);
+
+	console.log(rootContainer);
+
+	const accountInfoDiv = document.getElementById('account-info');
+
+	const feedbackLink = document.createElement('a');
+
+	feedbackLink.setAttribute('href', '#');
+	feedbackLink.onclick = () => {
+		console.log('feedback clicked...');
+
+		// const linaAppDiv = document.getElementById('lina.app');
+		html2canvas(rootContainer.rootDiv, {}).then(function(canvas) {
+			const feedbackModal = document.createElement('div');
+			feedbackModal.className = 'modal';
+
+			const screenshotContainer = document.createElement('div');
+			screenshotContainer.className = 'screenshot-container';
+
+			feedbackModal.appendChild(screenshotContainer);
+			document.body.appendChild(feedbackModal);
+
+			const imgData = canvas.toDataURL('image/png');
+			const image = new Image(300);
+			image.src = imgData;
+
+			screenshotContainer.appendChild(image);
+		});
+	};
+
+	feedbackLink.innerText = 'We love Your Feedback!';
+
+	accountInfoDiv.appendChild(feedbackLink);
 }
