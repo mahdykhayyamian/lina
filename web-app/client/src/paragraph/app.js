@@ -9,7 +9,7 @@ import { ChatComponent } from 'src/paragraph/chat/chat-component.js';
 import { CONSTANTS } from 'src/paragraph/constants.js';
 import RTCClient from 'src/paragraph/rtc/rtc-client.js';
 import { getRoomNumberFromUrl } from 'src/paragraph/utils.js';
-import * as html2canvas from 'html2canvas';
+import addFeedbackLink from './feedback.js';
 
 window.onload = function() {
 	console.log('onload running...');
@@ -162,43 +162,43 @@ function createLayoutForLargeSizeDisplays(boardsComponent, rtcClient) {
 	return rootContainer;
 }
 
-function addFeedbackLink(rootContainer) {
-	console.log('addFeedbackLink...');
-	console.log('html2canvas');
-	console.log(html2canvas);
+// function addFeedbackLink(rootContainer) {
+// 	console.log('addFeedbackLink...');
+// 	console.log('html2canvas');
+// 	console.log(html2canvas);
 
-	console.log(rootContainer);
+// 	console.log(rootContainer);
 
-	const accountInfoDiv = document.getElementById('account-info');
+// 	const accountInfoDiv = document.getElementById('account-info');
 
-	const feedbackLink = document.createElement('a');
+// 	const feedbackLink = document.createElement('a');
 
-	feedbackLink.setAttribute('href', '#');
-	feedbackLink.onclick = () => {
-		console.log('feedback clicked...');
+// 	feedbackLink.setAttribute('href', '#');
+// 	feedbackLink.onclick = () => {
+// 		console.log('feedback clicked...');
 
-		// const linaAppDiv = document.getElementById('lina.app');
-		html2canvas(rootContainer.rootDiv, { useCORS: true }).then(function(
-			canvas
-		) {
-			const feedbackModal = document.createElement('div');
-			feedbackModal.className = 'modal';
+// 		// const linaAppDiv = document.getElementById('lina.app');
+// 		html2canvas(rootContainer.rootDiv, { useCORS: true }).then(function(
+// 			canvas
+// 		) {
+// 			const feedbackModal = document.createElement('div');
+// 			feedbackModal.className = 'modal';
 
-			const screenshotContainer = document.createElement('div');
-			screenshotContainer.className = 'screenshot-container';
+// 			const screenshotContainer = document.createElement('div');
+// 			screenshotContainer.className = 'screenshot-container';
 
-			feedbackModal.appendChild(screenshotContainer);
-			document.body.appendChild(feedbackModal);
+// 			feedbackModal.appendChild(screenshotContainer);
+// 			document.body.appendChild(feedbackModal);
 
-			const imgData = canvas.toDataURL('image/png');
-			const image = new Image(300);
-			image.src = imgData;
+// 			const imgData = canvas.toDataURL('image/png');
+// 			const image = new Image(300);
+// 			image.src = imgData;
 
-			screenshotContainer.appendChild(image);
-		});
-	};
+// 			screenshotContainer.appendChild(image);
+// 		});
+// 	};
 
-	feedbackLink.innerText = 'We love Your Feedback!';
+// 	feedbackLink.innerText = 'We love Your Feedback!';
 
-	accountInfoDiv.appendChild(feedbackLink);
-}
+// 	accountInfoDiv.appendChild(feedbackLink);
+// }
