@@ -21,11 +21,23 @@ export default function addFeedbackLink(rootContainer) {
 			const feedbackModal = document.createElement('div');
 			feedbackModal.className = 'modal';
 
+			const feedbackHeader = document.createElement('div');
+			feedbackHeader.className = 'feedback-header';
+			feedbackModal.appendChild(feedbackHeader);
+
+			const closeIcon = document.createElement('img');
+			closeIcon.className = 'close-icon';
+			closeIcon.src = '/src/resources/icons/close.png';
+			feedbackHeader.appendChild(closeIcon);
+			closeIcon.onclick = () => {
+				console.log('closing modal...');
+				document.body.removeChild(feedbackModal);
+			};
+
 			const screenshotContainer = document.createElement('div');
 			screenshotContainer.className = 'screenshot-container';
 
 			feedbackModal.appendChild(screenshotContainer);
-			document.body.appendChild(feedbackModal);
 
 			const imgData = canvas.toDataURL('image/png');
 			const image = new Image(300);
@@ -35,16 +47,19 @@ export default function addFeedbackLink(rootContainer) {
 
 			const feedbackTextArea = document.createElement('textArea');
 			feedbackTextArea.className = 'feedback-txt';
+			feedbackTextArea.placeholder = 'Your Feedback...';
 			feedbackModal.appendChild(feedbackTextArea);
 
 			const feedbackButton = document.createElement('button');
 			feedbackButton.innerText = 'Submit';
 			feedbackButton.className = 'feedback-button';
 			feedbackModal.appendChild(feedbackButton);
+
+			document.body.appendChild(feedbackModal);
 		});
 	};
 
-	feedbackLink.innerText = 'We love Your Feedback!';
+	feedbackLink.innerText = 'Send Feedback!';
 
 	accountInfoDiv.appendChild(feedbackLink);
 

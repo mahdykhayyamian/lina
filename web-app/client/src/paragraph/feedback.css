@@ -7,6 +7,8 @@
     display: flex;
     flex-direction: column;
 
+    padding: 5px;
+
     background: white;
     border: solid;
     border-width: 1px;
@@ -33,10 +35,13 @@
 	display: flex;
     flex-direction: column;
     align-items: center;
+
+    margin-bottom: 10px;
 }
 
 .feedback-txt {
-    height: 200px;
+    flex-grow: 1;
+    padding: 5px;
 }
 
 .feedback-button {
@@ -55,4 +60,12 @@
     align-items: center;
     justify-content: center;
     height: 30px;
+}
+
+.feedback-header {
+    height : 50px;
+}
+
+.close-icon {
+    width : 24px;
 }
