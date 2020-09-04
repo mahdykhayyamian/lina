@@ -35,10 +35,11 @@ export default function addFeedbackLink(rootContainer) {
 			closeIcon.className = 'close-icon';
 			closeIcon.src = '/src/resources/icons/close.png';
 			feedbackHeader.appendChild(closeIcon);
+
 			closeIcon.onclick = () => {
-				console.log('closing modal...');
 				document.body.removeChild(feedbackModal);
 			};
+
 			const screenshotContainer = document.createElement('div');
 			screenshotContainer.className = 'screenshot-container';
 			feedbackModal.appendChild(screenshotContainer);
