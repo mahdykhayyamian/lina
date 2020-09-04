@@ -15,16 +15,22 @@ export default function addFeedbackLink(rootContainer) {
 	feedbackLink.onclick = () => {
 		console.log('feedback clicked...');
 
+		const feedbackModal = document.createElement('div');
+		feedbackModal.className = 'modal';
+
+		const loadingImage = document.createElement('img');
+		loadingImage.src = '/src/resources/images/spinner.svg';
+		loadingImage.className = 'loading-icon';
+		feedbackModal.appendChild(loadingImage);
+		document.body.appendChild(feedbackModal);
+
 		html2canvas(rootContainer.rootDiv, { useCORS: true }).then(function(
 			canvas
 		) {
-			const feedbackModal = document.createElement('div');
-			feedbackModal.className = 'modal';
-
+			feedbackModal.removeChild(loadingImage);
 			const feedbackHeader = document.createElement('div');
 			feedbackHeader.className = 'feedback-header';
 			feedbackModal.appendChild(feedbackHeader);
-
 			const closeIcon = document.createElement('img');
 			closeIcon.className = 'close-icon';
 			closeIcon.src = '/src/resources/icons/close.png';
@@ -33,33 +39,25 @@ export default function addFeedbackLink(rootContainer) {
 				console.log('closing modal...');
 				document.body.removeChild(feedbackModal);
 			};
-
 			const screenshotContainer = document.createElement('div');
 			screenshotContainer.className = 'screenshot-container';
-
 			feedbackModal.appendChild(screenshotContainer);
-
 			const imgData = canvas.toDataURL('image/png');
 			const image = new Image(300);
 			image.src = imgData;
-
 			screenshotContainer.appendChild(image);
-
 			const feedbackTextArea = document.createElement('textArea');
 			feedbackTextArea.className = 'feedback-txt';
 			feedbackTextArea.placeholder = 'Your Feedback...';
 			feedbackModal.appendChild(feedbackTextArea);
-
 			const feedbackButton = document.createElement('button');
 			feedbackButton.innerText = 'Submit';
 			feedbackButton.className = 'feedback-button';
 			feedbackModal.appendChild(feedbackButton);
-
-			document.body.appendChild(feedbackModal);
 		});
 	};
 
-	feedbackLink.innerText = 'Send Feedback!';
+	feedbackLink.innerText = 'Send Feedback';
 
 	accountInfoDiv.appendChild(feedbackLink);
 
