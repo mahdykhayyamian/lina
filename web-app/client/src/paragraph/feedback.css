@@ -38,7 +38,7 @@
     margin: 10px;
 }
 
-.feedback-button {
+.submit-button-container {
     background-color: #6764E8;
     font-size: 16px;
     font-family: monospace;
@@ -54,6 +54,7 @@
     border-color: beige;
     border-radius: 5px;
     border-style: unset;
+    cursor: pointer;
 }
 
 .feedback-header {
@@ -61,6 +62,9 @@
     margin-bottom: 5px;
     border-color: darkgrey;
     background-color: #FDF4E7;
+    border-bottom: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: bisque;
 }
 
 .close-icon {
@@ -76,4 +80,8 @@
     align-self: center;
     flex-grow: 1;
     width: 100%;
+}
+
+.submit-spinner {
+    width: 20px;
 }

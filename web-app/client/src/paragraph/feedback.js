@@ -1,4 +1,5 @@
 import * as html2canvas from 'html2canvas';
+import ajax from '@fdaciuk/ajax';
 
 export default function addFeedbackLink(rootContainer) {
 	console.log('addFeedbackLink...');
@@ -6,6 +7,12 @@ export default function addFeedbackLink(rootContainer) {
 	console.log(html2canvas);
 
 	console.log(rootContainer);
+
+	const request = ajax({
+		headers: {
+			'content-type': 'application/json'
+		}
+	});
 
 	const accountInfoDiv = document.getElementById('account-info');
 
@@ -31,6 +38,7 @@ export default function addFeedbackLink(rootContainer) {
 			const feedbackHeader = document.createElement('div');
 			feedbackHeader.className = 'feedback-header';
 			feedbackModal.appendChild(feedbackHeader);
+
 			const closeIcon = document.createElement('img');
 			closeIcon.className = 'close-icon';
 			closeIcon.src = '/src/resources/icons/close.png';
@@ -43,27 +51,49 @@ export default function addFeedbackLink(rootContainer) {
 			const screenshotContainer = document.createElement('div');
 			screenshotContainer.className = 'screenshot-container';
 			feedbackModal.appendChild(screenshotContainer);
+
 			const imgData = canvas.toDataURL('image/png');
 			const image = new Image(300);
 			image.src = imgData;
 			screenshotContainer.appendChild(image);
+
 			const feedbackTextArea = document.createElement('textArea');
 			feedbackTextArea.className = 'feedback-txt';
 			feedbackTextArea.placeholder = 'Your Feedback...';
 			feedbackModal.appendChild(feedbackTextArea);
-			const feedbackButton = document.createElement('button');
+
+			const submitContainer = document.createElement('div');
+			submitContainer.className = 'submit-button-container';
+			feedbackModal.appendChild(submitContainer);
+
+			const feedbackButton = document.createElement('div');
 			feedbackButton.innerText = 'Submit';
-			feedbackButton.className = 'feedback-button';
-			feedbackModal.appendChild(feedbackButton);
+			submitContainer.appendChild(feedbackButton);
+
+			submitContainer.onclick = () => {
+				console.log('text : ' + feedbackTextArea.value);
+				console.log('img : ' + imgData);
+
+				const submitSpinner = document.createElement('img');
+				submitSpinner.src = '/src/resources/images/spinner.svg';
+				submitSpinner.className = 'submit-spinner';
+				submitContainer.appendChild(submitSpinner);
+
+				request
+					.post('/api/addFeedback', {
+						feedback: feedbackTextArea.value,
+						screenshotImg: imgData
+					})
+					.then(() => {
+						document.body.removeChild(feedbackModal);
+					});
+			};
 		});
 	};
 
 	feedbackLink.innerText = 'Send Feedback';
 
 	accountInfoDiv.appendChild(feedbackLink);
-
-	console.log('accountInfoDiv');
-	console.log(accountInfoDiv);
 }
 
 require('src/paragraph/feedback.css');
