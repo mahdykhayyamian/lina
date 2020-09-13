@@ -70,6 +70,9 @@ public class AddFeedbackServlet extends HttpServlet {
 			String data = ServletUtils.getPostBody(request);
 			System.out.println(data);
 
+			Gson gson = new Gson();
+			FeedbackPayload payload = gson.fromJson(data, FeedbackPayload.class);
+
 			Properties prop = new Properties();
 			prop.put("mail.smtp.auth", true);
 			prop.put("mail.smtp.starttls.enable", "true");
@@ -78,19 +81,19 @@ public class AddFeedbackServlet extends HttpServlet {
 			prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 
 			Session session = Session.getInstance(prop, new Authenticator() {
-			    @Override
-			    protected PasswordAuthentication getPasswordAuthentication() {
-			        return new PasswordAuthentication("linaparagraph@gmail.com", "5@lamLinaParagraph");
-			    }
+				@Override
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication("feedback@lina.run", "5@lamLinaFeedback");
+				}
 			});
 
 			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("linaparagraph@gmail.com"));
+			message.setFrom(new InternetAddress("feedback@lina.run"));
 			message.setRecipients(
-			  Message.RecipientType.TO, InternetAddress.parse("mahdy.khayyamian@gmail.com"));
+				Message.RecipientType.TO, InternetAddress.parse("feedback@lina.run"));
 			message.setSubject("Lina Feedback Test");
 			 
-			String msg = "This is my first email using JavaMailer";
+			String msg = payload.feedback;
 			 
 			MimeBodyPart mimeBodyPart = new MimeBodyPart();
 			mimeBodyPart.setContent(msg, "text/html");
@@ -108,5 +111,13 @@ public class AddFeedbackServlet extends HttpServlet {
 		}
 	}
 
+}
+
+
+@Data
+@AllArgsConstructor
+class FeedbackPayload {
+   String feedback;
+   String screenshotImg;
 }
 
