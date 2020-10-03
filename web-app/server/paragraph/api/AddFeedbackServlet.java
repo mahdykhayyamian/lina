@@ -91,9 +91,9 @@ public class AddFeedbackServlet extends HttpServlet {
 			message.setFrom(new InternetAddress("feedback@lina.run"));
 			message.setRecipients(
 				Message.RecipientType.TO, InternetAddress.parse("feedback@lina.run"));
-			message.setSubject("Lina Feedback Test");
+			message.setSubject(payload.title);
 			 
-			String msg = payload.feedback;
+			String msg = payload.detail;
 			 
 			MimeBodyPart mimeBodyPart = new MimeBodyPart();
 			mimeBodyPart.setContent(msg, "text/html");
@@ -117,7 +117,8 @@ public class AddFeedbackServlet extends HttpServlet {
 @Data
 @AllArgsConstructor
 class FeedbackPayload {
-   String feedback;
+   String title;
+   String detail;
    String screenshotImg;
 }
 

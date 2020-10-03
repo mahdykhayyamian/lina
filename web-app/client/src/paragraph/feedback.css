@@ -33,7 +33,14 @@
 }
 
 .feedback-txt {
+    font-family: monospace;
     flex-grow: 1;
+    padding: 5px;
+    margin: 10px;
+}
+
+.feedback-title {
+    font-family: monospace;
     padding: 5px;
     margin: 10px;
 }

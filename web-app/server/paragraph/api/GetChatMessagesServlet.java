@@ -54,7 +54,7 @@ public class GetChatMessagesServlet extends HttpServlet {
             return;
         }
 
-		try{
+		try {
 			String roomNumber = request.getParameter("roomNumber");
 			System.out.println("Room number is " + roomNumber);
 

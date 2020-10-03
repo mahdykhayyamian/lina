@@ -57,9 +57,14 @@ export default function addFeedbackLink(rootContainer) {
 			image.src = imgData;
 			screenshotContainer.appendChild(image);
 
+			const feedbackTitle = document.createElement('input');
+			feedbackTitle.className = 'feedback-title';
+			feedbackTitle.placeholder = 'Feedback Title';
+			feedbackModal.appendChild(feedbackTitle);
+
 			const feedbackTextArea = document.createElement('textArea');
 			feedbackTextArea.className = 'feedback-txt';
-			feedbackTextArea.placeholder = 'Your Feedback...';
+			feedbackTextArea.placeholder = 'Feedback Detail';
 			feedbackModal.appendChild(feedbackTextArea);
 
 			const submitContainer = document.createElement('div');
@@ -81,7 +86,8 @@ export default function addFeedbackLink(rootContainer) {
 
 				request
 					.post('/api/addFeedback', {
-						feedback: feedbackTextArea.value,
+						title: feedbackTitle.value,
+						detail: feedbackTextArea.value,
 						screenshotImg: imgData
 					})
 					.then(() => {
