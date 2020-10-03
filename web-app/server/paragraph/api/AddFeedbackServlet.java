@@ -28,7 +28,10 @@ import javax.mail.Multipart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.InternetAddress;
-
+import javax.mail.BodyPart;
+import javax.mail.util.ByteArrayDataSource; 
+import javax.activation.DataHandler;
+import java.util.Base64;
 
 @WebServlet("/api/addFeedback")
 public class AddFeedbackServlet extends HttpServlet {
@@ -92,17 +95,26 @@ public class AddFeedbackServlet extends HttpServlet {
 			message.setRecipients(
 				Message.RecipientType.TO, InternetAddress.parse("feedback@lina.run"));
 			message.setSubject(payload.title);
+
+			Multipart multipart = new MimeMultipart();
 			 
+			// feedback detail
 			String msg = payload.detail;
-			 
 			MimeBodyPart mimeBodyPart = new MimeBodyPart();
 			mimeBodyPart.setContent(msg, "text/html");
-			 
-			Multipart multipart = new MimeMultipart();
 			multipart.addBodyPart(mimeBodyPart);
 			 
+			// screenshot attachment
+			String base64 = payload.screenshotImg.split(",")[1];
+			byte[] rawImage = Base64.getDecoder().decode(base64);
+			BodyPart imagePart = new MimeBodyPart();
+			ByteArrayDataSource imageDataSource = new ByteArrayDataSource(rawImage,"image/png");
+			imagePart.setDataHandler(new DataHandler(imageDataSource));
+			imagePart.setHeader("Content-ID", "<qrImage>");
+			imagePart.setFileName("Screenshot.png");
+			multipart.addBodyPart(imagePart);
+
 			message.setContent(multipart);
-			 
 			Transport.send(message);
 
 		} catch (Exception e) {
@@ -110,7 +122,6 @@ public class AddFeedbackServlet extends HttpServlet {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
 	}
-
 }
 
 
