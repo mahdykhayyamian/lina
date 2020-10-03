@@ -9,8 +9,10 @@ import { ChatComponent } from 'src/paragraph/chat/chat-component.js';
 import { CONSTANTS } from 'src/paragraph/constants.js';
 import RTCClient from 'src/paragraph/rtc/rtc-client.js';
 import { getRoomNumberFromUrl } from 'src/paragraph/utils.js';
+import addFeedbackLink from './feedback.js';
 
 window.onload = function() {
+	console.log('onload running...');
 	const appDiv = document.getElementById('lina.app');
 	appDiv.style.setProperty('position', 'absolute');
 
@@ -37,6 +39,8 @@ window.onload = function() {
 	window.onresize = onResize;
 	onResize();
 	boardsComponent.loadBoardsFromServer();
+
+	addFeedbackLink(rootContainer);
 };
 
 function determineDisplayType() {

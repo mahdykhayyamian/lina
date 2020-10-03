@@ -14,9 +14,12 @@
 	</head>
 
 	<body>
-		<div class="account-info">
-			Welcome <%= request.getAttribute("given-name") %>!  	<a href="#" onclick="signOut();">Sign out</a>
+		<div>
+			<div id="account-info">
+				Welcome <%= request.getAttribute("given-name") %>!  	
+				<a href="#" onclick="signOut();">Sign out</a> 
+			</div>
+			<div id="lina.app"></div>
 		</div>
-		<div id="lina.app"></div>
 	</body>
 </html>
