@@ -41,6 +41,7 @@
     border-bottom-style: dashed;
     border-bottom-width: 1px;
     height: 20px;
+    background-color: #1BBE7E;
 }
 
 .board-type-select ul li.selected {

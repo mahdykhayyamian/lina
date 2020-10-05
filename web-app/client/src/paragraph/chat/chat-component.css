@@ -29,6 +29,7 @@
     border-bottom-width: 1px;
     border-bottom-color: beige;
     padding: 1px;
+    flex-shrink: 0;
 }
 
 .chat-content {
@@ -67,4 +68,5 @@
 #chat-compose {
     display: flex;
     flex-direction: column;
+    flex-shrink: 0;
 }
