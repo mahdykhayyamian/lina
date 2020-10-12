@@ -52,7 +52,6 @@ export default class RTCClient {
 	}
 
 	send(message) {
-		console.log('going to send message');
 		this.webSocket.send(message);
 	}
 
