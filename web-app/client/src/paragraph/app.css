@@ -1,8 +1,18 @@
-#account-info {
+#app-header {
     padding-left: 15px;
     font-family: monospace;
+    display: flex;
 }
 
 body {
 	overflow-y: hidden;
+}
+
+.feedback-link {
+	margin-left : auto;
+	margin-right: 25px;
+}
+
+.sing-out-link {
+	padding-left: 10px;
 }

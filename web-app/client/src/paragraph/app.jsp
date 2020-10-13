@@ -15,9 +15,9 @@
 
 	<body>
 		<div>
-			<div id="account-info">
+			<div id="app-header">
 				Welcome <%= request.getAttribute("given-name") %>!  	
-				<a href="#" onclick="signOut();">Sign out</a> 
+				<a class='sing-out-link' href="#" onclick="signOut();">Sign out</a> 
 			</div>
 			<div id="lina.app"></div>
 		</div>

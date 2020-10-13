@@ -14,9 +14,10 @@ export default function addFeedbackLink(rootContainer) {
 		}
 	});
 
-	const accountInfoDiv = document.getElementById('account-info');
+	const appHeaderDiv = document.getElementById('app-header');
 
 	const feedbackLink = document.createElement('a');
+	feedbackLink.className = 'feedback-link';
 
 	feedbackLink.setAttribute('href', '#');
 	feedbackLink.onclick = () => {
@@ -99,7 +100,7 @@ export default function addFeedbackLink(rootContainer) {
 
 	feedbackLink.innerText = 'Send Feedback';
 
-	accountInfoDiv.appendChild(feedbackLink);
+	appHeaderDiv.appendChild(feedbackLink);
 }
 
 require('src/paragraph/feedback.css');
