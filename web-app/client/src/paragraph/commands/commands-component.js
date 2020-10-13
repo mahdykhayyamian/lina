@@ -9,7 +9,6 @@ const CommandsComponent = function(rtcClient) {
 
 	this.commandsRoot = createDiv(`
 		<div id="${CONSTANTS.COMMANDS_ACE_EDITOR_CONTAINER}" placeholder="Write commands to visualize..."></div>
-		<input type="button" class="btn run-command" value="Run" />
 		`);
 	this.commandsRoot.id = 'commands-container';
 
@@ -25,15 +24,23 @@ const CommandsComponent = function(rtcClient) {
 	attachAceEditor(`${CONSTANTS.COMMANDS_ACE_EDITOR_CONTAINER}`).then(
 		editor => {
 			this.commandsAceEditor = editor;
+
+			let timeout;
+
+			this.commandsAceEditor.on('change', () => {
+				if (timeout) {
+					clearTimeout(timeout);
+				}
+
+				timeout = setTimeout(() => {
+					this.runCommands();
+				}, 100);
+			});
 		}
 	);
 };
 
 CommandsComponent.prototype.createWidget = function() {
-	const runCommandClickEventHandler = event => {
-		this.runCommands();
-	};
-
 	const self = this;
 
 	const commandsWidget = new Widget('commands', [
@@ -41,7 +48,6 @@ CommandsComponent.prototype.createWidget = function() {
 			title: 'Commands',
 			contentNode: this.commandsRoot,
 			onRenderCallback: function(widget) {
-				const runButtonHeight = 40;
 				const extraSpace = 4;
 
 				const textEditorContainer = document.getElementById(
@@ -54,24 +60,9 @@ CommandsComponent.prototype.createWidget = function() {
 					);
 					textEditorContainer.style.setProperty(
 						'height',
-						textEditorContainer.parentNode.offsetHeight -
-							(runButtonHeight + extraSpace) +
-							'px'
+						textEditorContainer.parentNode.offsetHeight + 'px'
 					);
 					textEditorContainer.value = self.commands;
-				}
-
-				const buttons = document.querySelectorAll('.btn.run-command');
-				for (let i = 0; i < buttons.length; ++i) {
-					buttons[i].style.height = runButtonHeight + 'px';
-					buttons[i].style.top =
-						textEditorContainer.parentNode.offsetHeight -
-						(runButtonHeight + extraSpace / 2) +
-						'px';
-					buttons[i].addEventListener(
-						'click',
-						runCommandClickEventHandler
-					);
 				}
 
 				if (self.commandsAceEditor) {
