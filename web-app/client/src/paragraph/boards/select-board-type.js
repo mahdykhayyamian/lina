@@ -1,9 +1,9 @@
 import { ajaxProvider } from 'src/paragraph/providers.js';
 
 const boardTypeSelectorWidth = 250;
-const BoardTypeSelector = function(boardsComponent, onSelectCallback) {
+const BoardTypeSelector = function(boardsComponent, appendBoard) {
 	this.boardsComponent = boardsComponent;
-	this.onSelectCallback = onSelectCallback;
+	this.appendBoard = appendBoard;
 	this.shown = false;
 
 	this.options = null;
@@ -116,7 +116,7 @@ function updateMachingOptions(boardTypeSelector, matchingOptions) {
 
 		optionItem.addEventListener('click', event => {
 			removeMatchingOptions(boardTypeSelector);
-			boardTypeSelector.onSelectCallback(
+			boardTypeSelector.appendBoard(
 				boardTypeSelector.boardsComponent,
 				event.target.type,
 				event.target.id

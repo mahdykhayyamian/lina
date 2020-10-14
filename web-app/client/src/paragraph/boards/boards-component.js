@@ -314,6 +314,11 @@ function renderNewBoard(boardsComponent, boardType, newBoardId) {
 		loaderDiv.style.display = 'none';
 
 		newBoard.samples = samples;
+
+		if (newBoard.samples.length > 0) {
+			newBoard.commands = newBoard.samples[0];
+		}
+
 		boardsComponent.boards.push(newBoard);
 
 		registerBoardOnClickHandler(newBoard.rootElement, boardsComponent);

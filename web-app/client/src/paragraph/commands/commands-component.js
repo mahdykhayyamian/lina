@@ -45,7 +45,7 @@ CommandsComponent.prototype.createWidget = function() {
 
 	const commandsWidget = new Widget('commands', [
 		{
-			title: 'Commands',
+			title: 'Editor',
 			contentNode: this.commandsRoot,
 			onRenderCallback: function(widget) {
 				const extraSpace = 4;
@@ -71,7 +71,7 @@ CommandsComponent.prototype.createWidget = function() {
 			}
 		},
 		{
-			title: 'Sample Commands',
+			title: 'Samples',
 			contentNode: this.samplesRoot,
 
 			onRenderCallback: widget => {
