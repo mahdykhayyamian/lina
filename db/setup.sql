@@ -60,8 +60,9 @@ CREATE TABLE IF NOT EXISTS paragraph.SAMPLE_COMMAND (
 
 CREATE TABLE IF NOT EXISTS paragraph.ROOM_USERS (
     id SERIAL PRIMARY KEY NOT NULL,
-    lina_user_id INTEGER REFERENCES paragraph.LINA_USER(id),
     room_id INTEGER REFERENCES paragraph.ROOM(id),
+    username TEXT,
+    chat_color TEXT,
     created TIMESTAMP NOT NULL,
     updated TIMESTAMP NOT NULL default CURRENT_TIMESTAMP
 );

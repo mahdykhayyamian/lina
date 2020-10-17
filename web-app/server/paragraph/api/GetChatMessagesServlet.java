@@ -21,6 +21,7 @@ import lina.paragraph.persistence.ChatRepository;
 import lombok.AllArgsConstructor;
 import lina.paragraph.model.ChatMessage;
 import com.google.gson.Gson;
+import lina.board.athentication.AuthInfo;
 
 
 @WebServlet("/api/getChatMessages")
@@ -40,16 +41,16 @@ public class GetChatMessagesServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Inside getting chat messages...");
 
-		boolean authenticated = false;
+		AuthInfo authInfo = null;
 		try {
             AuthenticationCookies authCookies = AuthenticationUtils.getAuthCookies(request);
-            authenticated = AuthenticationUtils.authenticate(authCookies);
+            authInfo = AuthenticationUtils.authenticate(authCookies);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		}
 
-        if (!authenticated) {
+        if (authInfo == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }

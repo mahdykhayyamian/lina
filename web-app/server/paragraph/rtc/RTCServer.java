@@ -17,6 +17,7 @@ import java.util.Map;
 import javax.websocket.server.HandshakeRequest;
 import lina.board.athentication.AuthenticationUtils;
 import lina.board.athentication.AuthenticationCookies;
+import lina.board.athentication.AuthInfo;
 
 
 @ServerEndpoint(value="/broadcast", configurator = GetHttpSessionConfigurator.class)
@@ -59,10 +60,9 @@ public class RTCServer {
                                                       .get("handshakereq");
         AuthenticationCookies authCookies = AuthenticationUtils.getAuthCookies(req);
 
-        boolean isAuthentic = AuthenticationUtils.authenticate(authCookies);
-        System.out.println("auth result : " + isAuthentic);
+        AuthInfo authInfo = AuthenticationUtils.authenticate(authCookies);
 
-        if (!isAuthentic) {
+        if (authInfo == null) {
             try{
                 session.close();
                 return;

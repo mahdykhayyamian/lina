@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lina.board.athentication.AuthenticationUtils;
 import lina.board.athentication.AuthenticationCookies;
+import lina.board.athentication.AuthInfo;
 import lina.paragraph.persistence.RoomRepository;
 
 import javax.servlet.http.Cookie;
@@ -36,15 +37,15 @@ public class ParagraphServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String roomNumberParam = getRoomNumberParam(request);
-		boolean authenticated = false;
+		AuthInfo authInfo = null;
 		try {
             AuthenticationCookies authCookies = AuthenticationUtils.getAuthCookies(request);
-            authenticated = AuthenticationUtils.authenticate(authCookies);
+            authInfo = AuthenticationUtils.authenticate(authCookies);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
 
-		if (!authenticated) {
+		if (authInfo == null) {
 			if (roomNumberParam != null) {
 				String fromUrl = "/paragraph?roomNumber=" + roomNumberParam;
 				String encodedFromURL = Base64.getUrlEncoder().encodeToString(fromUrl.getBytes());

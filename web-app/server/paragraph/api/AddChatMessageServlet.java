@@ -20,6 +20,7 @@ import lina.paragraph.persistence.ChatRepository;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lina.board.athentication.AuthInfo;
 
 
 @WebServlet("/api/addChatMessage")
@@ -45,19 +46,18 @@ public class AddChatMessageServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		boolean authenticated = false;
+		AuthInfo authInfo = null;
 		try {
             AuthenticationCookies authCookies = AuthenticationUtils.getAuthCookies(request);
-			authenticated = AuthenticationUtils.authenticate(authCookies);
+			authInfo = AuthenticationUtils.authenticate(authCookies);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
 
-        if (!authenticated) {
+        if (authInfo == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
-
 
         try {
             String data = ServletUtils.getPostBody(request);
