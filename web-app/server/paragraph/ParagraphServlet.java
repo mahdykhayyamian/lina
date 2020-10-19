@@ -14,8 +14,10 @@ import lina.board.athentication.AuthenticationUtils;
 import lina.board.athentication.AuthenticationCookies;
 import lina.board.athentication.AuthInfo;
 import lina.paragraph.persistence.RoomRepository;
+import lina.paragraph.persistence.RoomUsersRepository;
 
 import javax.servlet.http.Cookie;
+import java.util.Random;
 
 
 /**
@@ -25,12 +27,14 @@ import javax.servlet.http.Cookie;
 public class ParagraphServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ParagraphServlet() {
-        super();
-    }
+	private static final String[] CHAT_COLORS = {"red", "blue", "green", "yellow", "salmon", "orange", "grey", "purple"};
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public ParagraphServlet() {
+		super();
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -39,8 +43,8 @@ public class ParagraphServlet extends HttpServlet {
 		String roomNumberParam = getRoomNumberParam(request);
 		AuthInfo authInfo = null;
 		try {
-            AuthenticationCookies authCookies = AuthenticationUtils.getAuthCookies(request);
-            authInfo = AuthenticationUtils.authenticate(authCookies);
+			AuthenticationCookies authCookies = AuthenticationUtils.getAuthCookies(request);
+			authInfo = AuthenticationUtils.authenticate(authCookies);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -49,7 +53,6 @@ public class ParagraphServlet extends HttpServlet {
 			if (roomNumberParam != null) {
 				String fromUrl = "/paragraph?roomNumber=" + roomNumberParam;
 				String encodedFromURL = Base64.getUrlEncoder().encodeToString(fromUrl.getBytes());
-
 				response.sendRedirect("/src/paragraph/login?from=" + encodedFromURL);
 			} else {
 				response.sendRedirect("/src/paragraph/login");
@@ -72,6 +75,16 @@ public class ParagraphServlet extends HttpServlet {
 
 				if (roomExist) {
 					System.out.println("need to load room from roomNumber in param : " + roomNumberParam);
+
+					int roomNum = Integer.parseInt(roomNumberParam);
+					boolean userHasAlreadyJoinedRoom = RoomUsersRepository.userJoinedRoom(roomNum, authInfo.getEmail());
+
+					if (!userHasAlreadyJoinedRoom) {
+						int rnd = new Random().nextInt(CHAT_COLORS.length);
+						String randomChatColor = CHAT_COLORS[rnd];
+						RoomUsersRepository.addUserToRoom(roomNum, authInfo.getEmail(), randomChatColor);
+					}
+
 					RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/src/paragraph/app.jsp");
 					RequetsDispatcherObj.forward(request, response);
 				} else {
