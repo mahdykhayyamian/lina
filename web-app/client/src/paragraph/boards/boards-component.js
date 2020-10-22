@@ -158,7 +158,11 @@ BoardsComponent.prototype.loadBoardsFromServer = function() {
 					.getModuleByName(board.type)
 					.then(visualizerModule => {
 						const visualizer = visualizerModule.default.visualizer;
-						visualizer.visualizeBoardCommands(board);
+						try {
+							visualizer.visualizeBoardCommands(board);
+						} catch (e) {
+							console.log(e);
+						}
 						getSamplesForType(board.type).then(samples => {
 							board.samples = samples;
 

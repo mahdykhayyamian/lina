@@ -3,12 +3,13 @@ import { Chart } from 'chart.js';
 
 function visualizeBoardCommands(board) {
 	const { commands, rootElement } = board;
-	const barChartIR = parseBarChartCommands(commands);
 
 	// clean the board
 	while (rootElement.firstChild) {
 		rootElement.firstChild.remove();
 	}
+
+	const barChartIR = parseBarChartCommands(commands);
 
 	const barChartCanvas = document.createElement('canvas');
 	rootElement.appendChild(barChartCanvas);

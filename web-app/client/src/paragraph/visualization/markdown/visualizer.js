@@ -1,9 +1,6 @@
 import * as showdown from 'showdown';
 
 function visualizeBoardCommands(board) {
-	console.log(board);
-	console.log(showdown);
-
 	const { commands, rootElement } = board;
 
 	// clean the board
