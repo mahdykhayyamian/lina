@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Stack;
 import java.util.Date;
 
-
 public class RoomUsersRepository {
 
 	public static int addUserToRoom(int roomNumber, String username, String chatColor) throws Exception {
@@ -54,6 +53,23 @@ public class RoomUsersRepository {
         st.close();
 
         return false;
+	}
+
+	public static String getUserChatColor(int roomNumber, String username) throws Exception {
+        Connection conn = DBManager.getConnection();
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery("select chat_color from paragraph.room_users where room_id='" + roomNumber + "' and username='" + username + "'");
+
+        while (rs.next()) {
+            System.out.print("Column 1 returned ");
+            System.out.println(rs.getString(1));
+            return rs.getString(1);
+        }
+
+        rs.close();
+        st.close();
+
+        return null;
 	}
 
 }
