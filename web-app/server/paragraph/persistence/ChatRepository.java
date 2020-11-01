@@ -41,9 +41,13 @@ public class ChatRepository {
 		List<ChatMessage> chats = new ArrayList<>();
 		Connection conn = DBManager.getConnection();
 		Statement st = conn.createStatement();
-		ResultSet rs = st.executeQuery(
-			"select lina.paragraph.chat_message.id, lina.paragraph.chat_message.room_id, lina.paragraph.chat_message.sender_email, " +
-			 "lina.paragraph.chat_message.sender_given_name, lina.paragraph.chat_message.text_content, lina.paragraph.chat_message.created from lina.paragraph.chat_message where room_id = " + roomId + " order by created");
+		String query = "select lina.paragraph.chat_message.id, lina.paragraph.chat_message.room_id, lina.paragraph.chat_message.sender_email," +
+			 "lina.paragraph.chat_message.sender_given_name, lina.paragraph.chat_message.text_content, lina.paragraph.chat_message.created, lina.paragraph.room_users.chat_color " + 
+			 "from lina.paragraph.chat_message join lina.paragraph.room_users on lina.paragraph.chat_message.sender_email = lina.paragraph.room_users.username and lina.paragraph.chat_message.room_id = lina.paragraph.room_users.room_id " +
+			 "where lina.paragraph.chat_message.room_id = " + roomId + " order by created";
+
+		System.out.println("query = " + query);
+		ResultSet rs = st.executeQuery(query);
 
 		while (rs.next()) {
 			System.out.println(rs.getString(1));
@@ -54,6 +58,7 @@ public class ChatRepository {
 				.senderGivenName(rs.getString(4))
 				.textContent(rs.getString(5))
 				.created(rs.getTimestamp(6))
+				.chatColor(rs.getString(7))
 			.build());
 		}
 

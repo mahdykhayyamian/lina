@@ -1,3 +1,5 @@
+import ajax from '@fdaciuk/ajax';
+
 import { Widget } from 'smartframes';
 import { WidgetContainer } from 'smartframes';
 import { WidgetTabDragController } from 'smartframes';
@@ -12,36 +14,60 @@ import { getRoomNumberFromUrl } from 'src/paragraph/utils.js';
 import addFeedbackLink from './feedback.js';
 
 window.onload = function() {
-	console.log('onload running...');
 	const appDiv = document.getElementById('lina.app');
 	appDiv.style.setProperty('position', 'absolute');
 
 	const roomNumber = getRoomNumberFromUrl();
-	const rtcClient = new RTCClient(roomNumber);
 
-	const boardsComponent = new BoardsComponent(rtcClient);
-	const rootContainer = buildLayout(boardsComponent, rtcClient);
+	const request = ajax({
+		headers: {
+			'content-type': 'application/json'
+		}
+	});
 
-	function onResize() {
-		const width = window.innerWidth - 50;
-		const height = window.innerHeight - 50;
-		const left = 10;
-		const top = 10;
+	request
+		.get('/api/getUserRoomSettings?roomNumber=' + roomNumber)
+		.then(roomSettings => {
+			console.log('roomSettings');
+			console.log(roomSettings);
 
-		rootContainer.left = left;
-		rootContainer.top = top;
-		rootContainer.width = width;
-		rootContainer.height = height;
+			setGlobalEnvVariables(roomSettings);
 
-		rootContainer.render(appDiv);
-	}
+			const rtcClient = new RTCClient(roomNumber);
+			const boardsComponent = new BoardsComponent(rtcClient);
+			const rootContainer = buildLayout(boardsComponent, rtcClient);
 
-	window.onresize = onResize;
-	onResize();
-	boardsComponent.loadBoardsFromServer();
+			function onResize() {
+				const width = window.innerWidth - 50;
+				const height = window.innerHeight - 50;
+				const left = 10;
+				const top = 10;
 
-	addFeedbackLink(rootContainer);
+				rootContainer.left = left;
+				rootContainer.top = top;
+				rootContainer.width = width;
+				rootContainer.height = height;
+
+				rootContainer.render(appDiv);
+			}
+
+			window.onresize = onResize;
+			onResize();
+			boardsComponent.loadBoardsFromServer();
+
+			addFeedbackLink(rootContainer);
+		});
 };
+
+function setGlobalEnvVariables(roomSettings) {
+	window.Lina = {
+		Paragraph: {
+			Environment: {
+				roomSettings
+			}
+		}
+	};
+}
 
 function determineDisplayType() {
 	if (screen.width <= 1600) {

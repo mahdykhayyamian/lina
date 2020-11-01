@@ -32,6 +32,8 @@ import javax.mail.BodyPart;
 import javax.mail.util.ByteArrayDataSource; 
 import javax.activation.DataHandler;
 import java.util.Base64;
+import lina.board.athentication.AuthInfo;
+
 
 @WebServlet("/api/addFeedback")
 public class AddFeedbackServlet extends HttpServlet {
@@ -56,15 +58,15 @@ public class AddFeedbackServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		boolean authenticated = false;
+		AuthInfo authInfo = null;
 		try {
 			AuthenticationCookies authCookies = AuthenticationUtils.getAuthCookies(request);
-			authenticated = AuthenticationUtils.authenticate(authCookies);
+			authInfo = AuthenticationUtils.authenticate(authCookies);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
 
-		if (!authenticated) {
+		if (authInfo == null) {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			return;
 		}

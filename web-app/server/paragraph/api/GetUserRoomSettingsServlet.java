@@ -18,15 +18,19 @@ import java.io.PrintWriter;
 import lina.board.athentication.AuthenticationUtils;
 import lina.board.athentication.AuthenticationCookies;
 import lina.board.athentication.AuthInfo;
+import lina.paragraph.persistence.RoomUsersRepository;
+import lombok.Data;
+import lombok.Builder;
 
-@WebServlet("/api/getContentTypes")
-public class GetContentTypesServlet extends HttpServlet {
+
+@WebServlet("/api/getUserRoomSettings")
+public class GetUserRoomSettingsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public GetContentTypesServlet() {
+	public GetUserRoomSettingsServlet() {
 		super();
 	}
 
@@ -34,7 +38,7 @@ public class GetContentTypesServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("Inside getting content types...");
+		System.out.println("Inside getting current user...");
 
 		AuthInfo authInfo = null;
 		try {
@@ -50,9 +54,15 @@ public class GetContentTypesServlet extends HttpServlet {
 		}
 
 		try {
-			List<ContentType> contentTypes = ContentTypeRepository.getContentTypes();
+			int roomNumber = Integer.parseInt(request.getParameter("roomNumber"));
+			System.out.println("Room number is " + roomNumber);
+
+			String chatColor = RoomUsersRepository.getUserChatColor(roomNumber, authInfo.getEmail());
+
+			UserRoomSettings userRoomSettings = UserRoomSettings.builder().roomNumber(roomNumber).userEmail(authInfo.getEmail()).roomChatColor(chatColor).build();
+
 			Gson gson = new Gson();
-			String jsonPayload = gson.toJson(contentTypes);
+			String jsonPayload = gson.toJson(userRoomSettings);
 			System.out.println("json payload");
 			System.out.println(jsonPayload);
 
@@ -71,4 +81,13 @@ public class GetContentTypesServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
+}
+
+
+@Data
+@Builder
+class UserRoomSettings {
+   int roomNumber;
+   String userEmail;
+   String roomChatColor;
 }

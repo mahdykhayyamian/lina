@@ -17,6 +17,7 @@ import lina.board.athentication.AuthenticationUtils;
 import lina.board.athentication.AuthenticationCookies;
 import lina.board.utils.ServletUtils;
 import java.io.PrintWriter;
+import lina.board.athentication.AuthInfo;
 
 
 @WebServlet("/api/addBoard")
@@ -42,15 +43,15 @@ public class AddBoardServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		boolean authenticated = false;
+		AuthInfo authInfo = null;
 		try {
             AuthenticationCookies authCookies = AuthenticationUtils.getAuthCookies(request);
-			authenticated = AuthenticationUtils.authenticate(authCookies);
+			authInfo = AuthenticationUtils.authenticate(authCookies);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
 
-        if (!authenticated) {
+        if (authInfo == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }

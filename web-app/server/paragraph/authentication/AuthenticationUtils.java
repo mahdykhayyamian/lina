@@ -63,7 +63,7 @@ public class AuthenticationUtils {
 		return AuthenticationCookies.builder().authType(authType).authToken(authToken).build();
 	}
 
-	public static boolean authenticate(AuthenticationCookies authCookies) {
+	public static AuthInfo authenticate(AuthenticationCookies authCookies) {
 		System.out.println("authenticating...");
 
 		String authType = authCookies.authType;
@@ -71,19 +71,19 @@ public class AuthenticationUtils {
 
 		if (authType == null || authToken == null) {
 			System.out.println("authType or authToken not provided, auth failed.");
-			return false;
+			return null;
 		}
 
 		if (authType.equals("googleAuth")) {
 			ParsedGoogleToken parsedGoogleToken = GoogleAuthHelper.validateGoogleToken(authToken);
 			if (parsedGoogleToken != null) {
-				return true;
+				return AuthInfo.builder().email(parsedGoogleToken.getEmail()).name(parsedGoogleToken.getName()).build();
 			} else {
-				return false;
+				return null;
 			}
 		}
 
-		return false;
+		return null;
 	}
 
 	public static Cookie getCookie(HttpServletRequest request, String name) {

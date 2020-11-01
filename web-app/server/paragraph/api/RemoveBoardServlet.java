@@ -18,6 +18,7 @@ import lina.paragraph.persistence.BoardRepository;
 import lina.board.utils.ServletUtils;
 import lina.board.athentication.AuthenticationUtils;
 import lina.board.athentication.AuthenticationCookies;
+import lina.board.athentication.AuthInfo;
 
 @WebServlet("/api/removeBoard")
 public class RemoveBoardServlet extends HttpServlet {
@@ -44,15 +45,15 @@ public class RemoveBoardServlet extends HttpServlet {
 
 		System.out.println("Going to remove board...");
 
-		boolean authenticated = false;
+		AuthInfo authInfo = null;
 		try {
             AuthenticationCookies authCookies = AuthenticationUtils.getAuthCookies(request);
-            authenticated = AuthenticationUtils.authenticate(authCookies);
+            authInfo = AuthenticationUtils.authenticate(authCookies);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
 
-		if (!authenticated) {
+		if (authInfo == null) {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			return;
 		}

@@ -10,6 +10,8 @@ import {
 	getRoomNumberFromUrl
 } from 'src/paragraph/utils.js';
 
+const CHAT_COLOR_DEFAULT = 'black';
+
 const ChatComponent = function(rtcClient) {
 	this.rtcClient = rtcClient;
 
@@ -44,6 +46,10 @@ const ChatComponent = function(rtcClient) {
 	this.chatCompose.appendChild(this.sendButton);
 	this.rootNode.appendChild(this.chatCompose);
 
+	const chatColor =
+		window.Lina.Paragraph.Environment.roomSettings.roomChatColor ||
+		CHAT_COLOR_DEFAULT;
+
 	this.sendButton.addEventListener('click', () => {
 		const textAreaDiv = document.getElementById('chat-compose-text-area');
 		const chatMessage = textAreaDiv.value;
@@ -64,7 +70,8 @@ const ChatComponent = function(rtcClient) {
 				roomNumber,
 				senderEmail,
 				senderGivenName,
-				textContent: chatMessage
+				textContent: chatMessage,
+				chatColor
 			})
 			.then(result => {
 				const messageObj = {
@@ -72,13 +79,14 @@ const ChatComponent = function(rtcClient) {
 					content: {
 						chatMessage,
 						senderGivenName,
-						senderEmail
+						senderEmail,
+						chatColor
 					}
 				};
 				const messageStr = JSON.stringify(messageObj, null, 4);
 
 				this.rtcClient.send(messageStr);
-				this.addChatMessage(chatMessage, senderGivenName);
+				this.addChatMessage(chatMessage, senderGivenName, chatColor);
 				textAreaDiv.value = '';
 			});
 	});
@@ -110,12 +118,26 @@ ChatComponent.prototype.createWidget = function() {
 	return chatWidget;
 };
 
-ChatComponent.prototype.addChatMessage = function(content, senderGivenName) {
+ChatComponent.prototype.addChatMessage = function(
+	content,
+	senderGivenName,
+	chatColor
+) {
 	const chatMessageNodes = document.getElementById('chat-messages');
 	const chatMessageDiv = document.createElement('div');
 	chatMessageDiv.classList.add('chat-message');
 
-	chatMessageDiv.innerHTML = `<div class="chat-sender"> ${senderGivenName} </div> <div class="chat-content"> ${content} </div>`;
+	const chatSenderDiv = document.createElement('div');
+	chatSenderDiv.classList.add('chat-sender');
+	chatSenderDiv.innerText = senderGivenName;
+	chatSenderDiv.style.backgroundColor = chatColor;
+	chatMessageDiv.appendChild(chatSenderDiv);
+
+	const chatContentDiv = document.createElement('div');
+	chatContentDiv.classList.add('chat-content');
+	chatContentDiv.innerText = content;
+	chatMessageDiv.appendChild(chatContentDiv);
+
 	chatMessageNodes.appendChild(chatMessageDiv);
 	chatMessageNodes.scrollTop = chatMessageNodes.scrollHeight;
 };
@@ -136,7 +158,8 @@ function loadChatsFromServer(chatComponent) {
 				const chatMessage = chatMessages[i];
 				chatComponent.addChatMessage(
 					chatMessage.textContent,
-					chatMessage.senderGivenName
+					chatMessage.senderGivenName,
+					chatMessage.chatColor || CHAT_COLOR_DEFAULT
 				);
 			}
 		});
@@ -144,12 +167,12 @@ function loadChatsFromServer(chatComponent) {
 
 function onRecieveRTCMessage(chatComponent, rtcMessage) {
 	const message = JSON.parse(rtcMessage);
-
 	switch (message.type) {
 		case CONSTANTS.RTC_MESSAGE_TYPES.CHAT_MESSAGE:
 			chatComponent.addChatMessage(
 				message.content.chatMessage,
-				message.content.senderGivenName
+				message.content.senderGivenName,
+				message.content.chatColor
 			);
 			break;
 		default:
