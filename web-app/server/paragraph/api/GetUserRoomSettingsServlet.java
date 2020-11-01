@@ -54,7 +54,6 @@ public class GetUserRoomSettingsServlet extends HttpServlet {
 		}
 
 		try {
-
 			int roomNumber = Integer.parseInt(request.getParameter("roomNumber"));
 			System.out.println("Room number is " + roomNumber);
 
@@ -72,7 +71,6 @@ public class GetUserRoomSettingsServlet extends HttpServlet {
 			response.setCharacterEncoding("UTF-8");
 			out.print(jsonPayload);
 			out.flush();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

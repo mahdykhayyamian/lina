@@ -71,6 +71,5 @@ public class RoomUsersRepository {
 
         return null;
 	}
-
 }
 
