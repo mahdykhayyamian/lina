@@ -31,6 +31,8 @@ window.onload = function() {
 			console.log('roomSettings');
 			console.log(roomSettings);
 
+			setGlobalEnvVariables(roomSettings);
+
 			const rtcClient = new RTCClient(roomNumber);
 			const boardsComponent = new BoardsComponent(rtcClient);
 			const rootContainer = buildLayout(boardsComponent, rtcClient);
@@ -56,6 +58,16 @@ window.onload = function() {
 			addFeedbackLink(rootContainer);
 		});
 };
+
+function setGlobalEnvVariables(roomSettings) {
+	window.Lina = {
+		Paragraph: {
+			Environment: {
+				roomSettings
+			}
+		}
+	};
+}
 
 function determineDisplayType() {
 	if (screen.width <= 1600) {

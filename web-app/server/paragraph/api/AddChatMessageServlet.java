@@ -66,6 +66,9 @@ public class AddChatMessageServlet extends HttpServlet {
             Gson gson = new Gson();
             AddChatMessagePayload payload = gson.fromJson(data, AddChatMessagePayload.class);
 
+            System.out.println("chat message payload");
+            System.out.println(payload);
+
             ChatMessage chatMessage = ChatMessage.builder()
                 .roomId(Integer.parseInt(payload.roomNumber))
                 .senderEmail(payload.senderEmail)

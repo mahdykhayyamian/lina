@@ -12,6 +12,7 @@ public class ChatMessage {
     String senderEmail;
     String senderGivenName;
     String textContent;
+    String chatColor;
     Date created;
     Date updated;
 
