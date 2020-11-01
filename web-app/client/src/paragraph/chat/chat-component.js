@@ -10,6 +10,8 @@ import {
 	getRoomNumberFromUrl
 } from 'src/paragraph/utils.js';
 
+const CHAT_COLOR_DEFAULT = 'black';
+
 const ChatComponent = function(rtcClient) {
 	this.rtcClient = rtcClient;
 
@@ -45,7 +47,8 @@ const ChatComponent = function(rtcClient) {
 	this.rootNode.appendChild(this.chatCompose);
 
 	const chatColor =
-		window.Lina.Paragraph.Environment.roomSettings.roomChatColor;
+		window.Lina.Paragraph.Environment.roomSettings.roomChatColor ||
+		CHAT_COLOR_DEFAULT;
 
 	this.sendButton.addEventListener('click', () => {
 		const textAreaDiv = document.getElementById('chat-compose-text-area');
@@ -83,8 +86,6 @@ const ChatComponent = function(rtcClient) {
 				const messageStr = JSON.stringify(messageObj, null, 4);
 
 				this.rtcClient.send(messageStr);
-				console.log('Hey, chatColor');
-				console.log(chatColor);
 				this.addChatMessage(chatMessage, senderGivenName, chatColor);
 				textAreaDiv.value = '';
 			});
@@ -122,9 +123,6 @@ ChatComponent.prototype.addChatMessage = function(
 	senderGivenName,
 	chatColor
 ) {
-	console.log('chatColor');
-	console.log(chatColor);
-
 	const chatMessageNodes = document.getElementById('chat-messages');
 	const chatMessageDiv = document.createElement('div');
 	chatMessageDiv.classList.add('chat-message');
@@ -156,14 +154,12 @@ function loadChatsFromServer(chatComponent) {
 	request
 		.get('/api/getChatMessages?roomNumber=' + roomNumber)
 		.then(chatMessages => {
-			console.log('loaded chat messages');
-			console.log(chatMessages);
 			for (let i = 0; i < chatMessages.length; i++) {
 				const chatMessage = chatMessages[i];
 				chatComponent.addChatMessage(
 					chatMessage.textContent,
 					chatMessage.senderGivenName,
-					chatMessage.chatColor
+					chatMessage.chatColor || CHAT_COLOR_DEFAULT
 				);
 			}
 		});
@@ -171,10 +167,6 @@ function loadChatsFromServer(chatComponent) {
 
 function onRecieveRTCMessage(chatComponent, rtcMessage) {
 	const message = JSON.parse(rtcMessage);
-
-	console.log('received message');
-	console.log(message);
-
 	switch (message.type) {
 		case CONSTANTS.RTC_MESSAGE_TYPES.CHAT_MESSAGE:
 			chatComponent.addChatMessage(
