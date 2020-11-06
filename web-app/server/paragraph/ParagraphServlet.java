@@ -53,9 +53,9 @@ public class ParagraphServlet extends HttpServlet {
 			if (roomNumberParam != null) {
 				String fromUrl = "/paragraph?roomNumber=" + roomNumberParam;
 				String encodedFromURL = Base64.getUrlEncoder().encodeToString(fromUrl.getBytes());
-				response.sendRedirect("/src/paragraph/login?from=" + encodedFromURL);
+				response.sendRedirect("/login?from=" + encodedFromURL);
 			} else {
-				response.sendRedirect("/src/paragraph/login");
+				response.sendRedirect("/login");
 			}
 			return;
 		}

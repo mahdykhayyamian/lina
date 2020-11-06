@@ -18,7 +18,7 @@ import com.google.gson.Gson;
 import lina.board.athentication.AuthenticationUtils;
 
 
-@WebServlet("/src/paragraph/login")
+@WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -34,7 +34,7 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		String action = "/src/paragraph/authenticate";
+		String action = "/authenticate";
 
 		String from = getFrom(request);
 

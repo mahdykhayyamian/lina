@@ -21,7 +21,7 @@ import lina.board.athentication.GoogleAuthHelper;
 import lina.board.athentication.ParsedGoogleToken;
 
 
-@WebServlet("/src/paragraph/authenticate")
+@WebServlet("/authenticate")
 public class AuthenticationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
