@@ -174,6 +174,8 @@ function attachAceEditor(containerId) {
 			fontSize: '10pt'
 		});
 		aceEditor.resize(true);
+		aceEditor.setOption('wrap', true);
+		aceEditor.setOption('indentedSoftWrap', false);
 		return aceEditor;
 	});
 }
