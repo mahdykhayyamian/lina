@@ -39,56 +39,59 @@ const ChatComponent = function(rtcClient) {
 
 	this.chatCompose.appendChild(this.textArea);
 
-	this.sendButton = document.createElement('div');
-	this.sendButton.id = 'send-button';
-	this.sendButton.innerHTML = `<div class="btn">Send</div>`;
-
-	this.chatCompose.appendChild(this.sendButton);
 	this.rootNode.appendChild(this.chatCompose);
 
 	const chatColor =
 		window.Lina.Paragraph.Environment.roomSettings.roomChatColor ||
 		CHAT_COLOR_DEFAULT;
 
-	this.sendButton.addEventListener('click', () => {
-		const textAreaDiv = document.getElementById('chat-compose-text-area');
-		const chatMessage = textAreaDiv.value;
+	this.textArea.addEventListener('keypress', event => {
+		if (event.code === 'Enter' && !event.shiftKey) {
+			const textAreaDiv = document.getElementById(
+				'chat-compose-text-area'
+			);
+			const chatMessage = textAreaDiv.value;
 
-		const senderEmail = getUserEmail();
-		const senderGivenName = getGivenName();
+			const senderEmail = getUserEmail();
+			const senderGivenName = getGivenName();
 
-		const roomNumber = getRoomNumberFromUrl();
+			const roomNumber = getRoomNumberFromUrl();
 
-		const request = ajax({
-			headers: {
-				'content-type': 'application/json'
-			}
-		});
+			const request = ajax({
+				headers: {
+					'content-type': 'application/json'
+				}
+			});
 
-		request
-			.post('/api/addChatMessage', {
-				roomNumber,
-				senderEmail,
-				senderGivenName,
-				textContent: chatMessage,
-				chatColor
-			})
-			.then(result => {
-				const messageObj = {
-					type: CONSTANTS.RTC_MESSAGE_TYPES.CHAT_MESSAGE,
-					content: {
+			request
+				.post('/api/addChatMessage', {
+					roomNumber,
+					senderEmail,
+					senderGivenName,
+					textContent: chatMessage,
+					chatColor
+				})
+				.then(result => {
+					const messageObj = {
+						type: CONSTANTS.RTC_MESSAGE_TYPES.CHAT_MESSAGE,
+						content: {
+							chatMessage,
+							senderGivenName,
+							senderEmail,
+							chatColor
+						}
+					};
+					const messageStr = JSON.stringify(messageObj, null, 4);
+
+					this.rtcClient.send(messageStr);
+					this.addChatMessage(
 						chatMessage,
 						senderGivenName,
-						senderEmail,
 						chatColor
-					}
-				};
-				const messageStr = JSON.stringify(messageObj, null, 4);
-
-				this.rtcClient.send(messageStr);
-				this.addChatMessage(chatMessage, senderGivenName, chatColor);
-				textAreaDiv.value = '';
-			});
+					);
+					textAreaDiv.value = '';
+				});
+		}
 	});
 
 	loadChatsFromServer(this);
