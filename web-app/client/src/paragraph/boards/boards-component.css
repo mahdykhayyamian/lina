@@ -78,3 +78,7 @@
 .board:last-child {
     margin-bottom: 10px
 }
+
+.board canvas {
+    width: 100% !important;
+}
