@@ -87,3 +87,4 @@ INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('sequence-diagr
 INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('math', 'Math', current_timestamp);
 INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('venn-diagram', 'Venn Diagram', current_timestamp);
 INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('graph', 'Graph', current_timestamp);
+INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('org-chart', 'Org Chart', current_timestamp);
