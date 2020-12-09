@@ -1,16 +1,16 @@
 import * as d3 from 'd3';
 
 const HEIGHT_MARGIN = 100;
-const RADIUS = 30;
-const SIZE_X = 500;
-const SIZE_Y = 500;
 
 function visualizeBoardCommands(board) {
 	console.log('in org chart visualizer...');
 
-	console.log(d3);
-
 	const { commands, rootElement } = board;
+
+	const parsedCommands = JSON.parse(commands);
+
+	const data = parsedCommands.data;
+	const style = parsedCommands.style;
 
 	// clean the board
 	while (rootElement.firstChild) {
@@ -31,68 +31,9 @@ function visualizeBoardCommands(board) {
 	container.setAttribute('class', 'math-container');
 	rootElement.appendChild(container);
 
-	const data = {
-		name: 'A1',
-		children: [
-			{
-				name: 'B1',
-				children: [
-					{
-						name: 'C1',
-						value: 100
-					},
-					{
-						name: 'C2',
-						value: 300
-					},
-					{
-						name: 'Pretty Long Name',
-						value: 200,
-						children: [
-							{
-								name: 'D1',
-								value: 400,
-								children: [
-									{
-										name: 'E1',
-										value: 600
-									}
-								]
-							},
-							{
-								name: 'D2',
-								value: 500,
-								children: [
-									{
-										name: 'R1',
-										value: 400,
-										children: [
-											{
-												name: 'S1',
-												value: 600
-											}
-										]
-									},
-									{
-										name: 'T2',
-										value: 500
-									}
-								]
-							}
-						]
-					}
-				]
-			},
-			{
-				name: 'B2',
-				value: 200
-			}
-		]
-	};
-
 	const root = d3.hierarchy(data);
 	const treeLayout = d3.tree();
-	treeLayout.size([SIZE_X, SIZE_Y]);
+	treeLayout.size([style.sizeX || 400, style.sizeY || 400]);
 	treeLayout(root);
 
 	console.log(root.descendants());
@@ -123,12 +64,13 @@ function visualizeBoardCommands(board) {
 		.attr('cy', function(d) {
 			return d.y;
 		})
-		.attr('r', RADIUS);
+		.attr('r', style.radius)
+		.attr('fill', style.nodeColor);
 
 	// Node Labels
 	const textContaier = g
 		.append('g')
-		.attr('transform', `translate(${-RADIUS / 2}, 0)`);
+		.attr('transform', `translate(${-style.radius / 2}, 0)`);
 
 	textContaier
 		.append('text')
