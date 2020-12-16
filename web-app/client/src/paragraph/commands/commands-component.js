@@ -45,7 +45,7 @@ CommandsComponent.prototype.createWidget = function() {
 
 	const commandsWidget = new Widget('commands', [
 		{
-			title: 'Editor',
+			title: CONSTANTS.COMMANDS_TAB_TITLE,
 			contentNode: this.commandsRoot,
 			onRenderCallback: function(widget) {
 				const extraSpace = 4;
@@ -71,7 +71,7 @@ CommandsComponent.prototype.createWidget = function() {
 			}
 		},
 		{
-			title: 'Samples',
+			title: CONSTANTS.SAMPLES_TAB_TITLE,
 			contentNode: this.samplesRoot,
 
 			onRenderCallback: widget => {
@@ -144,6 +144,22 @@ CommandsComponent.prototype.runCommands = function() {
 					this.rtcClient.send(messageStr);
 				});
 		});
+};
+
+// TODO: modify smartframes and add a select tab method instead of accessing its internal properties
+CommandsComponent.prototype.selectCommandsTab = function() {
+	let index = -1;
+	for (let i = 0; i < this.widget.tabs.length; i++) {
+		if (this.widget.tabs[i].title === CONSTANTS.COMMANDS_TAB_TITLE) {
+			index = i;
+			break;
+		}
+	}
+
+	if (index !== -1 && index < this.widget.tabs.length) {
+		this.widget.selectedTabIndex = index;
+		this.widget.render();
+	}
 };
 
 function loadAceEditorCode() {

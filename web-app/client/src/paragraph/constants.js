@@ -1,6 +1,8 @@
 const CONSTANTS = {
 	COMMANDS_CONTAINER_ID: 'commands-container',
 	COMMANDS_ACE_EDITOR_CONTAINER: 'commandsAceEditorContainer',
+	COMMANDS_TAB_TITLE: 'Editor',
+	SAMPLES_TAB_TITLE: 'Samples',
 	SAMPLE_COMMANDS_ID: 'sample-commands',
 	DISPLAY_SIZE_SMALL: 'display_size_small',
 	DISPLAY_SIZE_MEDIUM: 'display_size_medium',

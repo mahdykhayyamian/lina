@@ -383,6 +383,9 @@ function makeBoardSelected(boardIndex, boardsComponent) {
 	boardsComponent.commandsComponent.setSamples(selectedBoard.samples);
 	boardsComponent.commandsComponent.setBoard(selectedBoard);
 
+	// switch to commands tab
+	boardsComponent.commandsComponent.selectCommandsTab();
+
 	scrollToBaord(boardIndex, boardsComponent);
 }
 
