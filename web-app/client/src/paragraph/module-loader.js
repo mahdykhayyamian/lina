@@ -7,7 +7,7 @@ let sequenceDiagramModule = null;
 let mathModule = null;
 let vennDiagramModule = null;
 let graphModule = null;
-let orgChartModule = null;
+let treeChartModule = null;
 
 function getModuleByName(moduleName) {
 	switch (moduleName) {
@@ -91,13 +91,13 @@ function getModuleByName(moduleName) {
 
 			graphModule = import('src/paragraph/visualization/graph');
 			return graphModule;
-		case 'org-chart':
-			if (orgChartModule) {
-				return orgChartModule;
+		case 'tree-chart':
+			if (treeChartModule) {
+				return treeChartModule;
 			}
 
-			orgChartModule = import('src/paragraph/visualization/org-chart');
-			return orgChartModule;
+			treeChartModule = import('src/paragraph/visualization/tree-chart');
+			return treeChartModule;
 		default:
 			return Promise.resolve(null);
 	}

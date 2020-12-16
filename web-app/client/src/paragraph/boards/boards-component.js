@@ -463,6 +463,12 @@ function getSamplesForType(type) {
 			return graphModule.then(graphModule => {
 				return graphModule.default.samples;
 			});
+		case 'tree-chart':
+			const treeChartModule = moduleLoader.getModuleByName(type);
+			return treeChartModule.then(treeChartModule => {
+				return treeChartModule.default.samples;
+			});
+
 		default:
 			return Promise.resolve([]);
 	}

@@ -1,3 +1,0 @@
-const samples = [];
-
-export { samples };
