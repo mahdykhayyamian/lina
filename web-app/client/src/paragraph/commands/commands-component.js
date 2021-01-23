@@ -130,6 +130,8 @@ CommandsComponent.prototype.runCommands = function() {
 			return moduleLoader
 				.getModuleByName(moduleName)
 				.then(visualizerModule => {
+					console.log('visualizer');
+					console.log(visualizerModule);
 					const visualizer = visualizerModule.default.visualizer;
 					visualizer.visualizeBoardCommands(this.board);
 

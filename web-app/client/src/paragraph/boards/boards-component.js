@@ -471,7 +471,11 @@ function getSamplesForType(type) {
 			return treeChartModule.then(treeChartModule => {
 				return treeChartModule.default.samples;
 			});
-
+		case 'funnel':
+			const funnelModule = moduleLoader.getModuleByName(type);
+			return funnelModule.then(funnelModule => {
+				return funnelModule.default.samples;
+			});
 		default:
 			return Promise.resolve([]);
 	}
