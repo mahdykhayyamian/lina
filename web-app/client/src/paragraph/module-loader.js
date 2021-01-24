@@ -8,6 +8,7 @@ let mathModule = null;
 let vennDiagramModule = null;
 let graphModule = null;
 let treeChartModule = null;
+let funnelModule = null;
 
 function getModuleByName(moduleName) {
 	switch (moduleName) {
@@ -98,6 +99,13 @@ function getModuleByName(moduleName) {
 
 			treeChartModule = import('src/paragraph/visualization/tree-chart');
 			return treeChartModule;
+		case 'funnel':
+			if (funnelModule) {
+				return funnelModule;
+			}
+
+			funnelModule = import('src/paragraph/visualization/funnel');
+			return funnelModule;
 		default:
 			return Promise.resolve(null);
 	}
