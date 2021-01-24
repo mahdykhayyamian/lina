@@ -1,7 +1,6 @@
 import D3Funnel from 'd3-funnel';
 
 function visualizeBoardCommands(board) {
-	console.log('in funnel visualize commands');
 	const { commands, rootElement } = board;
 
 	// clean the board
@@ -16,12 +15,8 @@ function visualizeBoardCommands(board) {
 
 	board.rootElement.appendChild(container);
 
-	const data = [
-		{ label: 'Inquiries', value: 5000 },
-		{ label: 'Applicants', value: 2500 },
-		{ label: 'Admits', value: 1500 },
-		{ label: 'Deposits', value: 800 }
-	];
+	const data = JSON.parse(commands);
+
 	const options = {
 		block: {
 			dynamicSlope: true,
