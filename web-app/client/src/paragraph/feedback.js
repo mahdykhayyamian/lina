@@ -2,10 +2,6 @@ import * as html2canvas from 'html2canvas';
 import ajax from '@fdaciuk/ajax';
 
 export default function addFeedbackLink(rootContainer) {
-	console.log('addFeedbackLink...');
-	console.log('html2canvas');
-	console.log(html2canvas);
-
 	console.log(rootContainer);
 
 	const request = ajax({
@@ -21,7 +17,6 @@ export default function addFeedbackLink(rootContainer) {
 
 	feedbackLink.setAttribute('href', '#');
 	feedbackLink.onclick = () => {
-		console.log('feedback clicked...');
 
 		const feedbackModal = document.createElement('div');
 		feedbackModal.className = 'modal';
@@ -77,9 +72,6 @@ export default function addFeedbackLink(rootContainer) {
 			submitContainer.appendChild(feedbackButton);
 
 			submitContainer.onclick = () => {
-				console.log('text : ' + feedbackTextArea.value);
-				console.log('img : ' + imgData);
-
 				const submitSpinner = document.createElement('img');
 				submitSpinner.src = '/src/resources/images/spinner.svg';
 				submitSpinner.className = 'submit-spinner';

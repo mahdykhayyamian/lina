@@ -1,3 +1,5 @@
+import 'regenerator-runtime/runtime.js';
+
 import { Widget } from 'smartframes';
 import { CONSTANTS } from 'src/paragraph/constants.js';
 import { moduleLoader } from 'src/paragraph/module-loader.js';
@@ -105,7 +107,7 @@ CommandsComponent.prototype.setCommands = function(commands) {
 	}
 };
 
-CommandsComponent.prototype.runCommands = function() {
+CommandsComponent.prototype.runCommands = async function() {
 	if (!this.board) {
 		return;
 	}
@@ -118,34 +120,28 @@ CommandsComponent.prototype.runCommands = function() {
 		}
 	});
 
-	request
-		.post('/api/updateBoardCommands', {
-			boardId: this.board.boardId,
-			commands: this.commands
-		})
-		.then(() => {
-			const moduleName = this.board.type;
-			this.board.commands = this.commands;
+	await request.post('/api/updateBoardCommands', {
+		boardId: this.board.boardId,
+		commands: this.commands
+	});
 
-			return moduleLoader
-				.getModuleByName(moduleName)
-				.then(visualizerModule => {
-					console.log('visualizer');
-					console.log(visualizerModule);
-					const visualizer = visualizerModule.default.visualizer;
-					visualizer.visualizeBoardCommands(this.board);
+	const moduleName = this.board.type;
+	this.board.commands = this.commands;
 
-					const messageObj = {
-						type: CONSTANTS.RTC_MESSAGE_TYPES.RUN_COMMANDS,
-						content: {
-							board: this.board
-						}
-					};
+	return moduleLoader.getModuleByName(moduleName).then(visualizerModule => {
+		const visualizer = visualizerModule.default.visualizer;
+		visualizer.visualizeBoardCommands(this.board);
 
-					const messageStr = JSON.stringify(messageObj, null, 4);
-					this.rtcClient.send(messageStr);
-				});
-		});
+		const messageObj = {
+			type: CONSTANTS.RTC_MESSAGE_TYPES.RUN_COMMANDS,
+			content: {
+				board: this.board
+			}
+		};
+
+		const messageStr = JSON.stringify(messageObj, null, 4);
+		this.rtcClient.send(messageStr);
+	});
 };
 
 // TODO: modify smartframes and add a select tab method instead of accessing its internal properties

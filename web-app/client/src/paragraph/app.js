@@ -1,3 +1,5 @@
+import 'regenerator-runtime/runtime.js';
+
 import ajax from '@fdaciuk/ajax';
 
 import { Widget } from 'smartframes';
@@ -13,7 +15,7 @@ import RTCClient from 'src/paragraph/rtc/rtc-client.js';
 import { getRoomNumberFromUrl } from 'src/paragraph/utils.js';
 import addFeedbackLink from './feedback.js';
 
-window.onload = function() {
+window.onload = async function() {
 	const appDiv = document.getElementById('lina.app');
 	appDiv.style.setProperty('position', 'absolute');
 
@@ -25,38 +27,35 @@ window.onload = function() {
 		}
 	});
 
-	request
-		.get('/api/getUserRoomSettings?roomNumber=' + roomNumber)
-		.then(roomSettings => {
-			console.log('roomSettings');
-			console.log(roomSettings);
+	const roomSettings = await request.get(
+		'/api/getUserRoomSettings?roomNumber=' + roomNumber
+	);
 
-			setGlobalEnvVariables(roomSettings);
+	setGlobalEnvVariables(roomSettings);
 
-			const rtcClient = new RTCClient(roomNumber);
-			const boardsComponent = new BoardsComponent(rtcClient);
-			const rootContainer = buildLayout(boardsComponent, rtcClient);
+	const rtcClient = new RTCClient(roomNumber);
+	const boardsComponent = new BoardsComponent(rtcClient);
+	const rootContainer = buildLayout(boardsComponent, rtcClient);
 
-			function onResize() {
-				const width = window.innerWidth - 50;
-				const height = window.innerHeight - 50;
-				const left = 10;
-				const top = 10;
+	function onResize() {
+		const width = window.innerWidth - 50;
+		const height = window.innerHeight - 50;
+		const left = 10;
+		const top = 10;
 
-				rootContainer.left = left;
-				rootContainer.top = top;
-				rootContainer.width = width;
-				rootContainer.height = height;
+		rootContainer.left = left;
+		rootContainer.top = top;
+		rootContainer.width = width;
+		rootContainer.height = height;
 
-				rootContainer.render(appDiv);
-			}
+		rootContainer.render(appDiv);
+	}
 
-			window.onresize = onResize;
-			onResize();
-			boardsComponent.loadBoardsFromServer();
+	window.onresize = onResize;
+	onResize();
+	boardsComponent.loadBoardsFromServer();
 
-			addFeedbackLink(rootContainer);
-		});
+	addFeedbackLink(rootContainer);
 };
 
 function setGlobalEnvVariables(roomSettings) {
