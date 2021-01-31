@@ -81,5 +81,5 @@ public class RemoveBoardServlet extends HttpServlet {
 @AllArgsConstructor
 class RemoveBoardPayload {
    int boardId;
-   int roomNumber;
+   String roomNumber;
 }

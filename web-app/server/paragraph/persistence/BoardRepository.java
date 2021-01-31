@@ -114,13 +114,13 @@ public class BoardRepository {
 		return board;
 	}
 
-	public static void removeBoardFromRoom(int boardId, int roomNumber) throws Exception {
+	public static void removeBoardFromRoom(int boardId, String roomNumber) throws Exception {
 		Connection conn = DBManager.getConnection();
 		Statement st = conn.createStatement();
 
 		PreparedStatement ps = conn.prepareStatement("delete from lina.paragraph.board where lina.paragraph.board.id = ? and lina.paragraph.board.room_id = ?");
 		ps.setLong(1, boardId);
-		ps.setLong(2, roomNumber);
+		ps.setObject(2, roomNumber, java.sql.Types.OTHER);
 
 		ps.executeUpdate();
 		ps.close();
