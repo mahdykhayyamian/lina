@@ -8,7 +8,7 @@ import lombok.Data;
 @Builder
 public class Board {
     int id;
-    int roomId;
+    String roomId;
     int contentTypeId;
     String contentType;
     String commands;

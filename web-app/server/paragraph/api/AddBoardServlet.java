@@ -65,7 +65,7 @@ public class AddBoardServlet extends HttpServlet {
             System.out.println(payload.boardPayload.type);
 
             Board board = Board.builder()
-                .roomId(Integer.parseInt(payload.roomNumber))
+                .roomId(payload.roomNumber)
                 .contentTypeId(Integer.parseInt(payload.boardPayload.typeId))
                 .commands(payload.boardPayload.commands)
                 .previousBoardId(payload.boardPayload.previousBoardId)

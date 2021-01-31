@@ -1,3 +1,6 @@
+delete from paragraph.CHAT_MESSAGE;
+DROP Table paragraph.CHAT_MESSAGE;
+
 DELETE from paragraph.ROOM_USERS;
 DROP Table paragraph.ROOM_USERS;
 
@@ -18,10 +21,13 @@ DROP Table paragraph.ROOM;
 
 CREATE SCHEMA IF NOT EXISTS paragraph;
 
+CREATE EXTENSION IF NOT EXISTS "pgcrypto" SCHEMA paragraph;
+
 CREATE TABLE IF NOT EXISTS paragraph.ROOM(
-    id SERIAL PRIMARY KEY NOT NULL,
+    id UUID DEFAULT paragraph.gen_random_uuid(),
     created TIMESTAMP NOT NULL,
-    updated TIMESTAMP NOT NULL default CURRENT_TIMESTAMP
+    updated TIMESTAMP NOT NULL default CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS paragraph.CONTENT_TYPE (
@@ -41,7 +47,7 @@ CREATE TABLE IF NOT EXISTS paragraph.LINA_USER (
 
 CREATE TABLE IF NOT EXISTS paragraph.BOARD (
     id SERIAL PRIMARY KEY NOT NULL,
-    room_id INTEGER REFERENCES paragraph.ROOM(id),
+    room_id UUID REFERENCES paragraph.ROOM(id),
     content_type_id INTEGER REFERENCES paragraph.CONTENT_TYPE(id),
     commands TEXT,
     next_board_id INTEGER,
@@ -60,7 +66,7 @@ CREATE TABLE IF NOT EXISTS paragraph.SAMPLE_COMMAND (
 
 CREATE TABLE IF NOT EXISTS paragraph.ROOM_USERS (
     id SERIAL PRIMARY KEY NOT NULL,
-    room_id INTEGER REFERENCES paragraph.ROOM(id),
+    room_id UUID REFERENCES paragraph.ROOM(id),
     username TEXT,
     chat_color TEXT,
     created TIMESTAMP NOT NULL,
@@ -69,7 +75,7 @@ CREATE TABLE IF NOT EXISTS paragraph.ROOM_USERS (
 
 CREATE TABLE IF NOT EXISTS paragraph.CHAT_MESSAGE (
     id SERIAL PRIMARY KEY NOT NULL,
-    room_id INTEGER REFERENCES paragraph.ROOM(id),
+    room_id UUID REFERENCES paragraph.ROOM(id),
     sender_email TEXT,
     sender_given_name TEXT,
     text_content TEXT,

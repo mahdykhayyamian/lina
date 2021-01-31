@@ -14,12 +14,12 @@ import java.util.Date;
 
 public class RoomUsersRepository {
 
-	public static int addUserToRoom(int roomNumber, String username, String chatColor) throws Exception {
+	public static int addUserToRoom(String roomNumber, String username, String chatColor) throws Exception {
 		System.out.println("Going to add user to room");
 		Connection conn = DBManager.getConnection();
 		PreparedStatement ps = conn.prepareStatement("INSERT INTO paragraph.room_users (room_id, username, chat_color, created) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 
-		ps.setLong(1, roomNumber);
+		ps.setObject(1, roomNumber, java.sql.Types.OTHER);
 		ps.setString(2, username);
 		ps.setString(3, chatColor);
 		ps.setTimestamp(4, DBManager.getCurrentTimeStamp());
@@ -37,7 +37,7 @@ public class RoomUsersRepository {
 	}
 
 
-	public static boolean userJoinedRoom(int roomNumber, String username) throws Exception {
+	public static boolean userJoinedRoom(String roomNumber, String username) throws Exception {
 		System.out.println("Going to check if user has joined room");
         Connection conn = DBManager.getConnection();
         Statement st = conn.createStatement();
@@ -55,7 +55,7 @@ public class RoomUsersRepository {
         return false;
 	}
 
-	public static String getUserChatColor(int roomNumber, String username) throws Exception {
+	public static String getUserChatColor(String roomNumber, String username) throws Exception {
         Connection conn = DBManager.getConnection();
         Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery("select chat_color from paragraph.room_users where room_id='" + roomNumber + "' and username='" + username + "'");

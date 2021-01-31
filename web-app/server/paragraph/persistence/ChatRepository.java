@@ -44,7 +44,7 @@ public class ChatRepository {
 		String query = "select lina.paragraph.chat_message.id, lina.paragraph.chat_message.room_id, lina.paragraph.chat_message.sender_email," +
 			 "lina.paragraph.chat_message.sender_given_name, lina.paragraph.chat_message.text_content, lina.paragraph.chat_message.created, lina.paragraph.room_users.chat_color " + 
 			 "from lina.paragraph.chat_message join lina.paragraph.room_users on lina.paragraph.chat_message.sender_email = lina.paragraph.room_users.username and lina.paragraph.chat_message.room_id = lina.paragraph.room_users.room_id " +
-			 "where lina.paragraph.chat_message.room_id = " + roomId + " order by created";
+			 "where lina.paragraph.chat_message.room_id = '" + roomId + "' order by created";
 
 		System.out.println("query = " + query);
 		ResultSet rs = st.executeQuery(query);

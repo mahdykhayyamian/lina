@@ -24,8 +24,8 @@ import lina.board.athentication.AuthInfo;
 public class RTCServer {
 
     public static final String WS_KEEP_ALIVE_MESSAGE = "WS_KEEP_ALIVE_MESSAGE";
-    private static Map<Integer, List<Session>> roomNumToWSSessionsMap = Collections.synchronizedMap(new HashMap<Integer, List<Session>>());
-    private static Map<String, Integer> sessionIdToBoardNumMap = Collections.synchronizedMap(new HashMap<String, Integer>());
+    private static Map<String, List<Session>> roomNumToWSSessionsMap = Collections.synchronizedMap(new HashMap<String, List<Session>>());
+    private static Map<String, String> sessionIdToBoardNumMap = Collections.synchronizedMap(new HashMap<String, String>());
 
     @OnMessage
     public void onMessage(Session session, String msg) {
@@ -36,7 +36,7 @@ public class RTCServer {
             return;
         }
 
-        Integer roomNumber = sessionIdToBoardNumMap.get(session.getId());
+        String roomNumber = sessionIdToBoardNumMap.get(session.getId());
         System.out.println("Room number from session : " + roomNumber);
 
         try {
@@ -71,7 +71,7 @@ public class RTCServer {
             }
         }
 
-        Integer roomNumber = getRoomNumberParam(req);
+        String roomNumber = getRoomNumberParam(req);
         System.out.println("Room number from param : " + roomNumber);
 
         sessionIdToBoardNumMap.put(session.getId(), roomNumber);
@@ -91,7 +91,7 @@ public class RTCServer {
     public void onClose(Session closedSession) {
         System.out.println("Session " + closedSession.getId()+" has ended");
 
-        Integer roomNumber = sessionIdToBoardNumMap.get(closedSession.getId());
+        String roomNumber = sessionIdToBoardNumMap.get(closedSession.getId());
         sessionIdToBoardNumMap.remove(closedSession.getId());
 
         List<Session> openSessions = new ArrayList<Session>();
@@ -109,12 +109,12 @@ public class RTCServer {
         System.out.println(t);
     }
 
-    private static Integer getRoomNumberParam(HandshakeRequest req) {
+    private static String getRoomNumberParam(HandshakeRequest req) {
         System.out.println("params");
         Map<String,List<String>> params = req.getParameterMap();
         for (String key: params.keySet()) {
             if (key.equals("roomNumber")) {
-                return Integer.parseInt(params.get(key).get(0));
+                return params.get(key).get(0);
             }
         }
 

@@ -17,7 +17,6 @@ export default function addFeedbackLink(rootContainer) {
 
 	feedbackLink.setAttribute('href', '#');
 	feedbackLink.onclick = () => {
-
 		const feedbackModal = document.createElement('div');
 		feedbackModal.className = 'modal';
 

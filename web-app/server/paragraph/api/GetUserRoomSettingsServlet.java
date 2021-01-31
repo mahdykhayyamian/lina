@@ -54,7 +54,7 @@ public class GetUserRoomSettingsServlet extends HttpServlet {
 		}
 
 		try {
-			int roomNumber = Integer.parseInt(request.getParameter("roomNumber"));
+			String roomNumber = request.getParameter("roomNumber");
 			System.out.println("Room number is " + roomNumber);
 
 			String chatColor = RoomUsersRepository.getUserChatColor(roomNumber, authInfo.getEmail());
@@ -87,7 +87,7 @@ public class GetUserRoomSettingsServlet extends HttpServlet {
 @Data
 @Builder
 class UserRoomSettings {
-   int roomNumber;
+   String roomNumber;
    String userEmail;
    String roomChatColor;
 }

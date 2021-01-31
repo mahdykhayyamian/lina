@@ -67,8 +67,6 @@ public class ParagraphServlet extends HttpServlet {
 		String givenName = givenNameCookie.getValue();
 		request.setAttribute("given-name", givenName);
 
-		String roomNumber = null;
-
 		try {
 			if (roomNumberParam != null) {
 				boolean roomExist = RoomRepository.roomExist(roomNumberParam);
@@ -76,13 +74,12 @@ public class ParagraphServlet extends HttpServlet {
 				if (roomExist) {
 					System.out.println("need to load room from roomNumber in param : " + roomNumberParam);
 
-					int roomNum = Integer.parseInt(roomNumberParam);
-					boolean userHasAlreadyJoinedRoom = RoomUsersRepository.userJoinedRoom(roomNum, authInfo.getEmail());
+					boolean userHasAlreadyJoinedRoom = RoomUsersRepository.userJoinedRoom(roomNumberParam, authInfo.getEmail());
 
 					if (!userHasAlreadyJoinedRoom) {
 						int rnd = new Random().nextInt(CHAT_COLORS.length);
 						String randomChatColor = CHAT_COLORS[rnd];
-						RoomUsersRepository.addUserToRoom(roomNum, authInfo.getEmail(), randomChatColor);
+						RoomUsersRepository.addUserToRoom(roomNumberParam, authInfo.getEmail(), randomChatColor);
 					}
 
 					RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/src/paragraph/app.jsp");
@@ -94,8 +91,7 @@ public class ParagraphServlet extends HttpServlet {
 				}
 			} else {
 				System.out.println("no room Number in param, we need to create a new board");
-				int roomNum = RoomRepository.createRoom();
-				roomNumber = Integer.toString(roomNum);
+				String roomNumber = RoomRepository.createRoom();
 				response.sendRedirect("/paragraph?roomNumber=" + roomNumber);
 			}
 		} catch (Exception e) {

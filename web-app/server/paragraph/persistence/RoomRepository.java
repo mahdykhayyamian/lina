@@ -8,18 +8,18 @@ import java.sql.Statement;
 
 public class RoomRepository {
 
-    public static int createRoom() throws Exception {
+    public static String createRoom() throws Exception {
         System.out.println("Going to create a new room");
         Connection conn = DBManager.getConnection();
         PreparedStatement ps = conn.prepareStatement("INSERT INTO paragraph.room (created) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
         ps.setTimestamp(1, DBManager.getCurrentTimeStamp());
         ps.executeUpdate();
-        int id = 0;
+        String id = null;
         ResultSet rs = ps.getGeneratedKeys();
-        System.out.println(rs.toString());
 
         if (rs.next()){
-            id = rs.getInt(1);
+            id = rs.getString(1);
+            System.out.println("id = " + id);
         }
         ps.close();
         return id;
@@ -29,7 +29,7 @@ public class RoomRepository {
         System.out.println("Check if room exist");
         Connection conn = DBManager.getConnection();
         Statement st = conn.createStatement();
-        ResultSet rs = st.executeQuery("select * from lina.paragraph.room where id = " + roomNumber);
+        ResultSet rs = st.executeQuery("select * from lina.paragraph.room where id = '" + roomNumber + "'");
 
         while (rs.next()) {
             System.out.print("Column 1 returned ");
