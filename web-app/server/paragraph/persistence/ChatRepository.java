@@ -19,7 +19,7 @@ public class ChatRepository {
 		System.out.println("Going to create chat message");
 		Connection conn = DBManager.getConnection();
 		PreparedStatement ps = conn.prepareStatement("INSERT INTO paragraph.chat_message (room_id, sender_email, sender_given_name, text_content, created) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-		ps.setLong(1, chatMessage.getRoomId());
+		ps.setObject(1, chatMessage.getRoomId(), java.sql.Types.OTHER);
 		ps.setString(2, chatMessage.getSenderEmail());
 		ps.setString(3, chatMessage.getSenderGivenName());
 		ps.setString(4, chatMessage.getTextContent());
@@ -53,7 +53,7 @@ public class ChatRepository {
 			System.out.println(rs.getString(1));
 			chats.add(ChatMessage.builder()
 				.id(rs.getInt(1))
-				.roomId(rs.getInt(2))
+				.roomId(rs.getString(2))
 				.senderEmail(rs.getString(3))
 				.senderGivenName(rs.getString(4))
 				.textContent(rs.getString(5))

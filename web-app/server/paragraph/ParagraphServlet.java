@@ -51,7 +51,7 @@ public class ParagraphServlet extends HttpServlet {
 
 		if (authInfo == null) {
 			if (roomNumberParam != null) {
-				String fromUrl = "/paragraph?roomNumber=" + roomNumberParam;
+				String fromUrl = "/paragraph?roomId=" + roomNumberParam;
 				String encodedFromURL = Base64.getUrlEncoder().encodeToString(fromUrl.getBytes());
 				response.sendRedirect("/login?from=" + encodedFromURL);
 			} else {
@@ -72,7 +72,7 @@ public class ParagraphServlet extends HttpServlet {
 				boolean roomExist = RoomRepository.roomExist(roomNumberParam);
 
 				if (roomExist) {
-					System.out.println("need to load room from roomNumber in param : " + roomNumberParam);
+					System.out.println("need to load room from roomId in param : " + roomNumberParam);
 
 					boolean userHasAlreadyJoinedRoom = RoomUsersRepository.userJoinedRoom(roomNumberParam, authInfo.getEmail());
 
@@ -91,8 +91,8 @@ public class ParagraphServlet extends HttpServlet {
 				}
 			} else {
 				System.out.println("no room Number in param, we need to create a new board");
-				String roomNumber = RoomRepository.createRoom();
-				response.sendRedirect("/paragraph?roomNumber=" + roomNumber);
+				String roomId = RoomRepository.createRoom();
+				response.sendRedirect("/paragraph?roomId=" + roomId);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -107,9 +107,9 @@ public class ParagraphServlet extends HttpServlet {
 
 	private String getRoomNumberParam(HttpServletRequest request) {
 		Map<String, String[]> parmMap = request.getParameterMap();
-		if (parmMap.get("roomNumber") != null && parmMap.get("roomNumber").length > 0) {
-			String roomNumber = parmMap.get("roomNumber")[0];
-			return roomNumber;
+		if (parmMap.get("roomId") != null && parmMap.get("roomId").length > 0) {
+			String roomId = parmMap.get("roomId")[0];
+			return roomId;
 		}
 		return null;
 	}

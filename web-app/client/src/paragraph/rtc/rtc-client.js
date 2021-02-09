@@ -1,8 +1,8 @@
 import { CONSTANTS } from 'src/paragraph/constants.js';
 
 export default class RTCClient {
-	constructor(roomNumber) {
-		this.roomNumber = roomNumber;
+	constructor(roomId) {
+		this.roomId = roomId;
 		this.webSocket = createSocket(this);
 		this.onRecieveCallbacks = [];
 
@@ -15,9 +15,7 @@ export default class RTCClient {
 			const protocol =
 				window.location.hostname === 'localhost' ? 'ws://' : 'wss://';
 			const wsUri =
-				protocol +
-				window.location.host +
-				`/broadcast?roomNumber=${roomNumber}`;
+				protocol + window.location.host + `/broadcast?roomId=${roomId}`;
 			const webSocket = new WebSocket(wsUri);
 
 			webSocket.onerror = function(evt) {

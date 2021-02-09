@@ -25,11 +25,11 @@ public class RoomRepository {
         return id;
     }
 
-    public static boolean roomExist(String roomNumber) throws Exception {
+    public static boolean roomExist(String roomId) throws Exception {
         System.out.println("Check if room exist");
         Connection conn = DBManager.getConnection();
         Statement st = conn.createStatement();
-        ResultSet rs = st.executeQuery("select * from lina.paragraph.room where id = '" + roomNumber + "'");
+        ResultSet rs = st.executeQuery("select * from lina.paragraph.room where id = '" + roomId + "'");
 
         while (rs.next()) {
             System.out.print("Column 1 returned ");

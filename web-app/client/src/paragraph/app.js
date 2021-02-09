@@ -19,7 +19,7 @@ window.onload = async function() {
 	const appDiv = document.getElementById('lina.app');
 	appDiv.style.setProperty('position', 'absolute');
 
-	const roomNumber = getRoomNumberFromUrl();
+	const roomId = getRoomNumberFromUrl();
 
 	const request = ajax({
 		headers: {
@@ -28,12 +28,12 @@ window.onload = async function() {
 	});
 
 	const roomSettings = await request.get(
-		'/api/getUserRoomSettings?roomNumber=' + roomNumber
+		'/api/getUserRoomSettings?roomId=' + roomId
 	);
 
 	setGlobalEnvVariables(roomSettings);
 
-	const rtcClient = new RTCClient(roomNumber);
+	const rtcClient = new RTCClient(roomId);
 	const boardsComponent = new BoardsComponent(rtcClient);
 	const rootContainer = buildLayout(boardsComponent, rtcClient);
 
