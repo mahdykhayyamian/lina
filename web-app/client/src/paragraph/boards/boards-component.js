@@ -4,7 +4,7 @@ import { Widget } from 'smartframes';
 import { BoardTypeSelector } from 'src/paragraph/boards/select-board-type.js';
 import { moduleLoader } from 'src/paragraph/module-loader.js';
 import { CONSTANTS } from 'src/paragraph/constants.js';
-import { getRoomNumberFromUrl } from 'src/paragraph/utils.js';
+import { getroomIdFromUrl } from 'src/paragraph/utils.js';
 
 const addBoardHeight = 40;
 const boardHeaderHeight = 50;
@@ -129,7 +129,7 @@ BoardsComponent.prototype.loadBoardsFromServer = function() {
 		}
 	});
 
-	const roomId = getRoomNumberFromUrl();
+	const roomId = getroomIdFromUrl();
 
 	request.get('/api/getRoomBoards?roomId=' + roomId).then(loadedBoards => {
 		for (let i = 0; i < loadedBoards.length; i++) {
@@ -233,7 +233,7 @@ function runCommandsOnBoard(boardsComponent, remoteBoard) {
 }
 
 function appendBoard(boardsComponent, boardType, typeId) {
-	const roomId = getRoomNumberFromUrl();
+	const roomId = getroomIdFromUrl();
 
 	let previousBoardId = null;
 	let nextBoardId = null;
@@ -387,7 +387,7 @@ function removeSelectedBoard(boardsComponent) {
 		}
 	});
 
-	const roomId = getRoomNumberFromUrl();
+	const roomId = getroomIdFromUrl();
 	request
 		.post('/api/removeBoard', {
 			boardId: board.boardId,

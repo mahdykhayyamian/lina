@@ -1,4 +1,4 @@
-export const getRoomNumberFromUrl = function() {
+export const getroomIdFromUrl = function() {
 	const url = new URL(window.location.href);
 	const roomId = url.searchParams.get('roomId');
 	return roomId;

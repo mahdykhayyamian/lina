@@ -71,7 +71,7 @@ public class RTCServer {
             }
         }
 
-        String roomId = getRoomNumberParam(req);
+        String roomId = getroomIdParam(req);
         System.out.println("Room number from param : " + roomId);
 
         sessionIdToBoardNumMap.put(session.getId(), roomId);
@@ -109,7 +109,7 @@ public class RTCServer {
         System.out.println(t);
     }
 
-    private static String getRoomNumberParam(HandshakeRequest req) {
+    private static String getroomIdParam(HandshakeRequest req) {
         System.out.println("params");
         Map<String,List<String>> params = req.getParameterMap();
         for (String key: params.keySet()) {

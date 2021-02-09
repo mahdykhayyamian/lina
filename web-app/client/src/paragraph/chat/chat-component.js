@@ -7,7 +7,7 @@ import { CONSTANTS } from 'src/paragraph/constants.js';
 import {
 	getUserEmail,
 	getGivenName,
-	getRoomNumberFromUrl
+	getroomIdFromUrl
 } from 'src/paragraph/utils.js';
 
 const CHAT_COLOR_DEFAULT = 'black';
@@ -55,7 +55,7 @@ const ChatComponent = function(rtcClient) {
 			const senderEmail = getUserEmail();
 			const senderGivenName = getGivenName();
 
-			const roomId = getRoomNumberFromUrl();
+			const roomId = getroomIdFromUrl();
 
 			const request = ajax({
 				headers: {
@@ -152,7 +152,7 @@ function loadChatsFromServer(chatComponent) {
 		}
 	});
 
-	const roomId = getRoomNumberFromUrl();
+	const roomId = getroomIdFromUrl();
 
 	request.get('/api/getChatMessages?roomId=' + roomId).then(chatMessages => {
 		for (let i = 0; i < chatMessages.length; i++) {

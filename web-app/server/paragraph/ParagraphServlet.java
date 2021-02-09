@@ -40,7 +40,7 @@ public class ParagraphServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String roomNumberParam = getRoomNumberParam(request);
+		String roomIdParam = getroomIdParam(request);
 		AuthInfo authInfo = null;
 		try {
 			AuthenticationCookies authCookies = AuthenticationUtils.getAuthCookies(request);
@@ -50,8 +50,8 @@ public class ParagraphServlet extends HttpServlet {
 		}
 
 		if (authInfo == null) {
-			if (roomNumberParam != null) {
-				String fromUrl = "/paragraph?roomId=" + roomNumberParam;
+			if (roomIdParam != null) {
+				String fromUrl = "/paragraph?roomId=" + roomIdParam;
 				String encodedFromURL = Base64.getUrlEncoder().encodeToString(fromUrl.getBytes());
 				response.sendRedirect("/login?from=" + encodedFromURL);
 			} else {
@@ -68,18 +68,18 @@ public class ParagraphServlet extends HttpServlet {
 		request.setAttribute("given-name", givenName);
 
 		try {
-			if (roomNumberParam != null) {
-				boolean roomExist = RoomRepository.roomExist(roomNumberParam);
+			if (roomIdParam != null) {
+				boolean roomExist = RoomRepository.roomExist(roomIdParam);
 
 				if (roomExist) {
-					System.out.println("need to load room from roomId in param : " + roomNumberParam);
+					System.out.println("need to load room from roomId in param : " + roomIdParam);
 
-					boolean userHasAlreadyJoinedRoom = RoomUsersRepository.userJoinedRoom(roomNumberParam, authInfo.getEmail());
+					boolean userHasAlreadyJoinedRoom = RoomUsersRepository.userJoinedRoom(roomIdParam, authInfo.getEmail());
 
 					if (!userHasAlreadyJoinedRoom) {
 						int rnd = new Random().nextInt(CHAT_COLORS.length);
 						String randomChatColor = CHAT_COLORS[rnd];
-						RoomUsersRepository.addUserToRoom(roomNumberParam, authInfo.getEmail(), randomChatColor);
+						RoomUsersRepository.addUserToRoom(roomIdParam, authInfo.getEmail(), randomChatColor);
 					}
 
 					RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/src/paragraph/app.jsp");
@@ -105,7 +105,7 @@ public class ParagraphServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	}
 
-	private String getRoomNumberParam(HttpServletRequest request) {
+	private String getroomIdParam(HttpServletRequest request) {
 		Map<String, String[]> parmMap = request.getParameterMap();
 		if (parmMap.get("roomId") != null && parmMap.get("roomId").length > 0) {
 			String roomId = parmMap.get("roomId")[0];
