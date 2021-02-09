@@ -7,7 +7,7 @@ import { CONSTANTS } from 'src/paragraph/constants.js';
 import {
 	getUserEmail,
 	getGivenName,
-	getRoomNumberFromUrl
+	getroomIdFromUrl
 } from 'src/paragraph/utils.js';
 
 const CHAT_COLOR_DEFAULT = 'black';
@@ -55,7 +55,7 @@ const ChatComponent = function(rtcClient) {
 			const senderEmail = getUserEmail();
 			const senderGivenName = getGivenName();
 
-			const roomNumber = getRoomNumberFromUrl();
+			const roomId = getroomIdFromUrl();
 
 			const request = ajax({
 				headers: {
@@ -65,7 +65,7 @@ const ChatComponent = function(rtcClient) {
 
 			request
 				.post('/api/addChatMessage', {
-					roomNumber,
+					roomId,
 					senderEmail,
 					senderGivenName,
 					textContent: chatMessage,
@@ -152,20 +152,18 @@ function loadChatsFromServer(chatComponent) {
 		}
 	});
 
-	const roomNumber = getRoomNumberFromUrl();
+	const roomId = getroomIdFromUrl();
 
-	request
-		.get('/api/getChatMessages?roomNumber=' + roomNumber)
-		.then(chatMessages => {
-			for (let i = 0; i < chatMessages.length; i++) {
-				const chatMessage = chatMessages[i];
-				chatComponent.addChatMessage(
-					chatMessage.textContent,
-					chatMessage.senderGivenName,
-					chatMessage.chatColor || CHAT_COLOR_DEFAULT
-				);
-			}
-		});
+	request.get('/api/getChatMessages?roomId=' + roomId).then(chatMessages => {
+		for (let i = 0; i < chatMessages.length; i++) {
+			const chatMessage = chatMessages[i];
+			chatComponent.addChatMessage(
+				chatMessage.textContent,
+				chatMessage.senderGivenName,
+				chatMessage.chatColor || CHAT_COLOR_DEFAULT
+			);
+		}
+	});
 }
 
 function onRecieveRTCMessage(chatComponent, rtcMessage) {

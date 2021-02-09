@@ -19,7 +19,7 @@ public class ChatRepository {
 		System.out.println("Going to create chat message");
 		Connection conn = DBManager.getConnection();
 		PreparedStatement ps = conn.prepareStatement("INSERT INTO paragraph.chat_message (room_id, sender_email, sender_given_name, text_content, created) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-		ps.setLong(1, chatMessage.getRoomId());
+		ps.setObject(1, chatMessage.getRoomId(), java.sql.Types.OTHER);
 		ps.setString(2, chatMessage.getSenderEmail());
 		ps.setString(3, chatMessage.getSenderGivenName());
 		ps.setString(4, chatMessage.getTextContent());
@@ -44,7 +44,7 @@ public class ChatRepository {
 		String query = "select lina.paragraph.chat_message.id, lina.paragraph.chat_message.room_id, lina.paragraph.chat_message.sender_email," +
 			 "lina.paragraph.chat_message.sender_given_name, lina.paragraph.chat_message.text_content, lina.paragraph.chat_message.created, lina.paragraph.room_users.chat_color " + 
 			 "from lina.paragraph.chat_message join lina.paragraph.room_users on lina.paragraph.chat_message.sender_email = lina.paragraph.room_users.username and lina.paragraph.chat_message.room_id = lina.paragraph.room_users.room_id " +
-			 "where lina.paragraph.chat_message.room_id = " + roomId + " order by created";
+			 "where lina.paragraph.chat_message.room_id = '" + roomId + "' order by created";
 
 		System.out.println("query = " + query);
 		ResultSet rs = st.executeQuery(query);
@@ -53,7 +53,7 @@ public class ChatRepository {
 			System.out.println(rs.getString(1));
 			chats.add(ChatMessage.builder()
 				.id(rs.getInt(1))
-				.roomId(rs.getInt(2))
+				.roomId(rs.getString(2))
 				.senderEmail(rs.getString(3))
 				.senderGivenName(rs.getString(4))
 				.textContent(rs.getString(5))

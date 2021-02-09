@@ -1,7 +1,7 @@
-export const getRoomNumberFromUrl = function() {
+export const getroomIdFromUrl = function() {
 	const url = new URL(window.location.href);
-	const roomNumber = url.searchParams.get('roomNumber');
-	return roomNumber;
+	const roomId = url.searchParams.get('roomId');
+	return roomId;
 };
 
 export const getUserEmail = function() {

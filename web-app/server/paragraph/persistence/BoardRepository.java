@@ -17,7 +17,7 @@ public class BoardRepository {
 		System.out.println("Going to create a board");
 		Connection conn = DBManager.getConnection();
 		PreparedStatement ps = conn.prepareStatement("INSERT INTO paragraph.board (room_id, content_type_id, commands, previous_board_id, next_board_id, created) VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-		ps.setLong(1, board.getRoomId());
+		ps.setObject(1, board.getRoomId(), java.sql.Types.OTHER);
 		ps.setLong(2, board.getContentTypeId());
 		ps.setString(3, board.getCommands());
 		ps.setInt(4, board.getPreviousBoardId());
@@ -71,14 +71,14 @@ public class BoardRepository {
 		Statement st = conn.createStatement();
 		ResultSet rs = st.executeQuery(
 			"select lina.paragraph.board.id,  lina.paragraph.board.room_id,  lina.paragraph.board.content_type_id, lina.paragraph.content_type.type, lina.paragraph.board.commands, lina.paragraph.board.previous_board_id \n" +
-			"from lina.paragraph.board, lina.paragraph.content_type where lina.paragraph.board.content_type_id = lina.paragraph.content_type.id and room_id = " + roomId);
+			"from lina.paragraph.board, lina.paragraph.content_type where lina.paragraph.board.content_type_id = lina.paragraph.content_type.id and room_id = '" + roomId + "'");
 
 		while (rs.next()) {
 			System.out.print("Column 1 returned ");
 			System.out.println(rs.getString(1));
 			boards.add(Board.builder()
 				.id(rs.getInt(1))
-				.roomId(rs.getInt(2))
+				.roomId(rs.getString(2))
 				.contentTypeId(rs.getInt(3))
 				.contentType(rs.getString(4))
 				.commands(rs.getString(5))
@@ -114,13 +114,13 @@ public class BoardRepository {
 		return board;
 	}
 
-	public static void removeBoardFromRoom(int boardId, int roomNumber) throws Exception {
+	public static void removeBoardFromRoom(int boardId, String roomId) throws Exception {
 		Connection conn = DBManager.getConnection();
 		Statement st = conn.createStatement();
 
 		PreparedStatement ps = conn.prepareStatement("delete from lina.paragraph.board where lina.paragraph.board.id = ? and lina.paragraph.board.room_id = ?");
 		ps.setLong(1, boardId);
-		ps.setLong(2, roomNumber);
+		ps.setObject(2, roomId, java.sql.Types.OTHER);
 
 		ps.executeUpdate();
 		ps.close();

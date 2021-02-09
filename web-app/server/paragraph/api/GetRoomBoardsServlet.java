@@ -56,10 +56,10 @@ public class GetRoomBoardsServlet extends HttpServlet {
         }
 
 		try{
-			String roomNumber = request.getParameter("roomNumber");
-			System.out.println("Room number is " + roomNumber);
+			String roomId = request.getParameter("roomId");
+			System.out.println("Room number is " + roomId);
 
-			List<Board> boards = BoardRepository.getBoardsForRoom(roomNumber);
+			List<Board> boards = BoardRepository.getBoardsForRoom(roomId);
 
             Gson gson = new Gson();
             String jsonPayload = gson.toJson(boards);
@@ -87,5 +87,5 @@ public class GetRoomBoardsServlet extends HttpServlet {
 @Data
 @AllArgsConstructor
 class GetRoomBoardsPayload {
-   String roomNumber;
+   String roomId;
 }

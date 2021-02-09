@@ -12,14 +12,14 @@ import { BoardsComponent } from 'src/paragraph/boards/boards-component.js';
 import { ChatComponent } from 'src/paragraph/chat/chat-component.js';
 import { CONSTANTS } from 'src/paragraph/constants.js';
 import RTCClient from 'src/paragraph/rtc/rtc-client.js';
-import { getRoomNumberFromUrl } from 'src/paragraph/utils.js';
+import { getroomIdFromUrl } from 'src/paragraph/utils.js';
 import addFeedbackLink from './feedback.js';
 
 window.onload = async function() {
 	const appDiv = document.getElementById('lina.app');
 	appDiv.style.setProperty('position', 'absolute');
 
-	const roomNumber = getRoomNumberFromUrl();
+	const roomId = getroomIdFromUrl();
 
 	const request = ajax({
 		headers: {
@@ -28,12 +28,12 @@ window.onload = async function() {
 	});
 
 	const roomSettings = await request.get(
-		'/api/getUserRoomSettings?roomNumber=' + roomNumber
+		'/api/getUserRoomSettings?roomId=' + roomId
 	);
 
 	setGlobalEnvVariables(roomSettings);
 
-	const rtcClient = new RTCClient(roomNumber);
+	const rtcClient = new RTCClient(roomId);
 	const boardsComponent = new BoardsComponent(rtcClient);
 	const rootContainer = buildLayout(boardsComponent, rtcClient);
 

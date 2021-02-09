@@ -70,7 +70,7 @@ public class AddChatMessageServlet extends HttpServlet {
             System.out.println(payload);
 
             ChatMessage chatMessage = ChatMessage.builder()
-                .roomId(Integer.parseInt(payload.roomNumber))
+                .roomId(payload.roomId)
                 .senderEmail(payload.senderEmail)
                 .senderGivenName(payload.senderGivenName)
                 .textContent(payload.textContent)
@@ -94,7 +94,7 @@ public class AddChatMessageServlet extends HttpServlet {
 @Data
 @AllArgsConstructor
 class AddChatMessagePayload {
-    String roomNumber;
+    String roomId;
     String senderEmail;
     String senderGivenName;
     String textContent;

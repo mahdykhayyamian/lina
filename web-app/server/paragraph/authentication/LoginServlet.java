@@ -57,8 +57,8 @@ public class LoginServlet extends HttpServlet {
 	private String getFrom(HttpServletRequest request) {
 		Map<String, String[]> parmMap = request.getParameterMap();
 		if (parmMap.get("from") != null && parmMap.get("from").length > 0) {
-			String roomNumber = parmMap.get("from")[0];
-			return roomNumber;
+			String roomId = parmMap.get("from")[0];
+			return roomId;
 		}
 		return null;
 	}

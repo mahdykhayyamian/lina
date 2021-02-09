@@ -8,7 +8,7 @@ import lombok.Data;
 @Builder
 public class ChatMessage {
     int id;
-    int roomId;
+    String roomId;
     String senderEmail;
     String senderGivenName;
     String textContent;

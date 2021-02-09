@@ -4,7 +4,7 @@ import { Widget } from 'smartframes';
 import { BoardTypeSelector } from 'src/paragraph/boards/select-board-type.js';
 import { moduleLoader } from 'src/paragraph/module-loader.js';
 import { CONSTANTS } from 'src/paragraph/constants.js';
-import { getRoomNumberFromUrl } from 'src/paragraph/utils.js';
+import { getroomIdFromUrl } from 'src/paragraph/utils.js';
 
 const addBoardHeight = 40;
 const boardHeaderHeight = 50;
@@ -129,51 +129,47 @@ BoardsComponent.prototype.loadBoardsFromServer = function() {
 		}
 	});
 
-	const roomNumber = getRoomNumberFromUrl();
+	const roomId = getroomIdFromUrl();
 
-	request
-		.get('/api/getRoomBoards?roomNumber=' + roomNumber)
-		.then(loadedBoards => {
-			for (let i = 0; i < loadedBoards.length; i++) {
-				const loadedBoard = loadedBoards[i];
+	request.get('/api/getRoomBoards?roomId=' + roomId).then(loadedBoards => {
+		for (let i = 0; i < loadedBoards.length; i++) {
+			const loadedBoard = loadedBoards[i];
 
-				let boardDiv = document.createElement('div');
-				boardDiv.setAttribute('class', 'board');
-				boardDiv.setAttribute('id', loadedBoard.id);
+			let boardDiv = document.createElement('div');
+			boardDiv.setAttribute('class', 'board');
+			boardDiv.setAttribute('id', loadedBoard.id);
 
-				const board = {
-					type: loadedBoard.contentType,
-					commands: loadedBoard.commands,
-					rootElement: boardDiv,
-					boardId: loadedBoard.id,
-					previousBoardId: loadedBoard.previousBoardId,
-					nextBoardId: loadedBoard.nextBoardId
-				};
+			const board = {
+				type: loadedBoard.contentType,
+				commands: loadedBoard.commands,
+				rootElement: boardDiv,
+				boardId: loadedBoard.id,
+				previousBoardId: loadedBoard.previousBoardId,
+				nextBoardId: loadedBoard.nextBoardId
+			};
 
-				this.boards.push(board);
-				this.boardContainer.appendChild(board.rootElement);
-				registerBoardOnClickHandler(board.rootElement, this);
+			this.boards.push(board);
+			this.boardContainer.appendChild(board.rootElement);
+			registerBoardOnClickHandler(board.rootElement, this);
 
-				moduleLoader
-					.getModuleByName(board.type)
-					.then(visualizerModule => {
-						const visualizer = visualizerModule.default.visualizer;
-						try {
-							visualizer.visualizeBoardCommands(board);
-						} catch (e) {
-							console.log(e);
-						}
-						getSamplesForType(board.type).then(samples => {
-							board.samples = samples;
+			moduleLoader.getModuleByName(board.type).then(visualizerModule => {
+				const visualizer = visualizerModule.default.visualizer;
+				try {
+					visualizer.visualizeBoardCommands(board);
+				} catch (e) {
+					console.log(e);
+				}
+				getSamplesForType(board.type).then(samples => {
+					board.samples = samples;
 
-							// make the first board selected by default
-							if (loadedBoards.length > 0) {
-								makeBoardSelected(0, this);
-							}
-						});
-					});
-			}
-		});
+					// make the first board selected by default
+					if (loadedBoards.length > 0) {
+						makeBoardSelected(0, this);
+					}
+				});
+			});
+		}
+	});
 };
 
 function onRecieveRTCMessage(boardsComponent, rtcMessage) {
@@ -237,7 +233,7 @@ function runCommandsOnBoard(boardsComponent, remoteBoard) {
 }
 
 function appendBoard(boardsComponent, boardType, typeId) {
-	const roomNumber = getRoomNumberFromUrl();
+	const roomId = getroomIdFromUrl();
 
 	let previousBoardId = null;
 	let nextBoardId = null;
@@ -247,7 +243,7 @@ function appendBoard(boardsComponent, boardType, typeId) {
 	}
 
 	return saveBoard(
-		roomNumber,
+		roomId,
 		boardType,
 		typeId,
 		previousBoardId,
@@ -259,7 +255,7 @@ function appendBoard(boardsComponent, boardType, typeId) {
 			type: CONSTANTS.RTC_MESSAGE_TYPES.ADD_BOARD,
 			content: {
 				newBoardId,
-				roomNumber,
+				roomId,
 				boardType,
 				typeId,
 				previousBoardId,
@@ -272,13 +268,7 @@ function appendBoard(boardsComponent, boardType, typeId) {
 	});
 }
 
-function saveBoard(
-	roomNumber,
-	boardType,
-	typeId,
-	previousBoardId,
-	nextBoardId
-) {
+function saveBoard(roomId, boardType, typeId, previousBoardId, nextBoardId) {
 	const request = ajax({
 		headers: {
 			'content-type': 'application/json'
@@ -294,7 +284,7 @@ function saveBoard(
 	};
 
 	return request.post('/api/addBoard', {
-		roomNumber,
+		roomId,
 		boardPayload
 	});
 }
@@ -397,11 +387,11 @@ function removeSelectedBoard(boardsComponent) {
 		}
 	});
 
-	const roomNumber = getRoomNumberFromUrl();
+	const roomId = getroomIdFromUrl();
 	request
 		.post('/api/removeBoard', {
 			boardId: board.boardId,
-			roomNumber
+			roomId
 		})
 		.then(() => {
 			if (boardsComponent.selectedBoardIndex !== null) {

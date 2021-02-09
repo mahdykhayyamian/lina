@@ -24,8 +24,8 @@ import lina.board.athentication.AuthInfo;
 public class RTCServer {
 
     public static final String WS_KEEP_ALIVE_MESSAGE = "WS_KEEP_ALIVE_MESSAGE";
-    private static Map<Integer, List<Session>> roomNumToWSSessionsMap = Collections.synchronizedMap(new HashMap<Integer, List<Session>>());
-    private static Map<String, Integer> sessionIdToBoardNumMap = Collections.synchronizedMap(new HashMap<String, Integer>());
+    private static Map<String, List<Session>> roomNumToWSSessionsMap = Collections.synchronizedMap(new HashMap<String, List<Session>>());
+    private static Map<String, String> sessionIdToBoardNumMap = Collections.synchronizedMap(new HashMap<String, String>());
 
     @OnMessage
     public void onMessage(Session session, String msg) {
@@ -36,11 +36,11 @@ public class RTCServer {
             return;
         }
 
-        Integer roomNumber = sessionIdToBoardNumMap.get(session.getId());
-        System.out.println("Room number from session : " + roomNumber);
+        String roomId = sessionIdToBoardNumMap.get(session.getId());
+        System.out.println("Room number from session : " + roomId);
 
         try {
-            for (Session peerSession : roomNumToWSSessionsMap.get(roomNumber)) {
+            for (Session peerSession : roomNumToWSSessionsMap.get(roomId)) {
                 System.out.println("session id for peer : " + peerSession.getId());
                 if (peerSession.isOpen()) {
                     if (!peerSession.equals(session)) {
@@ -71,16 +71,16 @@ public class RTCServer {
             }
         }
 
-        Integer roomNumber = getRoomNumberParam(req);
-        System.out.println("Room number from param : " + roomNumber);
+        String roomId = getroomIdParam(req);
+        System.out.println("Room number from param : " + roomId);
 
-        sessionIdToBoardNumMap.put(session.getId(), roomNumber);
+        sessionIdToBoardNumMap.put(session.getId(), roomId);
 
-        if (roomNumber != null) {
-            List<Session> roomSessions = roomNumToWSSessionsMap.get(roomNumber);
+        if (roomId != null) {
+            List<Session> roomSessions = roomNumToWSSessionsMap.get(roomId);
             if (roomSessions == null) {
                 roomSessions = new ArrayList<Session>();
-                roomNumToWSSessionsMap.put(roomNumber, roomSessions);
+                roomNumToWSSessionsMap.put(roomId, roomSessions);
             }
 
             roomSessions.add(session);
@@ -91,17 +91,17 @@ public class RTCServer {
     public void onClose(Session closedSession) {
         System.out.println("Session " + closedSession.getId()+" has ended");
 
-        Integer roomNumber = sessionIdToBoardNumMap.get(closedSession.getId());
+        String roomId = sessionIdToBoardNumMap.get(closedSession.getId());
         sessionIdToBoardNumMap.remove(closedSession.getId());
 
         List<Session> openSessions = new ArrayList<Session>();
-        for (Session peerSession : roomNumToWSSessionsMap.get(roomNumber)) {
+        for (Session peerSession : roomNumToWSSessionsMap.get(roomId)) {
             if (!closedSession.getId().equals(peerSession.getId())) {
                 openSessions.add(peerSession);
             }
         }
 
-        roomNumToWSSessionsMap.put(roomNumber, openSessions);
+        roomNumToWSSessionsMap.put(roomId, openSessions);
     }
 
     @OnError
@@ -109,12 +109,12 @@ public class RTCServer {
         System.out.println(t);
     }
 
-    private static Integer getRoomNumberParam(HandshakeRequest req) {
+    private static String getroomIdParam(HandshakeRequest req) {
         System.out.println("params");
         Map<String,List<String>> params = req.getParameterMap();
         for (String key: params.keySet()) {
-            if (key.equals("roomNumber")) {
-                return Integer.parseInt(params.get(key).get(0));
+            if (key.equals("roomId")) {
+                return params.get(key).get(0);
             }
         }
 

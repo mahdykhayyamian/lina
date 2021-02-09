@@ -67,7 +67,7 @@ public class RemoveBoardServlet extends HttpServlet {
 		try {
 			// ideally these db changes should happen inside one transaction, but we can live with it for now
 			Board board = BoardRepository.getBoard(payload.boardId);
-			BoardRepository.removeBoardFromRoom(payload.boardId, payload.roomNumber);
+			BoardRepository.removeBoardFromRoom(payload.boardId, payload.roomId);
 			BoardRepository.updateNextBoard(board.getPreviousBoardId(), board.getNextBoardId());
 			BoardRepository.updatePreviousBoard(board.getNextBoardId(), board.getPreviousBoardId());
 		} catch (Exception e) {
@@ -81,5 +81,5 @@ public class RemoveBoardServlet extends HttpServlet {
 @AllArgsConstructor
 class RemoveBoardPayload {
    int boardId;
-   int roomNumber;
+   String roomId;
 }

@@ -54,12 +54,12 @@ public class GetUserRoomSettingsServlet extends HttpServlet {
 		}
 
 		try {
-			int roomNumber = Integer.parseInt(request.getParameter("roomNumber"));
-			System.out.println("Room number is " + roomNumber);
+			String roomId = request.getParameter("roomId");
+			System.out.println("Room number is " + roomId);
 
-			String chatColor = RoomUsersRepository.getUserChatColor(roomNumber, authInfo.getEmail());
+			String chatColor = RoomUsersRepository.getUserChatColor(roomId, authInfo.getEmail());
 
-			UserRoomSettings userRoomSettings = UserRoomSettings.builder().roomNumber(roomNumber).userEmail(authInfo.getEmail()).roomChatColor(chatColor).build();
+			UserRoomSettings userRoomSettings = UserRoomSettings.builder().roomId(roomId).userEmail(authInfo.getEmail()).roomChatColor(chatColor).build();
 
 			Gson gson = new Gson();
 			String jsonPayload = gson.toJson(userRoomSettings);
@@ -87,7 +87,7 @@ public class GetUserRoomSettingsServlet extends HttpServlet {
 @Data
 @Builder
 class UserRoomSettings {
-   int roomNumber;
+   String roomId;
    String userEmail;
    String roomChatColor;
 }
