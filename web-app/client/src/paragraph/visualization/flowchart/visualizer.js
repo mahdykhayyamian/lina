@@ -23,7 +23,7 @@ function visualizeBoardCommands(board) {
 
 	const graphDefinition = commands;
 	const graph = mermaid.mermaidAPI.render(
-		`erd-${uniqueId}`,
+		`flowchart-${uniqueId}`,
 		graphDefinition,
 		insertSvg
 	);
