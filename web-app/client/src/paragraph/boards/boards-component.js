@@ -471,6 +471,11 @@ function getSamplesForType(type) {
 			return erdModule.then(erdModule => {
 				return erdModule.default.samples;
 			});
+		case 'flowchart':
+			const flowchartModule = moduleLoader.getModuleByName(type);
+			return flowchartModule.then(flowchartModule => {
+				return flowchartModule.default.samples;
+			});
 		default:
 			return Promise.resolve([]);
 	}

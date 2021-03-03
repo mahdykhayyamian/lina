@@ -10,6 +10,7 @@ let graphModule = null;
 let treeChartModule = null;
 let funnelModule = null;
 let erdModule = null;
+let flowchartModule = null;
 
 function getModuleByName(moduleName) {
 	switch (moduleName) {
@@ -113,7 +114,13 @@ function getModuleByName(moduleName) {
 			}
 
 			erdModule = import('src/paragraph/visualization/erd');
-			return erdModule;
+		case 'flowchart':
+			if (flowchartModule) {
+				return flowchartModule;
+			}
+
+			flowchartModule = import('src/paragraph/visualization/flowchart');
+			return flowchartModule;
 		default:
 			return Promise.resolve(null);
 	}
