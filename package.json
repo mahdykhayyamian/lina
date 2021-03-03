@@ -15,6 +15,7 @@
     "load-js": "^3.0.3",
     "loadjs": "^3.5.5",
     "mathjax": "^2.7.5",
+    "mermaid": "^8.9.1",
     "phosphor-dockpanel": "^0.9.7",
     "phosphor-messaging": "^1.0.6",
     "phosphor-widget": "^1.0.0-rc.1",

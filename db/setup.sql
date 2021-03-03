@@ -95,3 +95,4 @@ INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('venn-diagram',
 INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('graph', 'Graph', current_timestamp);
 INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('tree-chart', 'Tree Chart', current_timestamp);
 INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('funnel', 'Funnel Chart', current_timestamp);
+INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('erd', 'Entity Relationship Diagram', current_timestamp);
