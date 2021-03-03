@@ -466,6 +466,11 @@ function getSamplesForType(type) {
 			return funnelModule.then(funnelModule => {
 				return funnelModule.default.samples;
 			});
+		case 'erd':
+			const erdModule = moduleLoader.getModuleByName(type);
+			return erdModule.then(erdModule => {
+				return erdModule.default.samples;
+			});
 		default:
 			return Promise.resolve([]);
 	}

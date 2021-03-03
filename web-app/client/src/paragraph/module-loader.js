@@ -9,6 +9,7 @@ let vennDiagramModule = null;
 let graphModule = null;
 let treeChartModule = null;
 let funnelModule = null;
+let erdModule = null;
 
 function getModuleByName(moduleName) {
 	switch (moduleName) {
@@ -106,6 +107,13 @@ function getModuleByName(moduleName) {
 
 			funnelModule = import('src/paragraph/visualization/funnel');
 			return funnelModule;
+		case 'erd':
+			if (erdModule) {
+				return erdModule;
+			}
+
+			erdModule = import('src/paragraph/visualization/erd');
+			return erdModule;
 		default:
 			return Promise.resolve(null);
 	}
