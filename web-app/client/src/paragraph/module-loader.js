@@ -114,6 +114,7 @@ function getModuleByName(moduleName) {
 			}
 
 			erdModule = import('src/paragraph/visualization/erd');
+			return erdModule;
 		case 'flowchart':
 			if (flowchartModule) {
 				return flowchartModule;
