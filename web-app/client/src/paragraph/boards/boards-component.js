@@ -476,6 +476,11 @@ function getSamplesForType(type) {
 			return flowchartModule.then(flowchartModule => {
 				return flowchartModule.default.samples;
 			});
+		case 'piechart':
+			const piechartModule = moduleLoader.getModuleByName(type);
+			return piechartModule.then(piechartModule => {
+				return piechartModule.default.samples;
+			});
 		default:
 			return Promise.resolve([]);
 	}
