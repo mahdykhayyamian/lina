@@ -11,6 +11,7 @@ let treeChartModule = null;
 let funnelModule = null;
 let erdModule = null;
 let flowchartModule = null;
+let pieChartModule = null;
 
 function getModuleByName(moduleName) {
 	switch (moduleName) {
@@ -122,6 +123,13 @@ function getModuleByName(moduleName) {
 
 			flowchartModule = import('src/paragraph/visualization/flowchart');
 			return flowchartModule;
+		case 'piechart':
+			if (pieChartModule) {
+				return pieChartModule;
+			}
+
+			pieChartModule = import('src/paragraph/visualization/pie-chart');
+			return pieChartModule;
 		default:
 			return Promise.resolve(null);
 	}

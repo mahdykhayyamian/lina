@@ -97,3 +97,4 @@ INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('tree-chart', '
 INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('funnel', 'Funnel Chart', current_timestamp);
 INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('erd', 'Entity Relationship Diagram', current_timestamp);
 INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('flowchart', 'Flowchart', current_timestamp);
+INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('piechart', 'Pie Chart', current_timestamp);
