@@ -1,4 +1,4 @@
-package lina.paragraph.persistence;
+package lina.persistence;
 import java.sql.*;
 import java.util.Properties;
 import java.lang.Class;
@@ -62,7 +62,7 @@ public class DBManager {
 
     public static String getHost(String linaEnv) {
         if (linaEnv.equals("PROD")) {
-            return "ec2-34-219-125-174.us-west-2.compute.amazonaws.com";
+            return "ec2-34-220-173-211.us-west-2.compute.amazonaws.com";
         } else if (linaEnv.equals("DEV")) {
             return "localhost";
         } else {

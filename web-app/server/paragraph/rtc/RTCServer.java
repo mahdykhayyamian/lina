@@ -25,7 +25,7 @@ public class RTCServer {
 
     public static final String WS_KEEP_ALIVE_MESSAGE = "WS_KEEP_ALIVE_MESSAGE";
     private static Map<String, List<Session>> roomNumToWSSessionsMap = Collections.synchronizedMap(new HashMap<String, List<Session>>());
-    private static Map<String, String> sessionIdToBoardNumMap = Collections.synchronizedMap(new HashMap<String, String>());
+    private static Map<String, String> sessionIdToRoomNumMap = Collections.synchronizedMap(new HashMap<String, String>());
 
     @OnMessage
     public void onMessage(Session session, String msg) {
@@ -36,7 +36,7 @@ public class RTCServer {
             return;
         }
 
-        String roomId = sessionIdToBoardNumMap.get(session.getId());
+        String roomId = sessionIdToRoomNumMap.get(session.getId());
         System.out.println("Room number from session : " + roomId);
 
         try {
@@ -74,7 +74,7 @@ public class RTCServer {
         String roomId = getroomIdParam(req);
         System.out.println("Room number from param : " + roomId);
 
-        sessionIdToBoardNumMap.put(session.getId(), roomId);
+        sessionIdToRoomNumMap.put(session.getId(), roomId);
 
         if (roomId != null) {
             List<Session> roomSessions = roomNumToWSSessionsMap.get(roomId);
@@ -91,8 +91,8 @@ public class RTCServer {
     public void onClose(Session closedSession) {
         System.out.println("Session " + closedSession.getId()+" has ended");
 
-        String roomId = sessionIdToBoardNumMap.get(closedSession.getId());
-        sessionIdToBoardNumMap.remove(closedSession.getId());
+        String roomId = sessionIdToRoomNumMap.get(closedSession.getId());
+        sessionIdToRoomNumMap.remove(closedSession.getId());
 
         List<Session> openSessions = new ArrayList<Session>();
         for (Session peerSession : roomNumToWSSessionsMap.get(roomId)) {

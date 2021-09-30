@@ -8,7 +8,7 @@ import lina.paragraph.model.ContentType;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import lina.persistence.DBManager;
 
 public class ContentTypeRepository {
 

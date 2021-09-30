@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Stack;
+import lina.persistence.DBManager;
 
 public class BoardRepository {
 
