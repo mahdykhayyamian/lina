@@ -5,6 +5,7 @@ module.exports = {
     entry: {
         smartframes: './web-app/client/src/demo/smartframes/demo.js',
         paragraph: './web-app/client/src/paragraph/app.js',
+        climate: './web-app/client/src/climate/climateTrends.js',        
     },
     output: {
         filename: '[name].js',

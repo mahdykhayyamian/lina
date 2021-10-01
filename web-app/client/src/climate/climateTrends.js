@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import ajax from '@fdaciuk/ajax';
 
-function drawLineChart(measures) {
+function drawLineChart(measures, title) {
 	const parseTime = d3.timeParse('%b %d, %Y');
 	let lineData = measures.map(measure => {
 		return {
@@ -70,7 +70,7 @@ function drawLineChart(measures) {
 
 	var xAxis = d3
 		.axisBottom(x)
-		.tickFormat(date => date.toLocaleDateString('en-US'))
+		.tickFormat(date => date.getFullYear())
 		.tickValues(lineData.map(d => d.date));
 
 	svg.append('g')
@@ -117,11 +117,25 @@ function drawLineChart(measures) {
 	svg.append('text')
 		.attr('x', 10)
 		.attr('y', -5)
-		.text('Max Temperature Historical Trend');
+		.text(title);
 }
 
 window.onload = function() {
 	console.log('we here man...');
+
+	let searchParams = new URLSearchParams(window.location.search);
+
+	const stationCode = searchParams.get('stationCode');
+	const month = searchParams.get('month');
+	const day = searchParams.get('day');
+
+	console.log('stationCode');
+	console.log(stationCode);
+
+	console.log('month');
+	console.log(month);
+
+	const title = `Max Temperature Historical Trend for Month=${month}, Day=${day}`;
 
 	const request = ajax({
 		headers: {
@@ -131,11 +145,11 @@ window.onload = function() {
 
 	request
 		.get(
-			'/api/climate/getYearlyTrends?stationCode=USW00023174&month=2&day=1'
+			`/api/climate/getYearlyTrends?stationCode=${stationCode}&month=${month}&day=${day}`
 		)
 		.then(measures => {
 			console.log(measures);
-			drawLineChart(measures);
+			drawLineChart(measures, title);
 		});
 };
 
