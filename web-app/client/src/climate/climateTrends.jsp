@@ -8,6 +8,6 @@
 		<title>Climate Trends</title>
 	</head>
 	<body>
-    	<h1>Hello ${measures}!!!</h2>
+		<div id="chart"></div>
   	</body>
   </html>
