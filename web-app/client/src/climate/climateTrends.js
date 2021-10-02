@@ -1,5 +1,6 @@
 import * as d3 from 'd3';
 import ajax from '@fdaciuk/ajax';
+import * as ss from 'simple-statistics';
 
 function drawLineChart(measures, title) {
 	const parseTime = d3.timeParse('%b %d, %Y');
@@ -118,6 +119,26 @@ function drawLineChart(measures, title) {
 		.attr('x', 10)
 		.attr('y', -5)
 		.text(title);
+
+	// trend line
+	const regData = lineData.map(function(d) {
+		return [+d.date.getFullYear(), d.temp];
+	});
+
+	const regression = ss.linearRegression(regData);
+	const lin = ss.linearRegressionLine(regression);
+
+	var linRegdata = x.domain().map(function(x) {
+		return {
+			date: x,
+			temp: lin(x.getFullYear())
+		};
+	});
+
+	svg.append('path')
+		.data([linRegdata])
+		.attr('class', 'trend-line')
+		.attr('d', valueline);
 }
 
 window.onload = function() {
