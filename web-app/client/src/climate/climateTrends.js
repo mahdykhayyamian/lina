@@ -2,23 +2,20 @@ import * as d3 from 'd3';
 import ajax from '@fdaciuk/ajax';
 import * as ss from 'simple-statistics';
 
-function drawLineChart(measures, title) {
+function drawLineChart(measures, metric, title) {
 	const parseTime = d3.timeParse('%b %d, %Y');
 	let lineData = measures.map(measure => {
 		return {
 			date: parseTime(measure.date),
-			temp: measure.maxTemp
+			value: measure[metric]
 		};
 	});
 
-	lineData = lineData.filter(d => d.temp > 0);
+	lineData = lineData.filter(d => d.value > 0);
 
 	lineData.sort(function(a, b) {
 		return new Date(b.date) - new Date(a.date);
 	});
-
-	console.log('lineData');
-	console.log(lineData);
 
 	var height = 800;
 	var width = 1600;
@@ -49,7 +46,7 @@ function drawLineChart(measures, title) {
 
 	y.domain([
 		d3.min(lineData, function(d) {
-			return d.temp;
+			return d.value;
 		}) - 5,
 		100
 	]);
@@ -60,7 +57,7 @@ function drawLineChart(measures, title) {
 			return x(d.date);
 		})
 		.y(function(d) {
-			return y(d.temp);
+			return y(d.value);
 		})
 		.curve(d3.curveMonotoneX);
 
@@ -95,7 +92,7 @@ function drawLineChart(measures, title) {
 			return x(d.date);
 		})
 		.attr('cy', function(d) {
-			return y(d.temp);
+			return y(d.value);
 		})
 		.attr('r', 5);
 
@@ -108,11 +105,11 @@ function drawLineChart(measures, title) {
 			return x(d.date);
 		})
 		.attr('y', function(d) {
-			return y(d.temp);
+			return y(d.value);
 		})
 		.attr('dy', '-5')
 		.text(function(d) {
-			return d.temp;
+			return d.value;
 		});
 
 	svg.append('text')
@@ -122,7 +119,7 @@ function drawLineChart(measures, title) {
 
 	// trend line
 	const regData = lineData.map(function(d) {
-		return [+d.date.getFullYear(), d.temp];
+		return [+d.date.getFullYear(), d.value];
 	});
 
 	const regression = ss.linearRegression(regData);
@@ -131,7 +128,7 @@ function drawLineChart(measures, title) {
 	var linRegdata = x.domain().map(function(x) {
 		return {
 			date: x,
-			temp: lin(x.getFullYear())
+			value: lin(x.getFullYear())
 		};
 	});
 
@@ -142,19 +139,11 @@ function drawLineChart(measures, title) {
 }
 
 window.onload = function() {
-	console.log('we here man...');
-
 	let searchParams = new URLSearchParams(window.location.search);
 
 	const stationCode = searchParams.get('stationCode');
 	const month = searchParams.get('month');
 	const day = searchParams.get('day');
-
-	console.log('stationCode');
-	console.log(stationCode);
-
-	console.log('month');
-	console.log(month);
 
 	const title = `Max Temperature Historical Trend for Month=${month}, Day=${day}`;
 
@@ -170,7 +159,21 @@ window.onload = function() {
 		)
 		.then(measures => {
 			console.log(measures);
-			drawLineChart(measures, title);
+			drawLineChart(
+				measures,
+				'maxTemp',
+				`Max Temperature Historical Trend for Month=${month}, Day=${day}`
+			);
+			drawLineChart(
+				measures,
+				'minTemp',
+				`Min Temperature Historical Trend for Month=${month}, Day=${day}`
+			);
+			drawLineChart(
+				measures,
+				'avgTemp',
+				`Avg Temperature Historical Trend for Month=${month}, Day=${day}`
+			);
 		});
 };
 
