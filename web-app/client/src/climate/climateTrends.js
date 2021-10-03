@@ -1,3 +1,5 @@
+import 'regenerator-runtime/runtime.js';
+
 import * as d3 from 'd3';
 import ajax from '@fdaciuk/ajax';
 import * as ss from 'simple-statistics';
@@ -123,6 +125,17 @@ function drawLineChart(measures, metric, title) {
 	});
 
 	const regression = ss.linearRegression(regData);
+
+	console.log('regression');
+	console.log(regression);
+
+	let trendLineCssClass = 'trend-line';
+	if (regression.m > 0) {
+		trendLineCssClass = 'trend-line warming';
+	} else if (regression.m < 0) {
+		trendLineCssClass = 'trend-line cooling';
+	}
+
 	const lin = ss.linearRegressionLine(regression);
 
 	var linRegdata = x.domain().map(function(x) {
@@ -134,11 +147,11 @@ function drawLineChart(measures, metric, title) {
 
 	svg.append('path')
 		.data([linRegdata])
-		.attr('class', 'trend-line')
+		.attr('class', trendLineCssClass)
 		.attr('d', valueline);
 }
 
-window.onload = function() {
+window.onload = async function() {
 	let searchParams = new URLSearchParams(window.location.search);
 
 	const stationCode = searchParams.get('stationCode');
@@ -153,28 +166,30 @@ window.onload = function() {
 		}
 	});
 
-	request
-		.get(
-			`/api/climate/getYearlyTrends?stationCode=${stationCode}&month=${month}&day=${day}`
-		)
-		.then(measures => {
-			console.log(measures);
-			drawLineChart(
-				measures,
-				'maxTemp',
-				`Max Temperature Historical Trend for Month=${month}, Day=${day}`
-			);
-			drawLineChart(
-				measures,
-				'minTemp',
-				`Min Temperature Historical Trend for Month=${month}, Day=${day}`
-			);
-			drawLineChart(
-				measures,
-				'avgTemp',
-				`Avg Temperature Historical Trend for Month=${month}, Day=${day}`
-			);
-		});
+	const stations = await request.get(`/api/climate/getStations`);
+	console.log(stations);
+
+	const stationMap = {};
+	for (let i = 0; i < stations.length; i++) {
+		stationMap[stations[i].code] = stations[i];
+	}
+
+	const currentStation = stationMap[stationCode];
+
+	const measures = await request.get(
+		`/api/climate/getYearlyTrends?stationCode=${stationCode}&month=${month}&day=${day}`
+	);
+	console.log(measures);
+	drawLineChart(
+		measures,
+		'maxTemp',
+		`${currentStation.name} Max Daily Temperature Historical Trend`
+	);
+	drawLineChart(
+		measures,
+		'minTemp',
+		`${currentStation.name} Min Daily Temperature Historical Trend`
+	);
 };
 
 require('src/climate/climateTrends.css');

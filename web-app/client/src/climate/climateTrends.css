@@ -24,3 +24,11 @@ body {
 	stroke-width: 2px;
 	stroke-dasharray: 3;
 }
+
+.trend-line.warming {
+	stroke: red;
+}
+
+.trend-line.cooling {
+	stroke: blue;
+}

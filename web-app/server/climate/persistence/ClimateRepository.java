@@ -3,6 +3,7 @@ import lina.paragraph.model.ContentType;
 import java.util.ArrayList;
 import java.util.List;
 import climate.model.DailyMeasure;
+import climate.model.Station;
 import java.util.List;
 import lina.persistence.DBManager;
 import java.sql.Timestamp;
@@ -39,6 +40,32 @@ public class ClimateRepository {
         }
 
         return measures;
+    }
+
+    public static List<Station> getStations() throws Exception {
+        List<Station> stations = new ArrayList<>();
+        Connection conn = DBManager.getConnection();
+        Statement st = conn.createStatement();
+        String query = "select id, code, name, latitude, longitude, elevation from climate.station";
+
+        System.out.println("query = " + query);
+        ResultSet rs = st.executeQuery(query);
+
+        while (rs.next()) {
+            Station station = Station.builder()
+                .id(rs.getString(1))
+                .code(rs.getString(2))
+                .name(rs.getString(3))
+                .latitude(rs.getDouble(4))
+                .longitude(rs.getDouble(5))
+                .elevation(rs.getDouble(6))
+                .build();
+
+            System.out.println(station.toString());
+            stations.add(station);
+        }
+
+        return stations;
     }
 }
 
