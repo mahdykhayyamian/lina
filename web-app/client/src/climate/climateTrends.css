@@ -1,0 +1,34 @@
+body {
+	font-family: sans-serif;
+	color: #444;
+}
+
+.line {
+	fill: none;
+	stroke: #ffab00;
+	stroke-width: 3;
+}
+
+.axis path,
+.axis line {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
+}
+.axis text {
+  font-size: 10px;
+}
+
+.trend-line {
+	stroke: mediumpurple;
+	stroke-width: 2px;
+	stroke-dasharray: 3;
+}
+
+.trend-line.warming {
+	stroke: red;
+}
+
+.trend-line.cooling {
+	stroke: blue;
+}

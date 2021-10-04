@@ -21,10 +21,10 @@ DROP Table paragraph.ROOM;
 
 CREATE SCHEMA IF NOT EXISTS paragraph;
 
-CREATE EXTENSION IF NOT EXISTS "pgcrypto" SCHEMA paragraph;
+CREATE EXTENSION IF NOT EXISTS "pgcrypto" SCHEMA public;
 
 CREATE TABLE IF NOT EXISTS paragraph.ROOM(
-    id UUID DEFAULT paragraph.gen_random_uuid(),
+    id UUID DEFAULT public.gen_random_uuid(),
     created TIMESTAMP NOT NULL,
     updated TIMESTAMP NOT NULL default CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
@@ -98,3 +98,4 @@ INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('funnel', 'Funn
 INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('erd', 'Entity Relationship Diagram', current_timestamp);
 INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('flowchart', 'Flowchart', current_timestamp);
 INSERT INTO paragraph.CONTENT_TYPE (type, name, created) VALUES ('piechart', 'Pie Chart', current_timestamp);
+
