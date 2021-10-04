@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 import ajax from '@fdaciuk/ajax';
 import * as ss from 'simple-statistics';
 
-function drawLineChart(measures, metric, title) {
+function drawLineChart(measures, metric, title, parentDiv) {
 	const parseTime = d3.timeParse('%b %d, %Y');
 	let lineData = measures.map(measure => {
 		return {
@@ -19,8 +19,8 @@ function drawLineChart(measures, metric, title) {
 		return new Date(b.date) - new Date(a.date);
 	});
 
-	var height = 800;
-	var width = 1600;
+	var height = 600;
+	var width = 1200;
 	var hEach = 40;
 
 	var margin = { top: 80, right: 60, bottom: 100, left: 100 };
@@ -29,7 +29,7 @@ function drawLineChart(measures, metric, title) {
 	height = height - margin.top - margin.bottom;
 
 	var svg = d3
-		.select('body')
+		.select(`#${parentDiv.id}`)
 		.append('svg')
 		.attr('width', width + margin.left + margin.right)
 		.attr('height', height + margin.top + margin.bottom)
@@ -50,7 +50,9 @@ function drawLineChart(measures, metric, title) {
 		d3.min(lineData, function(d) {
 			return d.value;
 		}) - 5,
-		100
+		d3.max(lineData, function(d) {
+			return d.value;
+		}) + 5
 	]);
 
 	var valueline = d3
@@ -70,7 +72,14 @@ function drawLineChart(measures, metric, title) {
 
 	var xAxis = d3
 		.axisBottom(x)
-		.tickFormat(date => date.getFullYear())
+		.tickFormat(date => {
+			const year = date.getFullYear();
+			if (String(year).endsWith('5')) {
+				return date.getFullYear();
+			} else {
+				return '';
+			}
+		})
 		.tickValues(lineData.map(d => d.date));
 
 	svg.append('g')
@@ -96,7 +105,7 @@ function drawLineChart(measures, metric, title) {
 		.attr('cy', function(d) {
 			return y(d.value);
 		})
-		.attr('r', 5);
+		.attr('r', 3);
 
 	svg.selectAll('.text')
 		.data(lineData)
@@ -180,15 +189,26 @@ window.onload = async function() {
 		`/api/climate/getYearlyTrends?stationCode=${stationCode}&month=${month}&day=${day}`
 	);
 	console.log(measures);
+
+	const maxTempChartDiv = document.createElement('div');
+	maxTempChartDiv.id = 'maxTempChart';
+	document.body.append(maxTempChartDiv);
 	drawLineChart(
 		measures,
 		'maxTemp',
-		`${currentStation.name} Max Daily Temperature Historical Trend`
+		`${currentStation.name} Max Daily Temperature Historical Trend`,
+		maxTempChartDiv
 	);
+
+	const minTempChartDiv = document.createElement('div');
+	minTempChartDiv.id = 'minTempChart';
+	document.body.append(minTempChartDiv);
+
 	drawLineChart(
 		measures,
 		'minTemp',
-		`${currentStation.name} Min Daily Temperature Historical Trend`
+		`${currentStation.name} Min Daily Temperature Historical Trend`,
+		minTempChartDiv
 	);
 };
 

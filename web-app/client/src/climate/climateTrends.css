@@ -32,3 +32,11 @@ body {
 .trend-line.cooling {
 	stroke: blue;
 }
+
+.label {
+	font-size: 10px;
+}
+
+text {
+	font-family: system-ui;
+}
