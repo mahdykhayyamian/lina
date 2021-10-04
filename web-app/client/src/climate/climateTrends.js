@@ -74,8 +74,8 @@ function drawLineChart(measures, metric, title, parentDiv) {
 		.axisBottom(x)
 		.tickFormat(date => {
 			const year = date.getFullYear();
-			if (String(year).endsWith('5')) {
-				return date.getFullYear();
+			if (year % 5 == 0) {
+				return year;
 			} else {
 				return '';
 			}
