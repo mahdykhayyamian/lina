@@ -40,7 +40,7 @@ function CSVtoArray(text) {
 async function main() {
 
 	const lineByLine = require('n-readlines');
-	const liner = new lineByLine('../../data/climate/Boulder-colorado-temp-daily.csv');
+	const liner = new lineByLine('../../data/climate/MINNEAPOLIS-ST-PAUL-AIRPORT.csv');
 
 	let line;
 	let lineNumber = 0;
