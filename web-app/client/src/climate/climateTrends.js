@@ -3,6 +3,7 @@ import 'regenerator-runtime/runtime.js';
 import * as d3 from 'd3';
 import ajax from '@fdaciuk/ajax';
 import * as ss from 'simple-statistics';
+import dateFormat from 'dateformat';
 
 function drawLineChart(measures, metric, title, parentDiv) {
 	const parseTime = d3.timeParse('%b %d, %Y');
@@ -167,7 +168,14 @@ window.onload = async function() {
 	const month = searchParams.get('month');
 	const day = searchParams.get('day');
 
-	const title = `Max Temperature Historical Trend for Month=${month}, Day=${day}`;
+	let dayAndMonth = new Date();
+	dayAndMonth.setDate(day);
+	dayAndMonth.setMonth(month);
+
+	dayAndMonth = dateFormat(dayAndMonth, 'mmm, dd');
+
+	console.log('dayAndMonth');
+	console.log(dayAndMonth);
 
 	const request = ajax({
 		headers: {
@@ -196,7 +204,7 @@ window.onload = async function() {
 	drawLineChart(
 		measures,
 		'maxTemp',
-		`${currentStation.name} Max Daily Temperature Historical Trend`,
+		`${currentStation.name} Max Daily Temperature Historical Trend on ${dayAndMonth}`,
 		maxTempChartDiv
 	);
 
@@ -207,7 +215,7 @@ window.onload = async function() {
 	drawLineChart(
 		measures,
 		'minTemp',
-		`${currentStation.name} Min Daily Temperature Historical Trend`,
+		`${currentStation.name} Min Daily Temperature Historical Trend on on ${dayAndMonth}`,
 		minTempChartDiv
 	);
 };

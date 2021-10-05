@@ -18,13 +18,13 @@ import java.io.PrintWriter;
 public class GetStationsApiServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public GetStationsApiServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public GetStationsApiServlet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -33,16 +33,16 @@ public class GetStationsApiServlet extends HttpServlet {
 
 		try {
 			List<Station> stations = ClimateRepository.getStations();
-            Gson gson = new Gson();
-            String jsonPayload = gson.toJson(stations);
-            System.out.println("json payload");
-            System.out.println(jsonPayload);
+			Gson gson = new Gson();
+			String jsonPayload = gson.toJson(stations);
+			System.out.println("json payload");
+			System.out.println(jsonPayload);
 
-            PrintWriter out = response.getWriter();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            out.print(jsonPayload);
-            out.flush();
+			PrintWriter out = response.getWriter();
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			out.print(jsonPayload);
+			out.flush();
 
 		} catch(Exception e) {
 			e.printStackTrace();

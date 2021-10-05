@@ -10,6 +10,7 @@
     "d3": "^5.11.0",
     "d3-funnel": "^1.2.2",
     "d3-hierarchy": "^2.0.0",
+    "dateformat": "^5.0.1",
     "html2canvas": "^1.0.0-rc.7",
     "katex": "^0.10.0",
     "load-js": "^3.0.3",
