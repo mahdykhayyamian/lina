@@ -1,9 +1,10 @@
 const LocationDropdownWidth = 250;
 
-const LocationDropdown = function(parentDiv, stations) {
+const LocationDropdown = function(parentDiv, options, idProp, onChange) {
 	this.parentDiv = parentDiv;
-	this.stations = stations;
-	this.options = stations;
+	this.options = options;
+	this.onChange = onChange;
+	this.idProp = idProp;
 };
 
 LocationDropdown.prototype.render = function() {
@@ -33,17 +34,21 @@ function createDOM(locationDropdown) {
 		LocationDropdownWidth + 'px'
 	);
 
+	const dropdownHeaderDiv = document.createElement('div');
+	dropdownHeaderDiv.setAttribute('class', 'dropdown-header');
+
+	locationDropdown.dropdownRootDiv.appendChild(dropdownHeaderDiv);
+
 	const searchBox = document.createElement('input');
 	searchBox.setAttribute('type', 'text');
 	searchBox.setAttribute('placeholder', 'Search Location...');
 
+	const matchingOptions = locationDropdown.options.filter(option =>
+		option.name.toLowerCase().startsWith(searchBox.value.toLowerCase())
+	);
+
 	searchBox.addEventListener('keyup', event => {
 		if (searchBox.value !== '') {
-			const matchingOptions = LocationDropdown.options.filter(option =>
-				option.name
-					.toLowerCase()
-					.startsWith(searchBox.value.toLowerCase())
-			);
 			updateMachingOptions(locationDropdown, matchingOptions);
 		} else {
 			updateMachingOptions(locationDropdown, locationDropdown.options);
@@ -51,14 +56,21 @@ function createDOM(locationDropdown) {
 	});
 
 	locationDropdown.searchBox = searchBox;
-	locationDropdown.dropdownRootDiv.appendChild(searchBox);
+	dropdownHeaderDiv.appendChild(searchBox);
+
+	const dropDownIcon = document.createElement('img');
+	dropDownIcon.src = '/src/resources/icons/drop-down.png';
+	dropDownIcon.setAttribute('class', 'drag-down');
+	dropDownIcon.addEventListener('click', event => {
+		updateMachingOptions(locationDropdown, matchingOptions);
+	});
+
+	dropdownHeaderDiv.appendChild(dropDownIcon);
 
 	locationDropdown.matchingOptionsRoot = document.createElement('ul');
 	locationDropdown.dropdownRootDiv.appendChild(
 		locationDropdown.matchingOptionsRoot
 	);
-
-	updateMachingOptions(locationDropdown, locationDropdown.options);
 
 	return locationDropdown.dropdownRootDiv;
 }
@@ -69,7 +81,9 @@ function updateMachingOptions(locationDropdown, matchingOptions) {
 	for (let i = 0; i < matchingOptions.length; i++) {
 		const option = matchingOptions[i];
 		const optionItem = document.createElement('li');
-		optionItem.setAttribute('id', option.id);
+		console.log(option);
+		console.log(locationDropdown.idProp);
+		optionItem.setAttribute('id', option[locationDropdown.idProp]);
 		optionItem.setAttribute('type', option.type);
 		optionItem.innerText = option.name;
 
@@ -86,6 +100,8 @@ function updateMachingOptions(locationDropdown, matchingOptions) {
 			console.log(event.target);
 			removeMatchingOptions(locationDropdown);
 			locationDropdown.searchBox.value = event.target.textContent;
+			console.log(locationDropdown);
+			locationDropdown.onChange(event.target.id);
 		});
 
 		locationDropdown.matchingOptionsRoot.appendChild(optionItem);
