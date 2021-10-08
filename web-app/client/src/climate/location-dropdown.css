@@ -13,7 +13,6 @@
 	list-style: none;
 	padding: 0px;
 	margin: 0px;
-    background-color: #1BBE7E;
     position: absolute;
     width: inherit;    
 }
@@ -44,11 +43,11 @@
     border-bottom-style: dashed;
     border-bottom-width: 1px;
     min-height: 20px;
-    background-color: #1BBE7E;
+    background-color: lightslategray;
 }
 
 .location-dropdown ul li.selected {
-	background-color: #26AB76;
+	background-color: darkslategray;
 }
 
 #boards-loader {
@@ -69,3 +68,9 @@
     width: 30px;
     height:  30px;
 }
+
+#filters {
+    margin-left: 38px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}}

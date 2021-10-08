@@ -1,4 +1,4 @@
-const LocationDropdownWidth = 250;
+const LocationDropdownWidth = 350;
 
 const LocationDropdown = function(parentDiv, options, idProp, onChange) {
 	this.parentDiv = parentDiv;
@@ -43,11 +43,18 @@ function createDOM(locationDropdown) {
 	searchBox.setAttribute('type', 'text');
 	searchBox.setAttribute('placeholder', 'Search Location...');
 
-	const matchingOptions = locationDropdown.options.filter(option =>
+	let matchingOptions = locationDropdown.options.filter(option =>
 		option.name.toLowerCase().startsWith(searchBox.value.toLowerCase())
 	);
 
 	searchBox.addEventListener('keyup', event => {
+		console.log('keyup event...');
+		console.log(searchBox.value);
+
+		matchingOptions = locationDropdown.options.filter(option =>
+			option.name.toLowerCase().startsWith(searchBox.value.toLowerCase())
+		);
+
 		if (searchBox.value !== '') {
 			updateMachingOptions(locationDropdown, matchingOptions);
 		} else {

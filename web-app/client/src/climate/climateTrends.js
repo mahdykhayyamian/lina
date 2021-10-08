@@ -15,7 +15,7 @@ window.onload = async function() {
 
 	let dayAndMonth = new Date();
 	dayAndMonth.setDate(day);
-	dayAndMonth.setMonth(month);
+	dayAndMonth.setMonth(month - 1);
 
 	dayAndMonth = dateFormat(dayAndMonth, 'mmm, dd');
 
@@ -62,9 +62,12 @@ window.onload = async function() {
 
 		console.log(measures);
 
+		const chartsDiv = document.getElementById('charts');
+
 		const maxTempChartDiv = document.createElement('div');
 		maxTempChartDiv.id = 'maxTempChart';
-		document.body.append(maxTempChartDiv);
+		chartsDiv.append(maxTempChartDiv);
+
 		drawLineChart(
 			measures,
 			'maxTemp',
@@ -74,7 +77,7 @@ window.onload = async function() {
 
 		const minTempChartDiv = document.createElement('div');
 		minTempChartDiv.id = 'minTempChart';
-		document.body.append(minTempChartDiv);
+		chartsDiv.append(minTempChartDiv);
 
 		drawLineChart(
 			measures,
@@ -112,7 +115,7 @@ function drawLineChart(measures, metric, title, parentDiv) {
 	var width = 1200;
 	var hEach = 40;
 
-	var margin = { top: 80, right: 60, bottom: 100, left: 100 };
+	var margin = { top: 40, right: 60, bottom: 100, left: 40 };
 
 	width = width - margin.left - margin.right;
 	height = height - margin.top - margin.bottom;

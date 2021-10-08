@@ -9,6 +9,6 @@
 	</head>
 	<body>
 		<div id="filters"></div>
-		<div id="chart"></div>
+		<div id="charts"></div>
   	</body>
   </html>
