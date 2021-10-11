@@ -1,36 +1,36 @@
 .location-dropdown {
-    font-family: monospace;
-    font-size: 16px;
-    color: white;
-    margin-left: 1px;
-    border-radius: 2px;
-    height: fit-content;
-    z-index: 1;
-    margin-top: 5px;
+	font-family: monospace;
+	font-size: 16px;
+	color: white;
+	margin-left: 1px;
+	border-radius: 2px;
+	height: fit-content;
+	z-index: 1;
+	margin-top: 5px;
 }
 
 .location-dropdown ul {
 	list-style: none;
 	padding: 0px;
 	margin: 0px;
-    position: absolute;
-    width: inherit;    
+	position: absolute;
+	width: inherit;    
 }
 
 .location-dropdown input {
 	height: 28px;
 	width: 100%;
-    font-family: monospace;
+	font-family: monospace;
 	font-size: 14px;
-    box-sizing: border-box;
-    border-radius: 2px;
-    padding-left: 5px;
-    padding-right: 5px;
-    border-style: none;
+	box-sizing: border-box;
+	border-radius: 2px;
+	padding-left: 5px;
+	padding-right: 5px;
+	border-style: none;
 }
 
 .location-dropdown input:focus, .location-dropdown input:focus{
-    outline: none;
+	outline: none;
 }
 
 .location-dropdown ul li {
@@ -40,10 +40,10 @@
 	padding-top: 3px;
 	padding-bottom: 3px;
 	cursor: default;
-    border-bottom-style: dashed;
-    border-bottom-width: 1px;
-    min-height: 20px;
-    background-color: lightslategray;
+	border-bottom-style: dashed;
+	border-bottom-width: 1px;
+	min-height: 20px;
+	background-color: lightslategray;
 }
 
 .location-dropdown ul li.selected {
@@ -51,26 +51,26 @@
 }
 
 #boards-loader {
-    position: absolute;
-    top: 50%;
-    left: 50%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
 }
 
 .dropdown-header {
-    display: flex;
-    border-radius: 1px;
-    border-style: solid;
-    border-width: 2px;
-    border-color: black;
+	display: flex;
+	border-radius: 1px;
+	border-style: solid;
+	border-width: 2px;
+	border-color: black;
 }
 
 .dropdown-header img {
-    width: 30px;
-    height:  30px;
+	width: 30px;
+	height:  30px;
 }
 
 #filters {
-    margin-left: 38px;
-    margin-top: 20px;
-    margin-bottom: 10px;
-}}
+	margin-left: 38px;
+	margin-top: 20px;
+	margin-bottom: 10px;
+}

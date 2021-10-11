@@ -19,9 +19,6 @@ window.onload = async function() {
 
 	dayAndMonth = dateFormat(dayAndMonth, 'mmm, dd');
 
-	console.log('dayAndMonth');
-	console.log(dayAndMonth);
-
 	const request = ajax({
 		headers: {
 			'content-type': 'application/json'
@@ -37,11 +34,11 @@ window.onload = async function() {
 		stations,
 		'code',
 		code => {
-			console.log(code);
 			stationCode = code;
 			removeCharts();
 			drawCharts();
-		}
+		},
+		stationCode
 	);
 
 	locationDropdown.render();
@@ -226,9 +223,6 @@ function drawLineChart(measures, metric, title, parentDiv) {
 	});
 
 	const regression = ss.linearRegression(regData);
-
-	console.log('regression');
-	console.log(regression);
 
 	let trendLineCssClass = 'trend-line';
 	if (regression.m > 0) {

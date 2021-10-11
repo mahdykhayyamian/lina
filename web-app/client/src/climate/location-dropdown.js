@@ -1,10 +1,17 @@
 const LocationDropdownWidth = 350;
 
-const LocationDropdown = function(parentDiv, options, idProp, onChange) {
+const LocationDropdown = function(
+	parentDiv,
+	options,
+	idProp,
+	onChange,
+	selectedId
+) {
 	this.parentDiv = parentDiv;
 	this.options = options;
 	this.onChange = onChange;
 	this.idProp = idProp;
+	this.selectedId = selectedId;
 };
 
 LocationDropdown.prototype.render = function() {
@@ -37,6 +44,10 @@ function createDOM(locationDropdown) {
 	const dropdownHeaderDiv = document.createElement('div');
 	dropdownHeaderDiv.setAttribute('class', 'dropdown-header');
 
+	dropdownHeaderDiv.addEventListener('click', event => {
+		updateMachingOptions(locationDropdown, matchingOptions);
+	});
+
 	locationDropdown.dropdownRootDiv.appendChild(dropdownHeaderDiv);
 
 	const searchBox = document.createElement('input');
@@ -48,9 +59,6 @@ function createDOM(locationDropdown) {
 	);
 
 	searchBox.addEventListener('keyup', event => {
-		console.log('keyup event...');
-		console.log(searchBox.value);
-
 		matchingOptions = locationDropdown.options.filter(option =>
 			option.name.toLowerCase().startsWith(searchBox.value.toLowerCase())
 		);
@@ -68,9 +76,6 @@ function createDOM(locationDropdown) {
 	const dropDownIcon = document.createElement('img');
 	dropDownIcon.src = '/src/resources/icons/drop-down.png';
 	dropDownIcon.setAttribute('class', 'drag-down');
-	dropDownIcon.addEventListener('click', event => {
-		updateMachingOptions(locationDropdown, matchingOptions);
-	});
 
 	dropdownHeaderDiv.appendChild(dropDownIcon);
 
@@ -78,6 +83,17 @@ function createDOM(locationDropdown) {
 	locationDropdown.dropdownRootDiv.appendChild(
 		locationDropdown.matchingOptionsRoot
 	);
+
+	// preselect if passed
+	if (locationDropdown.selectedId) {
+		const selectedOption = locationDropdown.options.find(
+			option =>
+				option[locationDropdown.idProp] === locationDropdown.selectedId
+		);
+		if (selectedOption) {
+			locationDropdown.searchBox.value = selectedOption.name;
+		}
+	}
 
 	return locationDropdown.dropdownRootDiv;
 }
@@ -88,8 +104,6 @@ function updateMachingOptions(locationDropdown, matchingOptions) {
 	for (let i = 0; i < matchingOptions.length; i++) {
 		const option = matchingOptions[i];
 		const optionItem = document.createElement('li');
-		console.log(option);
-		console.log(locationDropdown.idProp);
 		optionItem.setAttribute('id', option[locationDropdown.idProp]);
 		optionItem.setAttribute('type', option.type);
 		optionItem.innerText = option.name;
@@ -103,11 +117,8 @@ function updateMachingOptions(locationDropdown, matchingOptions) {
 		});
 
 		optionItem.addEventListener('click', event => {
-			console.log('clicked...');
-			console.log(event.target);
 			removeMatchingOptions(locationDropdown);
 			locationDropdown.searchBox.value = event.target.textContent;
-			console.log(locationDropdown);
 			locationDropdown.onChange(event.target.id);
 		});
 
