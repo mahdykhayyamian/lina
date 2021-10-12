@@ -1,4 +1,4 @@
-const LocationDropdownWidth = 350;
+const LocationDropdownWidth = 400;
 
 const LocationDropdown = function(
 	parentDiv,

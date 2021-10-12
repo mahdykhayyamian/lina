@@ -5,6 +5,7 @@ import ajax from '@fdaciuk/ajax';
 import * as ss from 'simple-statistics';
 import dateFormat from 'dateformat';
 import { LocationDropdown } from 'src/climate/location-dropdown.js';
+import * as queryString from 'query-string';
 
 window.onload = async function() {
 	let searchParams = new URLSearchParams(window.location.search);
@@ -35,6 +36,14 @@ window.onload = async function() {
 		'code',
 		code => {
 			stationCode = code;
+			const queryString = require('query-string');
+			const parsed = queryString.parse(location.search);
+
+			// set stationCode in the url
+			parsed.stationCode = stationCode;
+			const stringified = queryString.stringify(parsed);
+			location.search = stringified;
+
 			removeCharts();
 			drawCharts();
 		},
