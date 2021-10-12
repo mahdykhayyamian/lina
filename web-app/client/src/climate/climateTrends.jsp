@@ -8,6 +8,7 @@
 		<title>Climate Trends</title>
 	</head>
 	<body>
-		<div id="chart"></div>
+		<div id="filters"></div>
+		<div id="charts"></div>
   	</body>
   </html>
