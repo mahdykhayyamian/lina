@@ -5,7 +5,6 @@ import ajax from '@fdaciuk/ajax';
 import * as ss from 'simple-statistics';
 import dateFormat from 'dateformat';
 import { LocationDropdown } from 'src/climate/location-dropdown.js';
-import * as queryString from 'query-string';
 
 window.onload = async function() {
 	let searchParams = new URLSearchParams(window.location.search);
