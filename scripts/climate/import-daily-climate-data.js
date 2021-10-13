@@ -40,7 +40,7 @@ function CSVtoArray(text) {
 async function main() {
 
 	const lineByLine = require('n-readlines');
-	const liner = new lineByLine('../../data/climate/AUSTIN0CAMP-MABRY-daily-temps.csv');
+	const liner = new lineByLine('../../data/climate/NY-CENTRAL-PARK-TEMPS.csv');
 
 	let line;
 	let lineNumber = 0;
@@ -55,8 +55,8 @@ async function main() {
 			station = {
 				code : data[0],
 				name: data[1],
-				lat: null,
-				long: null,
+				lat: data[2],
+				long: data[3],
 				elevation: data[4]
 			}
 			console.log(station)
@@ -72,10 +72,10 @@ async function main() {
 			let data = CSVtoArray(line)
 
 			const measurements = {
-				date: data[2],
+				date: data[5],
 				avgTemp: null,
-				maxTemp: data[4] || null,
-				minTemp: data[5] || null,
+				maxTemp: data[8] || null,
+				minTemp: data[10] || null,
 			}
 
 			const query = `INSERT into climate.DAILY_MEASURES (station_id, date, avg_temp, max_temp, min_temp, created) values`  

@@ -36,14 +36,7 @@ window.onload = async function() {
 		'code',
 		code => {
 			stationCode = code;
-			const queryString = require('query-string');
-			const parsed = queryString.parse(location.search);
-
-			// set stationCode in the url
-			parsed.stationCode = stationCode;
-			const stringified = queryString.stringify(parsed);
-			location.search = stringified;
-
+			insertUrlParam('stationCode', stationCode);
 			removeCharts();
 			drawCharts();
 		},
@@ -118,7 +111,7 @@ function drawLineChart(measures, metric, title, parentDiv) {
 	});
 
 	var height = 600;
-	var width = 1200;
+	var width = 1400;
 	var hEach = 40;
 
 	var margin = { top: 40, right: 60, bottom: 100, left: 40 };
@@ -253,6 +246,21 @@ function drawLineChart(measures, metric, title, parentDiv) {
 		.data([linRegdata])
 		.attr('class', trendLineCssClass)
 		.attr('d', valueline);
+}
+
+function insertUrlParam(key, value) {
+	if (history.pushState) {
+		let searchParams = new URLSearchParams(window.location.search);
+		searchParams.set(key, value);
+		let newurl =
+			window.location.protocol +
+			'//' +
+			window.location.host +
+			window.location.pathname +
+			'?' +
+			searchParams.toString();
+		window.history.pushState({ path: newurl }, '', newurl);
+	}
 }
 
 require('src/climate/climateTrends.css');
