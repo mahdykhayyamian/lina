@@ -95,7 +95,22 @@ function createDOM(locationDropdown) {
 		}
 	}
 
+	registerClickOutOfSelectorEventListner(locationDropdown);
+
 	return locationDropdown.dropdownRootDiv;
+}
+
+function registerClickOutOfSelectorEventListner(locationDropdown) {
+	const handler = function(event) {
+		if (!event.target.closest('.location-dropdown')) {
+			removeMatchingOptions(locationDropdown);
+		}
+	};
+
+	// wrapping in setTimeout to avoid removing immediately after adding the selector.
+	setTimeout(() => {
+		document.body.addEventListener('click', handler);
+	}, 0);
 }
 
 function updateMachingOptions(locationDropdown, matchingOptions) {
