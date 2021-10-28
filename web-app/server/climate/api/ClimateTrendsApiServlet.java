@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lina.climate.persistence.ClimateRepository;
 import climate.model.DailyMeasure;
+import climate.model.MonthlyMeasure;
 import java.util.List;
 import com.google.gson.Gson;
 import java.io.PrintWriter;
@@ -39,11 +40,19 @@ public class ClimateTrendsApiServlet extends HttpServlet {
 		System.out.println("day = " + day);
 
 		try {
-			List<DailyMeasure> measures = ClimateRepository.getDailMeasures(stationCode, month, day);
-            Gson gson = new Gson();
-            String jsonPayload = gson.toJson(measures);
+			Gson gson = new Gson();
+			String jsonPayload = null;
+			if (day != null) {
+				List<DailyMeasure> measures = ClimateRepository.getDailyMeasures(stationCode, month, day);
+				jsonPayload = gson.toJson(measures);
+
+			} else {
+				List<MonthlyMeasure> measures = ClimateRepository.getMonthlyMeasures(stationCode, month);
+				jsonPayload = gson.toJson(measures);
+			}
+
             System.out.println("json payload");
-            System.out.println(jsonPayload);
+            System.out.println(jsonPayload);				
 
             PrintWriter out = response.getWriter();
             response.setContentType("application/json");

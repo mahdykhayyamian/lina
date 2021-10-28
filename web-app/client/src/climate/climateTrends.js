@@ -53,36 +53,72 @@ window.onload = async function() {
 		}
 
 		const currentStation = stationMap[stationCode];
-
-		const measures = await request.get(
-			`/api/climate/getYearlyTrends?stationCode=${stationCode}&month=${month}&day=${day}`
-		);
-
-		console.log(measures);
-
 		const chartsDiv = document.getElementById('charts');
 
-		const maxTempChartDiv = document.createElement('div');
-		maxTempChartDiv.id = 'maxTempChart';
-		chartsDiv.append(maxTempChartDiv);
+		let measures = null;
+		if (day) {
+			measures = await request.get(
+				`/api/climate/getYearlyTrends?stationCode=${stationCode}&month=${month}&day=${day}`
+			);
 
-		drawLineChart(
-			measures,
-			'maxTemp',
-			`${currentStation.name} Max Daily Temperature Historical Trend on ${dayAndMonth}`,
-			maxTempChartDiv
-		);
+			// min daily temp
+			const minTempChartDiv = document.createElement('div');
+			minTempChartDiv.id = 'minTempChart';
+			chartsDiv.append(minTempChartDiv);
 
-		const minTempChartDiv = document.createElement('div');
-		minTempChartDiv.id = 'minTempChart';
-		chartsDiv.append(minTempChartDiv);
+			let lineData = getLineDate(measures, 'day', 'min');
+			console.log(lineData);
 
-		drawLineChart(
-			measures,
-			'minTemp',
-			`${currentStation.name} Min Daily Temperature Historical Trend on on ${dayAndMonth}`,
-			minTempChartDiv
-		);
+			drawLineChart(
+				lineData,
+				`${currentStation.name} Min Daily Temperature Historical Trend on ${dayAndMonth}`,
+				minTempChartDiv
+			);
+
+			// max daily temp
+			const maxTempChartDiv = document.createElement('div');
+			maxTempChartDiv.id = 'maxTempChart';
+			chartsDiv.append(maxTempChartDiv);
+
+			lineData = getLineDate(measures, 'day', 'max');
+			console.log(lineData);
+
+			drawLineChart(
+				lineData,
+				`${currentStation.name} Max Daily Temperature Historical Trend on ${dayAndMonth}`,
+				minTempChartDiv
+			);
+		} else {
+			measures = await request.get(
+				`/api/climate/getYearlyTrends?stationCode=${stationCode}&month=${month}`
+			);
+
+			// monthly avg of min daily temp
+			const avgMinDailyTempChartDiv = document.createElement('div');
+			avgMinDailyTempChartDiv.id = 'minTempChart';
+			chartsDiv.append(avgMinDailyTempChartDiv);
+
+			let lineData = getLineDate(measures, 'month', 'min');
+
+			drawLineChart(
+				lineData,
+				`${currentStation.name} Min Daily Temperature Historical Trend`,
+				avgMinDailyTempChartDiv
+			);
+
+			// monthly avg of max daily temp
+			const avgMaxDailyTempChartDiv = document.createElement('div');
+			avgMaxDailyTempChartDiv.id = 'maxTempChart';
+			chartsDiv.append(avgMaxDailyTempChartDiv);
+
+			lineData = getLineDate(measures, 'month', 'max');
+
+			drawLineChart(
+				lineData,
+				`${currentStation.name} Max Daily Temperature Historical Trend`,
+				avgMaxDailyTempChartDiv
+			);
+		}
 	}
 
 	function removeCharts() {
@@ -94,21 +130,39 @@ window.onload = async function() {
 	}
 };
 
-function drawLineChart(measures, metric, title, parentDiv) {
-	const parseTime = d3.timeParse('%b %d, %Y');
+function getLineDate(measures, compareBy, minOrMax) {
 	let lineData = measures.map(measure => {
+		let value;
+		let date;
+
+		if (compareBy === 'day') {
+			date = d3.timeParse('%b %d, %Y')(measure.date);
+			value = minOrMax === 'min' ? measure.minTemp : measure.maxTemp;
+		} else {
+			date = d3.timeParse('%Y')(measure.year);
+			value =
+				minOrMax === 'min'
+					? measure.avgMinDailyTemp
+					: measure.avgMaxDailyTemp;
+		}
+
+		value = Number(value.toFixed(1));
+
 		return {
-			date: parseTime(measure.date),
-			value: measure[metric]
+			date,
+			value
 		};
 	});
 
 	lineData = lineData.filter(d => d.value > 0);
-
 	lineData.sort(function(a, b) {
 		return new Date(b.date) - new Date(a.date);
 	});
 
+	return lineData;
+}
+
+function drawLineChart(lineData, title, parentDiv) {
 	var height = 600;
 	var width = 1400;
 	var hEach = 40;
