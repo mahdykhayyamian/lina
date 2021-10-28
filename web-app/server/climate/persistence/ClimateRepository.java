@@ -50,7 +50,7 @@ public class ClimateRepository {
 
         String query = "select date_part('year', climate.daily_measures.date) as year, date_part('month', climate.daily_measures.date) as month, avg(min_temp) as avg_daily_min_temp, avg(max_temp) as avg_daily_max_temp " 
         + "from climate.daily_measures inner join climate.station on climate.station.id = climate.daily_measures.station_id and climate.station.code = '" + stationCode
-        + "'and date_part('month', climate.daily_measures.date) = '" +  month + "' group by year, month";
+        + "'and date_part('month', climate.daily_measures.date) = '" +  month + "' group by year, month having count(*) >= 28";
 
         System.out.println("query = " + query);
         ResultSet rs = st.executeQuery(query);
