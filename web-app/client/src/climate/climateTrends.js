@@ -25,7 +25,7 @@ window.onload = async function() {
 	let searchParams = new URLSearchParams(window.location.search);
 
 	let stationCode = searchParams.get('stationCode');
-	const month = searchParams.get('month');
+	let month = searchParams.get('month');
 	const day = searchParams.get('day');
 
 	let dayAndMonth = new Date();
@@ -47,6 +47,7 @@ window.onload = async function() {
 	const locationDropdown = new Dropdown(
 		filtersDiv,
 		stations,
+		'Select Location...',
 		'code',
 		code => {
 			stationCode = code;
@@ -58,6 +59,28 @@ window.onload = async function() {
 	);
 
 	locationDropdown.render();
+
+	const monthsDropdown = new Dropdown(
+		filtersDiv,
+		monthNames.map((month, i) => {
+			return {
+				value: i + 1,
+				name: month
+			};
+		}),
+		'Select Month...',
+		'value',
+		value => {
+			console.log('got value ' + value);
+			month = value;
+			insertUrlParam('month', value);
+			removeCharts();
+			drawCharts();
+		},
+		month
+	);
+
+	monthsDropdown.render();
 
 	drawCharts();
 

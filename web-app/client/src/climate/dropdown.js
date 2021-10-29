@@ -1,8 +1,16 @@
 const dropdownWidth = 400;
 
-const Dropdown = function(parentDiv, options, idProp, onChange, selectedId) {
+const Dropdown = function(
+	parentDiv,
+	options,
+	placeholder,
+	idProp,
+	onChange,
+	selectedId
+) {
 	this.parentDiv = parentDiv;
 	this.options = options;
+	this.placeholder = placeholder;
 	this.onChange = onChange;
 	this.idProp = idProp;
 	this.selectedId = selectedId;
@@ -37,7 +45,7 @@ function createDOM(dropdown) {
 
 	const searchBox = document.createElement('input');
 	searchBox.setAttribute('type', 'text');
-	searchBox.setAttribute('placeholder', 'Search Location...');
+	searchBox.setAttribute('placeholder', dropdown.placeholder);
 
 	let matchingOptions = dropdown.options.filter(option =>
 		option.name.toLowerCase().startsWith(searchBox.value.toLowerCase())
