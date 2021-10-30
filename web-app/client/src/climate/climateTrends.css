@@ -3,6 +3,10 @@ body {
 	color: #444;
 }
 
+#filters {
+	display: flex;
+}
+
 .line {
 	fill: none;
 	stroke: #ffab00;

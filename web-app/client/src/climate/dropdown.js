@@ -1,12 +1,11 @@
-const dropdownWidth = 400;
-
 const Dropdown = function(
 	parentDiv,
 	options,
 	placeholder,
 	idProp,
 	onChange,
-	selectedId
+	selectedId,
+	width
 ) {
 	this.parentDiv = parentDiv;
 	this.options = options;
@@ -14,6 +13,7 @@ const Dropdown = function(
 	this.onChange = onChange;
 	this.idProp = idProp;
 	this.selectedId = selectedId;
+	this.width = width;
 };
 
 Dropdown.prototype.render = function() {
@@ -32,7 +32,7 @@ function createDOM(dropdown) {
 
 	dropdown.dropdownRootDiv.style.setProperty('left', dropdown.left + 'px');
 	dropdown.dropdownRootDiv.style.setProperty('top', dropdown.top + 'px');
-	dropdown.dropdownRootDiv.style.setProperty('width', dropdownWidth + 'px');
+	dropdown.dropdownRootDiv.style.setProperty('width', dropdown.width + 'px');
 
 	const dropdownHeaderDiv = document.createElement('div');
 	dropdownHeaderDiv.setAttribute('class', 'dropdown-header');
@@ -78,8 +78,9 @@ function createDOM(dropdown) {
 	// preselect if passed
 	if (dropdown.selectedId) {
 		const selectedOption = dropdown.options.find(
-			option => option[dropdown.idProp] === dropdown.selectedId
+			option => option[dropdown.idProp] == dropdown.selectedId
 		);
+
 		if (selectedOption) {
 			dropdown.searchBox.value = selectedOption.name;
 		}

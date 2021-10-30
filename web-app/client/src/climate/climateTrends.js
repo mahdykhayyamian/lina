@@ -55,7 +55,8 @@ window.onload = async function() {
 			removeCharts();
 			drawCharts();
 		},
-		stationCode
+		stationCode,
+		400
 	);
 
 	locationDropdown.render();
@@ -71,13 +72,13 @@ window.onload = async function() {
 		'Select Month...',
 		'value',
 		value => {
-			console.log('got value ' + value);
 			month = value;
 			insertUrlParam('month', value);
 			removeCharts();
 			drawCharts();
 		},
-		month
+		month,
+		200
 	);
 
 	monthsDropdown.render();
