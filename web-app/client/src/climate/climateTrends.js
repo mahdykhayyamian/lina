@@ -4,13 +4,28 @@ import * as d3 from 'd3';
 import ajax from '@fdaciuk/ajax';
 import * as ss from 'simple-statistics';
 import dateFormat from 'dateformat';
-import { LocationDropdown } from 'src/climate/location-dropdown.js';
+import { Dropdown } from 'src/climate/dropdown.js';
+
+const monthNames = [
+	'January',
+	'February',
+	'March',
+	'April',
+	'May',
+	'June',
+	'July',
+	'August',
+	'September',
+	'October',
+	'November',
+	'December'
+];
 
 window.onload = async function() {
 	let searchParams = new URLSearchParams(window.location.search);
 
 	let stationCode = searchParams.get('stationCode');
-	const month = searchParams.get('month');
+	let month = searchParams.get('month');
 	const day = searchParams.get('day');
 
 	let dayAndMonth = new Date();
@@ -29,9 +44,10 @@ window.onload = async function() {
 	console.log(stations);
 
 	const filtersDiv = document.getElementById('filters');
-	const locationDropdown = new LocationDropdown(
+	const locationDropdown = new Dropdown(
 		filtersDiv,
 		stations,
+		'Select Location...',
 		'code',
 		code => {
 			stationCode = code;
@@ -39,10 +55,33 @@ window.onload = async function() {
 			removeCharts();
 			drawCharts();
 		},
-		stationCode
+		stationCode,
+		400
 	);
 
 	locationDropdown.render();
+
+	const monthsDropdown = new Dropdown(
+		filtersDiv,
+		monthNames.map((month, i) => {
+			return {
+				value: i + 1,
+				name: month
+			};
+		}),
+		'Select Month...',
+		'value',
+		value => {
+			month = value;
+			insertUrlParam('month', value);
+			removeCharts();
+			drawCharts();
+		},
+		month,
+		200
+	);
+
+	monthsDropdown.render();
 
 	drawCharts();
 
@@ -102,7 +141,11 @@ window.onload = async function() {
 
 			drawLineChart(
 				lineData,
-				`${currentStation.name} Min Daily Temperature Historical Trend`,
+				`${
+					currentStation.name
+				} Avg Min Daily Temperature Historical Trend Month of ${
+					monthNames[month - 1]
+				}`,
 				avgMinDailyTempChartDiv
 			);
 
@@ -115,7 +158,11 @@ window.onload = async function() {
 
 			drawLineChart(
 				lineData,
-				`${currentStation.name} Max Daily Temperature Historical Trend`,
+				`${
+					currentStation.name
+				} Avg Max Daily Temperature Historical Trend for The Month of ${
+					monthNames[month - 1]
+				}`,
 				avgMaxDailyTempChartDiv
 			);
 		}

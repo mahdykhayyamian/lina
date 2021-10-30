@@ -1,4 +1,4 @@
-.location-dropdown {
+.dropdown {
 	font-family: monospace;
 	font-size: 16px;
 	color: white;
@@ -7,9 +7,10 @@
 	height: fit-content;
 	z-index: 1;
 	margin-top: 5px;
+	margin-right: 10px;
 }
 
-.location-dropdown ul {
+.dropdown ul {
 	list-style: none;
 	padding: 0px;
 	margin: 0px;
@@ -17,7 +18,7 @@
 	width: inherit;    
 }
 
-.location-dropdown input {
+.dropdown input {
 	height: 28px;
 	width: 100%;
 	font-family: monospace;
@@ -29,11 +30,11 @@
 	border-style: none;
 }
 
-.location-dropdown input:focus, .location-dropdown input:focus{
+.dropdown input:focus, .dropdown input:focus{
 	outline: none;
 }
 
-.location-dropdown ul li {
+.dropdown ul li {
 	list-style: none;
 	padding-left: 5px;
 	padding-right: 5px;
@@ -46,7 +47,7 @@
 	background-color: lightslategray;
 }
 
-.location-dropdown ul li.selected {
+.dropdown ul li.selected {
 	background-color: darkslategray;
 }
 
