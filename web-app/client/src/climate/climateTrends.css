@@ -15,13 +15,13 @@ body {
 
 .minLine {
 	fill: none;
-	stroke: blue;
+	stroke: mediumpurple;
 	stroke-width: 3;
 }
 
 .maxLine {
 	fill: none;
-	stroke: red;
+	stroke: orange;
 	stroke-width: 3;
 }
 

@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 import ajax from '@fdaciuk/ajax';
 import * as ss from 'simple-statistics';
 import dateFormat from 'dateformat';
-import { Dropdown } from 'src/climate/dropdown.js';
+import { Dropdown } from 'src/common/dropdown.js';
 
 const monthNames = [
 	'January',
@@ -26,13 +26,6 @@ window.onload = async function() {
 
 	let stationCode = searchParams.get('stationCode');
 	let month = searchParams.get('month');
-	const day = searchParams.get('day');
-
-	let dayAndMonth = new Date();
-	dayAndMonth.setDate(day);
-	dayAndMonth.setMonth(month - 1);
-
-	dayAndMonth = dateFormat(dayAndMonth, 'mmm, dd');
 
 	const request = ajax({
 		headers: {
@@ -41,7 +34,6 @@ window.onload = async function() {
 	});
 
 	const stations = await request.get(`/api/climate/getStations`);
-	console.log(stations);
 
 	const filtersDiv = document.getElementById('filters');
 	const locationDropdown = new Dropdown(
@@ -52,8 +44,8 @@ window.onload = async function() {
 		code => {
 			stationCode = code;
 			insertUrlParam('stationCode', stationCode);
-			removeCharts();
-			drawCharts();
+			removeChart();
+			drawChart();
 		},
 		stationCode,
 		400
@@ -74,8 +66,8 @@ window.onload = async function() {
 		value => {
 			month = value;
 			insertUrlParam('month', value);
-			removeCharts();
-			drawCharts();
+			removeChart();
+			drawChart();
 		},
 		month,
 		200
@@ -83,9 +75,11 @@ window.onload = async function() {
 
 	monthsDropdown.render();
 
-	drawCharts();
+	if (stationCode && month) {
+		drawChart();
+	}
 
-	async function drawCharts() {
+	async function drawChart() {
 		const stationMap = {};
 		for (let i = 0; i < stations.length; i++) {
 			stationMap[stations[i].code] = stations[i];
@@ -95,64 +89,31 @@ window.onload = async function() {
 		const chartsDiv = document.getElementById('charts');
 
 		let measures = null;
-		if (day) {
-			measures = await request.get(
-				`/api/climate/getYearlyTrends?stationCode=${stationCode}&month=${month}&day=${day}`
-			);
 
-			// min daily temp
-			const minTempChartDiv = document.createElement('div');
-			minTempChartDiv.id = 'minTempChart';
-			chartsDiv.append(minTempChartDiv);
+		measures = await request.get(
+			`/api/climate/getYearlyTrends?stationCode=${stationCode}&month=${month}`
+		);
 
-			let lineData = getLineDate(measures, 'day', 'min');
-			console.log(lineData);
+		const avgDailyTempChartDiv = document.createElement('div');
+		avgDailyTempChartDiv.id = 'avgDailyTempChartDiv';
+		chartsDiv.append(avgDailyTempChartDiv);
 
-			drawLineChart(
-				lineData,
-				`${currentStation.name} Min Daily Temperature Historical Trend on ${dayAndMonth}`,
-				minTempChartDiv
-			);
+		let minLineData = getLineDate(measures, 'month', 'min');
+		let maxLineData = getLineDate(measures, 'month', 'max');
 
-			// max daily temp
-			const maxTempChartDiv = document.createElement('div');
-			maxTempChartDiv.id = 'maxTempChart';
-			chartsDiv.append(maxTempChartDiv);
-
-			lineData = getLineDate(measures, 'day', 'max');
-			console.log(lineData);
-
-			drawLineChart(
-				lineData,
-				`${currentStation.name} Max Daily Temperature Historical Trend on ${dayAndMonth}`,
-				minTempChartDiv
-			);
-		} else {
-			measures = await request.get(
-				`/api/climate/getYearlyTrends?stationCode=${stationCode}&month=${month}`
-			);
-
-			const avgDailyTempChartDiv = document.createElement('div');
-			avgDailyTempChartDiv.id = 'avgDailyTempChartDiv';
-			chartsDiv.append(avgDailyTempChartDiv);
-
-			let minLineData = getLineDate(measures, 'month', 'min');
-			let maxLineData = getLineDate(measures, 'month', 'max');
-
-			drawLineChart(
-				minLineData,
-				maxLineData,
-				`${
-					currentStation.name
-				} Avg Low/High Daily Temperature Historical Trend for the Month of ${
-					monthNames[month - 1]
-				}`,
-				avgDailyTempChartDiv
-			);
-		}
+		drawLineChart(
+			minLineData,
+			maxLineData,
+			`${
+				currentStation.name
+			} Avg Low/High Daily Temperature Historical Trend for the Month of ${
+				monthNames[month - 1]
+			}`,
+			avgDailyTempChartDiv
+		);
 	}
 
-	function removeCharts() {
+	function removeChart() {
 		let node = document.getElementById('avgDailyTempChartDiv');
 		node.parentNode.removeChild(node);
 	}
@@ -191,7 +152,7 @@ function getLineDate(measures, compareBy, minOrMax) {
 }
 
 function drawLineChart(minLineData, maxLineData, title, parentDiv) {
-	var height = 600;
+	var height = 700;
 	var width = 1400;
 	var hEach = 40;
 
