@@ -132,47 +132,28 @@ window.onload = async function() {
 				`/api/climate/getYearlyTrends?stationCode=${stationCode}&month=${month}`
 			);
 
-			// monthly avg of min daily temp
-			const avgMinDailyTempChartDiv = document.createElement('div');
-			avgMinDailyTempChartDiv.id = 'minTempChart';
-			chartsDiv.append(avgMinDailyTempChartDiv);
+			const avgDailyTempChartDiv = document.createElement('div');
+			avgDailyTempChartDiv.id = 'avgDailyTempChartDiv';
+			chartsDiv.append(avgDailyTempChartDiv);
 
-			let lineData = getLineDate(measures, 'month', 'min');
-
-			drawLineChart(
-				lineData,
-				`${
-					currentStation.name
-				} Avg Min Daily Temperature Historical Trend Month of ${
-					monthNames[month - 1]
-				}`,
-				avgMinDailyTempChartDiv
-			);
-
-			// monthly avg of max daily temp
-			const avgMaxDailyTempChartDiv = document.createElement('div');
-			avgMaxDailyTempChartDiv.id = 'maxTempChart';
-			chartsDiv.append(avgMaxDailyTempChartDiv);
-
-			lineData = getLineDate(measures, 'month', 'max');
+			let minLineData = getLineDate(measures, 'month', 'min');
+			let maxLineData = getLineDate(measures, 'month', 'max');
 
 			drawLineChart(
-				lineData,
+				minLineData,
+				maxLineData,
 				`${
 					currentStation.name
-				} Avg Max Daily Temperature Historical Trend for The Month of ${
+				} Avg Low/High Daily Temperature Historical Trend for the Month of ${
 					monthNames[month - 1]
 				}`,
-				avgMaxDailyTempChartDiv
+				avgDailyTempChartDiv
 			);
 		}
 	}
 
 	function removeCharts() {
-		let node = document.getElementById('minTempChart');
-		node.parentNode.removeChild(node);
-
-		node = document.getElementById('maxTempChart');
+		let node = document.getElementById('avgDailyTempChartDiv');
 		node.parentNode.removeChild(node);
 	}
 };
@@ -209,7 +190,7 @@ function getLineDate(measures, compareBy, minOrMax) {
 	return lineData;
 }
 
-function drawLineChart(lineData, title, parentDiv) {
+function drawLineChart(minLineData, maxLineData, title, parentDiv) {
 	var height = 600;
 	var width = 1400;
 	var hEach = 40;
@@ -230,7 +211,7 @@ function drawLineChart(lineData, title, parentDiv) {
 	// set the ranges
 	var x = d3.scaleTime().range([0, width]);
 	x.domain(
-		d3.extent(lineData, function(d) {
+		d3.extent(minLineData, function(d) {
 			return d.date;
 		})
 	);
@@ -238,10 +219,10 @@ function drawLineChart(lineData, title, parentDiv) {
 	var y = d3.scaleLinear().range([height, 0]);
 
 	y.domain([
-		d3.min(lineData, function(d) {
+		d3.min(minLineData, function(d) {
 			return d.value;
 		}) - 5,
-		d3.max(lineData, function(d) {
+		d3.max(maxLineData, function(d) {
 			return d.value;
 		}) + 5
 	]);
@@ -257,8 +238,13 @@ function drawLineChart(lineData, title, parentDiv) {
 		.curve(d3.curveMonotoneX);
 
 	svg.append('path')
-		.data([lineData])
-		.attr('class', 'line')
+		.data([minLineData])
+		.attr('class', 'minLine')
+		.attr('d', valueline);
+
+	svg.append('path')
+		.data([maxLineData])
+		.attr('class', 'maxLine')
 		.attr('d', valueline);
 
 	var xAxis = d3
@@ -271,7 +257,7 @@ function drawLineChart(lineData, title, parentDiv) {
 				return '';
 			}
 		})
-		.tickValues(lineData.map(d => d.date));
+		.tickValues(minLineData.map(d => d.date));
 
 	svg.append('g')
 		.attr('class', 'x axis')
@@ -285,11 +271,24 @@ function drawLineChart(lineData, title, parentDiv) {
 
 	svg.append('g').call(d3.axisLeft(y));
 
-	svg.selectAll('.dot')
-		.data(lineData)
+	svg.selectAll('.dotMin')
+		.data(minLineData)
 		.enter()
 		.append('circle') // Uses the enter().append() method
-		.attr('class', 'dot') // Assign a class for styling
+		.attr('class', 'dotMin') // Assign a class for styling
+		.attr('cx', function(d) {
+			return x(d.date);
+		})
+		.attr('cy', function(d) {
+			return y(d.value);
+		})
+		.attr('r', 3);
+
+	svg.selectAll('.dotMax')
+		.data(maxLineData)
+		.enter()
+		.append('circle') // Uses the enter().append() method
+		.attr('class', 'dotMin') // Assign a class for styling
 		.attr('cx', function(d) {
 			return x(d.date);
 		})
@@ -299,7 +298,23 @@ function drawLineChart(lineData, title, parentDiv) {
 		.attr('r', 3);
 
 	svg.selectAll('.text')
-		.data(lineData)
+		.data(minLineData)
+		.enter()
+		.append('text') // Uses the enter().append() method
+		.attr('class', 'label') // Assign a class for styling
+		.attr('x', function(d, i) {
+			return x(d.date);
+		})
+		.attr('y', function(d) {
+			return y(d.value);
+		})
+		.attr('dy', '-5')
+		.text(function(d) {
+			return d.value;
+		});
+
+	svg.selectAll('.text')
+		.data(maxLineData)
 		.enter()
 		.append('text') // Uses the enter().append() method
 		.attr('class', 'label') // Assign a class for styling
@@ -320,11 +335,11 @@ function drawLineChart(lineData, title, parentDiv) {
 		.text(title);
 
 	// trend line
-	const regData = lineData.map(function(d) {
+	let regData = minLineData.map(function(d) {
 		return [+d.date.getFullYear(), d.value];
 	});
 
-	const regression = ss.linearRegression(regData);
+	let regression = ss.linearRegression(regData);
 
 	let trendLineCssClass = 'trend-line';
 	if (regression.m > 0) {
@@ -333,7 +348,35 @@ function drawLineChart(lineData, title, parentDiv) {
 		trendLineCssClass = 'trend-line cooling';
 	}
 
-	const lin = ss.linearRegressionLine(regression);
+	let lin = ss.linearRegressionLine(regression);
+
+	var linRegdata = x.domain().map(function(x) {
+		return {
+			date: x,
+			value: lin(x.getFullYear())
+		};
+	});
+
+	svg.append('path')
+		.data([linRegdata])
+		.attr('class', trendLineCssClass)
+		.attr('d', valueline);
+
+	// trend line
+	regData = maxLineData.map(function(d) {
+		return [+d.date.getFullYear(), d.value];
+	});
+
+	regression = ss.linearRegression(regData);
+
+	trendLineCssClass = 'trend-line';
+	if (regression.m > 0) {
+		trendLineCssClass = 'trend-line warming';
+	} else if (regression.m < 0) {
+		trendLineCssClass = 'trend-line cooling';
+	}
+
+	lin = ss.linearRegressionLine(regression);
 
 	var linRegdata = x.domain().map(function(x) {
 		return {

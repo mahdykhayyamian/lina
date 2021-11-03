@@ -13,6 +13,18 @@ body {
 	stroke-width: 3;
 }
 
+.minLine {
+	fill: none;
+	stroke: blue;
+	stroke-width: 3;
+}
+
+.maxLine {
+	fill: none;
+	stroke: red;
+	stroke-width: 3;
+}
+
 .axis path,
 .axis line {
 	fill: none;
