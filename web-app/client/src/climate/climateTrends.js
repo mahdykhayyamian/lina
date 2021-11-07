@@ -334,22 +334,22 @@ function drawLineChart(minLineData, maxLineData, title, parentDiv) {
 		.attr('cx', width / 2 - 70)
 		.attr('cy', height + 60)
 		.attr('r', 8)
-		.attr('class', 'minLegend');
+		.attr('class', 'maxLegend');
 	svg.append('circle')
 		.attr('cx', width / 2 - 70)
 		.attr('cy', height + 90)
 		.attr('r', 8)
-		.attr('class', 'maxLegend');
+		.attr('class', 'minLegend');
 	svg.append('text')
 		.attr('x', width / 2 - 50)
 		.attr('y', height + 60)
-		.text('Daily Low Avergage')
+		.text('Daily High Avergage')
 		.style('font-size', '15px')
 		.attr('alignment-baseline', 'middle');
 	svg.append('text')
 		.attr('x', width / 2 - 50)
 		.attr('y', height + 90)
-		.text('Daily High Average')
+		.text('Daily Low Average')
 		.style('font-size', '15px')
 		.attr('alignment-baseline', 'middle');
 
