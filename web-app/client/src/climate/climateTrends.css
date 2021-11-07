@@ -1,3 +1,8 @@
+:root {
+  --min-color: mediumpurple;
+  --max-color: orange;
+}
+
 body {
 	font-family: sans-serif;
 	color: #444;
@@ -15,14 +20,22 @@ body {
 
 .minLine {
 	fill: none;
-	stroke: mediumpurple;
+	stroke: var(--min-color);
 	stroke-width: 3;
 }
 
 .maxLine {
 	fill: none;
-	stroke: orange;
+	stroke: var(--max-color);
 	stroke-width: 3;
+}
+
+.minLegend {
+	fill: var(--min-color);
+}
+
+.maxLegend {
+	fill:  orange;
 }
 
 .axis path,

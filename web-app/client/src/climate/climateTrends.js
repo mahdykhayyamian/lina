@@ -45,10 +45,12 @@ window.onload = async function() {
 			stationCode = code;
 			insertUrlParam('stationCode', stationCode);
 			removeChart();
-			drawChart();
+			if (stationCode && month) {
+				drawChart();
+			}
 		},
 		stationCode,
-		400
+		500
 	);
 
 	locationDropdown.render();
@@ -67,10 +69,12 @@ window.onload = async function() {
 			month = value;
 			insertUrlParam('month', value);
 			removeChart();
-			drawChart();
+			if (stationCode && month) {
+				drawChart();
+			}
 		},
 		month,
-		200
+		150
 	);
 
 	monthsDropdown.render();
@@ -115,7 +119,9 @@ window.onload = async function() {
 
 	function removeChart() {
 		let node = document.getElementById('avgDailyTempChartDiv');
-		node.parentNode.removeChild(node);
+		if (node) {
+			node.parentNode.removeChild(node);
+		}
 	}
 };
 
@@ -322,6 +328,30 @@ function drawLineChart(minLineData, maxLineData, title, parentDiv) {
 		.data([linRegdata])
 		.attr('class', trendLineCssClass)
 		.attr('d', valueline);
+
+	// legend
+	svg.append('circle')
+		.attr('cx', width / 2 - 70)
+		.attr('cy', height + 60)
+		.attr('r', 8)
+		.attr('class', 'minLegend');
+	svg.append('circle')
+		.attr('cx', width / 2 - 70)
+		.attr('cy', height + 90)
+		.attr('r', 8)
+		.attr('class', 'maxLegend');
+	svg.append('text')
+		.attr('x', width / 2 - 50)
+		.attr('y', height + 60)
+		.text('Daily Low Avergage')
+		.style('font-size', '15px')
+		.attr('alignment-baseline', 'middle');
+	svg.append('text')
+		.attr('x', width / 2 - 50)
+		.attr('y', height + 90)
+		.text('Daily High Average')
+		.style('font-size', '15px')
+		.attr('alignment-baseline', 'middle');
 
 	// trend line
 	regData = maxLineData.map(function(d) {
