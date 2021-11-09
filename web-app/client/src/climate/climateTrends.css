@@ -6,6 +6,12 @@
 body {
 	font-family: sans-serif;
 	color: #444;
+	display: flex;
+	flex-direction: column;
+}
+
+#content {
+	align-self: center;
 }
 
 #filters {

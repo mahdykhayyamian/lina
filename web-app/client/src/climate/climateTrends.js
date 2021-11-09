@@ -79,6 +79,10 @@ window.onload = async function() {
 
 	monthsDropdown.render();
 
+	const contentDiv = document.getElementById('content');
+	const contentWidth = 1400;
+	contentDiv.style.width = contentWidth + 'px';
+
 	if (stationCode && month) {
 		drawChart();
 	}
@@ -113,7 +117,8 @@ window.onload = async function() {
 			} Avg Low/High Daily Temperature Historical Trend for the Month of ${
 				monthNames[month - 1]
 			}`,
-			avgDailyTempChartDiv
+			avgDailyTempChartDiv,
+			contentWidth
 		);
 	}
 
@@ -157,14 +162,13 @@ function getLineDate(measures, compareBy, minOrMax) {
 	return lineData;
 }
 
-function drawLineChart(minLineData, maxLineData, title, parentDiv) {
+function drawLineChart(minLineData, maxLineData, title, parentDiv, outerWidth) {
 	var height = 700;
-	var width = 1400;
 	var hEach = 40;
 
 	var margin = { top: 40, right: 60, bottom: 100, left: 40 };
 
-	width = width - margin.left - margin.right;
+	let width = outerWidth - margin.left - margin.right;
 	height = height - margin.top - margin.bottom;
 
 	var svg = d3
