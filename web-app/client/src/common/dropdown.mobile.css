@@ -1,6 +1,6 @@
 .dropdown {
 	font-family: monospace;
-	font-size: 36px;
+	font-size: 14px;
 	color: white;
 	margin-left: 1px;
 	border-radius: 2px;
@@ -14,15 +14,15 @@
 	list-style: none;
 	padding: 0px;
 	margin: 0px;
-	position: inherit;
+	position: absolute;
 	width: auto;    
 }
 
 .dropdown input {
-	height: 100px;
+	height: 50px;
 	width: 100%;
 	font-family: monospace;
-	font-size: 36px;
+	font-size: 14px;
 	box-sizing: border-box;
 	border-radius: 2px;
 	padding-left: 10px;
@@ -43,7 +43,7 @@
 	cursor: default;
 	border-bottom-style: dashed;
 	border-bottom-width: 2px;
-	min-height: 60px;
+	min-height: 20px;
 	background-color: lightslategray;
 	display: flex;
 	align-items: center;
@@ -64,13 +64,13 @@
 	display: flex;
 	border-radius: 1px;
 	border-style: solid;
-	border-width: 5px;
+	border-width: 2px;
 	border-color: black;
 }
 
 .dropdown-header img {
-	width: 100px;
-	height: 100px;
+	width: 50px;
+	height: 50px;
 }
 
 #filters {

@@ -6,6 +6,21 @@ import * as ss from 'simple-statistics';
 import dateFormat from 'dateformat';
 import { Dropdown } from 'src/common/dropdown.mobile.js';
 
+const monthNames = [
+	'January',
+	'February',
+	'March',
+	'April',
+	'May',
+	'June',
+	'July',
+	'August',
+	'September',
+	'October',
+	'November',
+	'December'
+];
+
 window.onload = async function() {
 	let searchParams = new URLSearchParams(window.location.search);
 
@@ -33,8 +48,30 @@ window.onload = async function() {
 		},
 		stationCode
 	);
-
 	locationDropdown.render();
+
+	const monthsDropdown = new Dropdown(
+		filtersDiv,
+		monthNames.map((month, i) => {
+			return {
+				value: i + 1,
+				name: month
+			};
+		}),
+		'Select Month...',
+		'value',
+		value => {
+			month = value;
+			insertUrlParam('month', value);
+			removeChart();
+			if (stationCode && month) {
+				drawChart();
+			}
+		},
+		month
+	);
+
+	monthsDropdown.render();
 };
 
 function insertUrlParam(key, value) {
@@ -51,3 +88,5 @@ function insertUrlParam(key, value) {
 		window.history.pushState({ path: newurl }, '', newurl);
 	}
 }
+
+require('src/climate/climateTrends.mobile.css');
