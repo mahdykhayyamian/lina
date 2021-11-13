@@ -10,3 +10,68 @@ body {
 	align-self: center;
 	width: 100%;
 }
+
+:root {
+  --min-color: mediumpurple;
+  --max-color: orange;
+}
+
+.line {
+	fill: none;
+	stroke: #ffab00;
+	stroke-width: 3;
+}
+
+.minLine {
+	fill: none;
+	stroke: var(--min-color);
+	stroke-width: 3;
+}
+
+.maxLine {
+	fill: none;
+	stroke: var(--max-color);
+	stroke-width: 3;
+}
+
+.minLegend {
+	fill: var(--min-color);
+}
+
+.maxLegend {
+	fill:  orange;
+}
+
+.axis path,
+.axis line {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
+}
+.axis text {
+  font-size: 10px;
+}
+
+.trend-line {
+	stroke: mediumpurple;
+	stroke-width: 2px;
+	stroke-dasharray: 3;
+}
+
+.trend-line.warming {
+	stroke: red;
+}
+
+.trend-line.cooling {
+	stroke: blue;
+}
+
+.label {
+	font-size: 10px;
+}
+
+text {
+	font-family: system-ui;
+}
+
+
