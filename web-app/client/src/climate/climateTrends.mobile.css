@@ -74,4 +74,13 @@ text {
 	font-family: system-ui;
 }
 
+#avgDailyTempChartDiv {
+	width:  350px;
+	overflow-x: auto;
+}
+
+.title {
+	font-size: 10px;
+}
+
 

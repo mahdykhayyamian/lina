@@ -78,9 +78,6 @@ window.onload = async function() {
 	monthsDropdown.render();
 
 	const contentDiv = document.getElementById('content');
-	const contentWidth = 300;
-	contentDiv.style.width = contentWidth + 'px';
-
 	if (stationCode && month) {
 		drawChart();
 	}
@@ -107,6 +104,7 @@ window.onload = async function() {
 		let minLineData = getLineDate(measures, 'month', 'min');
 		let maxLineData = getLineDate(measures, 'month', 'max');
 
+		const width = 1400;
 		drawLineChart(
 			minLineData,
 			maxLineData,
@@ -116,7 +114,7 @@ window.onload = async function() {
 				monthNames[month - 1]
 			}`,
 			avgDailyTempChartDiv,
-			contentWidth
+			width
 		);
 	}
 
@@ -299,8 +297,9 @@ function drawLineChart(minLineData, maxLineData, title, parentDiv, outerWidth) {
 		});
 
 	svg.append('text')
-		.attr('x', 10)
-		.attr('y', -5)
+		.attr('x', -20)
+		.attr('y', -20)
+		.attr('class', 'title')
 		.text(title);
 
 	// trend line
