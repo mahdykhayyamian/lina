@@ -290,12 +290,12 @@ function drawLineChart(
 	svg.append('circle')
 		.attr('cx', width / 2 - 70)
 		.attr('cy', height + 60)
-		.attr('r', 8)
+		.attr('r', 5)
 		.attr('class', 'maxLegend');
 	svg.append('circle')
 		.attr('cx', width / 2 - 70)
 		.attr('cy', height + 90)
-		.attr('r', 8)
+		.attr('r', 5)
 		.attr('class', 'minLegend');
 	svg.append('text')
 		.attr('x', width / 2 - 50)
