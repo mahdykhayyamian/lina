@@ -301,13 +301,13 @@ function drawLineChart(
 		.attr('x', width / 2 - 50)
 		.attr('y', height + 60)
 		.text('Daily High Avergage')
-		.style('font-size', '15px')
+		.style('font-size', '12px')
 		.attr('alignment-baseline', 'middle');
 	svg.append('text')
 		.attr('x', width / 2 - 50)
 		.attr('y', height + 90)
 		.text('Daily Low Average')
-		.style('font-size', '15px')
+		.style('font-size', '12px')
 		.attr('alignment-baseline', 'middle');
 
 	// trend line

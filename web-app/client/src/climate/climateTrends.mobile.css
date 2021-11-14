@@ -121,4 +121,5 @@ text {
 	align-items: center;
 	border-top: solid;
   border-top-width: 0.5px;
+  border-top-color: lightgrey;
 }
