@@ -33,6 +33,10 @@ window.onload = async function() {
 		}
 	});
 
+	const headerDiv = document.getElementById('header');
+	headerDiv.innerText =
+		'Select a location and a month to see the historical temperature trend.';
+
 	const stations = await request.get(`/api/climate/getStations`);
 	console.log(stations);
 

@@ -15,7 +15,9 @@
 			<div id="chart"></div>
 		</div>
 		<div id="footer">
-			<div id="legend"></div>
+			<div id="source">
+				Data based on public government data : <a href='https://www.ncdc.noaa.gov/cdo-web/datasets'>https://www.ncdc.noaa.gov/cdo-web/datasets</a>
+			</div>
 		</div> 		
   	</body>
   </html>
