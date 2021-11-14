@@ -89,7 +89,7 @@ window.onload = async function() {
 		}
 
 		const currentStation = stationMap[stationCode];
-		const chartsDiv = document.getElementById('charts');
+		const chartsDiv = document.getElementById('chart');
 
 		let measures = null;
 
@@ -104,7 +104,9 @@ window.onload = async function() {
 		let minLineData = getLineDate(measures, 'month', 'min');
 		let maxLineData = getLineDate(measures, 'month', 'max');
 
-		const width = 1400;
+		const width = avgDailyTempChartDiv.offsetWidth;
+		const height = avgDailyTempChartDiv.offsetHeight;
+
 		drawLineChart(
 			minLineData,
 			maxLineData,
@@ -114,7 +116,8 @@ window.onload = async function() {
 				monthNames[month - 1]
 			}`,
 			avgDailyTempChartDiv,
-			width
+			width,
+			height
 		);
 	}
 
@@ -158,8 +161,15 @@ function getLineDate(measures, compareBy, minOrMax) {
 	return lineData;
 }
 
-function drawLineChart(minLineData, maxLineData, title, parentDiv, outerWidth) {
-	var height = 700;
+function drawLineChart(
+	minLineData,
+	maxLineData,
+	title,
+	parentDiv,
+	outerWidth,
+	outerHeight
+) {
+	var height = outerHeight;
 	var hEach = 40;
 
 	var margin = { top: 40, right: 60, bottom: 100, left: 40 };
@@ -188,10 +198,10 @@ function drawLineChart(minLineData, maxLineData, title, parentDiv, outerWidth) {
 	y.domain([
 		d3.min(minLineData, function(d) {
 			return d.value;
-		}) - 5,
+		}) - 2,
 		d3.max(maxLineData, function(d) {
 			return d.value;
-		}) + 5
+		}) + 2
 	]);
 
 	var valueline = d3
@@ -218,7 +228,7 @@ function drawLineChart(minLineData, maxLineData, title, parentDiv, outerWidth) {
 		.axisBottom(x)
 		.tickFormat(date => {
 			const year = date.getFullYear();
-			if (year % 5 == 0) {
+			if (year % 10 == 0) {
 				return year;
 			} else {
 				return '';
@@ -237,64 +247,6 @@ function drawLineChart(minLineData, maxLineData, title, parentDiv, outerWidth) {
 		.attr('transform', 'rotate(-75)');
 
 	svg.append('g').call(d3.axisLeft(y));
-
-	svg.selectAll('.dotMin')
-		.data(minLineData)
-		.enter()
-		.append('circle') // Uses the enter().append() method
-		.attr('class', 'dotMin') // Assign a class for styling
-		.attr('cx', function(d) {
-			return x(d.date);
-		})
-		.attr('cy', function(d) {
-			return y(d.value);
-		})
-		.attr('r', 3);
-
-	svg.selectAll('.dotMax')
-		.data(maxLineData)
-		.enter()
-		.append('circle') // Uses the enter().append() method
-		.attr('class', 'dotMin') // Assign a class for styling
-		.attr('cx', function(d) {
-			return x(d.date);
-		})
-		.attr('cy', function(d) {
-			return y(d.value);
-		})
-		.attr('r', 3);
-
-	svg.selectAll('.text')
-		.data(minLineData)
-		.enter()
-		.append('text') // Uses the enter().append() method
-		.attr('class', 'label') // Assign a class for styling
-		.attr('x', function(d, i) {
-			return x(d.date);
-		})
-		.attr('y', function(d) {
-			return y(d.value);
-		})
-		.attr('dy', '-5')
-		.text(function(d) {
-			return d.value;
-		});
-
-	svg.selectAll('.text')
-		.data(maxLineData)
-		.enter()
-		.append('text') // Uses the enter().append() method
-		.attr('class', 'label') // Assign a class for styling
-		.attr('x', function(d, i) {
-			return x(d.date);
-		})
-		.attr('y', function(d) {
-			return y(d.value);
-		})
-		.attr('dy', '-5')
-		.text(function(d) {
-			return d.value;
-		});
 
 	svg.append('text')
 		.attr('x', -20)

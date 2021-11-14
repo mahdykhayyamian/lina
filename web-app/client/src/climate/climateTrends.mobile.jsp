@@ -6,12 +6,16 @@
 		<script src="/climateMobile.js" type="text/javascript"></script>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-		<title>Climate Trends On Mobile</title>
+		<title>Climate Trends</title>
 	</head>
 	<body>
+		<div id="header"></div> 		
 		<div id="content">
 			<div id="filters"></div>
-			<div id="charts"></div>
+			<div id="chart"></div>
 		</div>
+		<div id="footer">
+			<div id="legend"></div>
+		</div> 		
   	</body>
   </html>
