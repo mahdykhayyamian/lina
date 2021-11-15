@@ -291,7 +291,7 @@ function drawLineChart(
 
 	svg.append('text')
 		.attr('x', 10)
-		.attr('y', height + 64)
+		.attr('y', height + 60)
 		.text('Daily High Avergage')
 		.style('font-size', '12px')
 		.attr('alignment-baseline', 'middle');
@@ -304,7 +304,7 @@ function drawLineChart(
 
 	svg.append('text')
 		.attr('x', 170)
-		.attr('y', height + 64)
+		.attr('y', height + 60)
 		.text('Daily Low Average')
 		.style('font-size', '12px')
 		.attr('alignment-baseline', 'middle');
