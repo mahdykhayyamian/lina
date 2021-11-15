@@ -111,14 +111,17 @@ window.onload = async function() {
 		const width = avgDailyTempChartDiv.offsetWidth;
 		const height = avgDailyTempChartDiv.offsetHeight;
 
+		const title = `${
+			currentStation.name
+		} Avg Low/High Daily Temperature Historical Trend for the Month of ${
+			monthNames[month - 1]
+		}`;
+
+		document.getElementById('title').innerText = title;
+
 		drawLineChart(
 			minLineData,
 			maxLineData,
-			`${
-				currentStation.name
-			} Avg Low/High Daily Temperature Historical Trend for the Month of ${
-				monthNames[month - 1]
-			}`,
 			avgDailyTempChartDiv,
 			width,
 			height
@@ -168,7 +171,6 @@ function getLineDate(measures, compareBy, minOrMax) {
 function drawLineChart(
 	minLineData,
 	maxLineData,
-	title,
 	parentDiv,
 	outerWidth,
 	outerHeight
@@ -251,12 +253,6 @@ function drawLineChart(
 		.attr('transform', 'rotate(-75)');
 
 	svg.append('g').call(d3.axisLeft(y));
-
-	svg.append('text')
-		.attr('x', -20)
-		.attr('y', -20)
-		.attr('class', 'title')
-		.text(title);
 
 	// trend line
 	let regData = minLineData.map(function(d) {

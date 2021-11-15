@@ -12,6 +12,7 @@
 		<div id="header"></div> 		
 		<div id="content">
 			<div id="filters"></div>
+			<div id="title"></div>
 			<div id="chart"></div>
 		</div>
 		<div id="footer">
