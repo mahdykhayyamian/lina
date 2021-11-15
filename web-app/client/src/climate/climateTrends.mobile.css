@@ -12,7 +12,7 @@ body {
 }
 
 #header {
-	height: 5%;
+	height: 30px;
 	font-size: 16px;
   font-family: monospace;
   padding: 10px;
@@ -32,11 +32,12 @@ body {
 }
 
 #chart {
-	height: 80%;
+	display: flex;
+	flex: 1;
 }
 
 #filters {
-	height: 20%;
+	height: 120px;
 }
 
 :root {

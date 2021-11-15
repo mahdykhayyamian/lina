@@ -288,24 +288,27 @@ function drawLineChart(
 
 	// legend
 	svg.append('circle')
-		.attr('cx', width / 2 - 70)
+		.attr('cx', 0)
 		.attr('cy', height + 60)
 		.attr('r', 5)
 		.attr('class', 'maxLegend');
-	svg.append('circle')
-		.attr('cx', width / 2 - 70)
-		.attr('cy', height + 90)
-		.attr('r', 5)
-		.attr('class', 'minLegend');
+
 	svg.append('text')
-		.attr('x', width / 2 - 50)
-		.attr('y', height + 60)
+		.attr('x', 10)
+		.attr('y', height + 64)
 		.text('Daily High Avergage')
 		.style('font-size', '12px')
 		.attr('alignment-baseline', 'middle');
+
+	svg.append('circle')
+		.attr('cx', 160)
+		.attr('cy', height + 60)
+		.attr('r', 5)
+		.attr('class', 'minLegend');
+
 	svg.append('text')
-		.attr('x', width / 2 - 50)
-		.attr('y', height + 90)
+		.attr('x', 170)
+		.attr('y', height + 64)
 		.text('Daily Low Average')
 		.style('font-size', '12px')
 		.attr('alignment-baseline', 'middle');
