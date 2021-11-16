@@ -65,7 +65,7 @@ function createDOM(dropdown) {
 	dropdownHeaderDiv.appendChild(searchBox);
 
 	const dropDownIcon = document.createElement('img');
-	dropDownIcon.src = '/src/resources/icons/drop-down.png';
+	dropDownIcon.src = '/src/resources/icons/chevron-down.png';
 	dropDownIcon.setAttribute('class', 'drag-down');
 
 	dropdownHeaderDiv.appendChild(dropDownIcon);
