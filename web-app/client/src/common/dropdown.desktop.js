@@ -141,4 +141,4 @@ function removeMatchingOptions(dropdown) {
 }
 
 export { Dropdown };
-require('src/common/dropdown.css');
+require('src/common/dropdown.desktop.css');

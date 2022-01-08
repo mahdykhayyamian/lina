@@ -4,8 +4,7 @@ const Dropdown = function(
 	placeholder,
 	idProp,
 	onChange,
-	selectedId,
-	width
+	selectedId
 ) {
 	this.parentDiv = parentDiv;
 	this.options = options;
@@ -13,7 +12,6 @@ const Dropdown = function(
 	this.onChange = onChange;
 	this.idProp = idProp;
 	this.selectedId = selectedId;
-	this.width = width;
 };
 
 Dropdown.prototype.render = function() {
@@ -32,7 +30,7 @@ function createDOM(dropdown) {
 
 	dropdown.dropdownRootDiv.style.setProperty('left', dropdown.left + 'px');
 	dropdown.dropdownRootDiv.style.setProperty('top', dropdown.top + 'px');
-	dropdown.dropdownRootDiv.style.setProperty('width', dropdown.width + 'px');
+	dropdown.dropdownRootDiv.style.setProperty('width', '100%');
 
 	const dropdownHeaderDiv = document.createElement('div');
 	dropdownHeaderDiv.setAttribute('class', 'dropdown-header');
@@ -67,7 +65,7 @@ function createDOM(dropdown) {
 	dropdownHeaderDiv.appendChild(searchBox);
 
 	const dropDownIcon = document.createElement('img');
-	dropDownIcon.src = '/src/resources/icons/drop-down.png';
+	dropDownIcon.src = '/src/resources/icons/chevron-down.png';
 	dropDownIcon.setAttribute('class', 'drag-down');
 
 	dropdownHeaderDiv.appendChild(dropDownIcon);
@@ -141,4 +139,4 @@ function removeMatchingOptions(dropdown) {
 }
 
 export { Dropdown };
-require('src/climate/dropdown.css');
+require('src/common/dropdown.mobile.css');

@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 import ajax from '@fdaciuk/ajax';
 import * as ss from 'simple-statistics';
 import dateFormat from 'dateformat';
-import { Dropdown } from 'src/common/dropdown.js';
+import { Dropdown } from 'src/common/dropdown.desktop.js';
 
 const monthNames = [
 	'January',
@@ -401,4 +401,4 @@ function insertUrlParam(key, value) {
 	}
 }
 
-require('src/climate/climateTrends.css');
+require('src/climate/climateTrends.desktop.css');

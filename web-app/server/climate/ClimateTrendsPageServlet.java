@@ -30,7 +30,15 @@ public class ClimateTrendsPageServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher RequetsDispatcherObj = request.getRequestDispatcher("/src/climate/climateTrends.jsp");
+
+		RequestDispatcher RequetsDispatcherObj = null;
+
+		if(request.getHeader("User-Agent").contains("Mobi")) {
+			RequetsDispatcherObj = request.getRequestDispatcher("/src/climate/climateTrends.mobile.jsp");
+		} else {
+			RequetsDispatcherObj = request.getRequestDispatcher("/src/climate/climateTrends.desktop.jsp");
+		}
+
 		RequetsDispatcherObj.forward(request, response);
 	}
 

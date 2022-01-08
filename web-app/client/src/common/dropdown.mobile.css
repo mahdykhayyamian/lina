@@ -1,6 +1,6 @@
 .dropdown {
 	font-family: monospace;
-	font-size: 16px;
+	font-size: 14px;
 	color: white;
 	margin-left: 1px;
 	border-radius: 2px;
@@ -8,6 +8,7 @@
 	z-index: 1;
 	margin-top: 5px;
 	margin-right: 10px;
+	margin-bottom: 10px;
 }
 
 .dropdown ul {
@@ -15,18 +16,20 @@
 	padding: 0px;
 	margin: 0px;
 	position: absolute;
-	width: inherit;    
+	right: 17px;
+	left: 19px;
+	width: auto;    
 }
 
 .dropdown input {
-	height: 28px;
+	height: 50px;
 	width: 100%;
 	font-family: monospace;
 	font-size: 14px;
 	box-sizing: border-box;
 	border-radius: 2px;
-	padding-left: 5px;
-	padding-right: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
 	border-style: none;
 }
 
@@ -42,9 +45,12 @@
 	padding-bottom: 3px;
 	cursor: default;
 	border-bottom-style: dashed;
-	border-bottom-width: 1px;
+	border-bottom-width: 2px;
 	min-height: 20px;
 	background-color: lightslategray;
+	display: flex;
+	align-items: center;
+	padding: 10px;
 }
 
 .dropdown ul li.selected {
@@ -61,17 +67,15 @@
 	display: flex;
 	border-radius: 1px;
 	border-style: solid;
-	border-width: 2px;
-	border-color: black;
+	border-color: grey;
 }
 
 .dropdown-header img {
-	width: 30px;
-	height:  30px;
+	padding-top: 5px;
+	width: 38px;
+	height: 38px;
 }
 
 #filters {
-	margin-left: 38px;
-	margin-top: 20px;
-	margin-bottom: 10px;
+	margin: 10px;
 }

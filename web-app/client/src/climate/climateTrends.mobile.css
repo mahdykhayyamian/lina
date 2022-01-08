@@ -1,0 +1,136 @@
+
+html, body {
+	height: 100%;
+}
+
+body {
+	font-family: sans-serif;
+	color: #444;
+	display: flex;
+	flex-direction: column;
+	font-size: 16px;
+}
+
+#header {
+	height: 30px;
+	font-size: 16px;
+  font-family: monospace;
+  padding: 10px;
+  line-height: 25px;	
+}
+
+#footer {
+	height: 5%;
+}
+
+#content {
+	display: flex;
+	flex-direction: column;
+	align-self: center;
+	width: 100%;
+	flex: 1;
+}
+
+#title {
+	font-size: 12px;
+	height:  20px;
+	padding-left : 10px;
+	font-family: monospace;
+	padding-left: 35px;
+	padding-right: 35px;
+  padding-top: 10px;
+}
+
+#chart {
+	display: flex;
+	flex: 1;
+}
+
+#filters {
+	height: 120px;
+}
+
+:root {
+  --min-color: mediumpurple;
+  --max-color: orange;
+}
+
+.line {
+	fill: none;
+	stroke: #ffab00;
+	stroke-width: 3;
+}
+
+.minLine {
+	fill: none;
+	stroke: var(--min-color);
+	stroke-width: 3;
+}
+
+.maxLine {
+	fill: none;
+	stroke: var(--max-color);
+	stroke-width: 3;
+}
+
+.minLegend {
+	fill: var(--min-color);
+}
+
+.maxLegend {
+	fill:  orange;
+}
+
+.axis path,
+.axis line {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
+}
+.axis text {
+  font-size: 10px;
+}
+
+.trend-line {
+	stroke: mediumpurple;
+	stroke-width: 2px;
+	stroke-dasharray: 3;
+}
+
+.trend-line.warming {
+	stroke: red;
+}
+
+.trend-line.cooling {
+	stroke: blue;
+}
+
+.label {
+	font-size: 10px;
+}
+
+text {
+	font-family: system-ui;
+}
+
+#avgDailyTempChartDiv {
+	width:  100%;
+	overflow-x: auto;
+	height: 100%
+}
+
+#source {
+	display: flex;
+	font-family: monospace;
+	font-size: 8px;
+	padding: 8px;
+	flex-direction: column;
+	align-items: center;
+	border-top: solid;
+  border-top-width: 0.5px;
+  border-top-color: lightgrey;
+}
+
+text {
+	font-family: monospace;
+}
