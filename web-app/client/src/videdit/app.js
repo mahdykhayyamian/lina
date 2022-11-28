@@ -1,14 +1,12 @@
 import 'regenerator-runtime/runtime.js';
 
 window.onload = async function() {
-	console.log('chetory to?');
-
 	const videoSrc = document.querySelector('#video-source');
 	const videoTag = document.querySelector('#video-tag');
 
-	const inputTag = document.querySelector('#input-tag');
+	const uploadButton = document.querySelector('#upload-video-button');
 
-	inputTag.addEventListener('change', event => {
+	uploadButton.addEventListener('change', event => {
 		console.log(event.target.files);
 		if (event.target.files && event.target.files[0]) {
 			var reader = new FileReader();
@@ -23,6 +21,19 @@ window.onload = async function() {
 	videoTag.addEventListener('loadeddata', event => {
 		console.log('loadeddata..');
 		videoTag.style.visibility = 'visible';
+	});
+
+	videoTag.addEventListener('click', event => {
+		console.log('click event');
+		console.log(event);
+		videoTag.pause();
+		event.preventDefault();
+	});
+
+	videoTag.addEventListener('mouseup', event => {
+		console.log('mouseup event');
+		console.log(event);
+		event.preventDefault();
 	});
 
 	videoTag.addEventListener('loadedmetadata', event => {

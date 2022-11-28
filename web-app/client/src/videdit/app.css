@@ -1,3 +1,9 @@
+#videdit-app {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
 #video-container {
 	max-width: 1200px;
 }
@@ -5,4 +11,17 @@
 #video-tag {
 	width: max-content;
 	visibility: hidden;
+}
+
+#upload-video-button {
+	top: 150px;
+	font-family: calibri;
+	width: 150px;
+	padding: 10px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border: 1px dashed #BBB;
+	text-align: center;
+	background-color: lightgreen;
+	cursor: pointer;
 }

@@ -10,9 +10,9 @@
 		<div>
 			<div id="app-header">
 			</div>
-			<div id="lina.videdit.app">
+			<div id="videdit-app">
 				<div id="video-container">
-					<input type="file" accept="video/*" id="input-tag"/>
+					<input type="file" accept="video/*" id="upload-video-button"/>
 					<hr>
 					<video controls id="video-tag">
 					  <source id="video-source" media="all and (max-width:600px)">
