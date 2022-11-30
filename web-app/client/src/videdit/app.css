@@ -11,6 +11,7 @@
 #video-tag {
 	width: max-content;
 	visibility: hidden;
+	position: absolute;
 }
 
 #upload-video-button {
@@ -24,4 +25,10 @@
 	text-align: center;
 	background-color: lightgreen;
 	cursor: pointer;
+}
+
+.canvas {
+	z-index: 10;
+	background-color:rgba(255,0,0,0.5);
+	position: relative;
 }

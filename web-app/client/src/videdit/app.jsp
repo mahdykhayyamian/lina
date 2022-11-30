@@ -18,6 +18,7 @@
 					  <source id="video-source" media="all and (max-width:600px)">
 					  	Your browser does not support the video tag.
 					</video>
+					<canvas class="canvas" id="cv1"></canvas>
 				</div>
 			</div>
 		</div>
