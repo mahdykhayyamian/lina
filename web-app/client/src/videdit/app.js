@@ -18,7 +18,9 @@ window.onload = async function() {
 		var h = element.offsetHeight;
 		var cv = document.getElementById('cv1');
 		cv.width = w;
-		cv.height = h;
+
+		// -60 so we don't cover the controls with the cancvas
+		cv.height = h - 60;
 
 		var rect = element.getBoundingClientRect();
 
