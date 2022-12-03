@@ -6,10 +6,11 @@ window.onload = async function() {
 
 	const overlayCanvas = document.querySelector('#cv1');
 
-	console.log('overlayCanvas');
-	console.log(overlayCanvas);
-
 	let topLeft, bottomRight;
+	let isDragging = false;
+
+	var c = document.getElementById('cv1');
+	var ctx = c.getContext('2d');
 
 	const uploadButton = document.querySelector('#upload-video-button');
 
@@ -41,34 +42,40 @@ window.onload = async function() {
 	});
 
 	videoTag.addEventListener('loadeddata', event => {
-		console.log('loadeddata..');
 		videoTag.style.visibility = 'visible';
 		resizeCanvas(videoTag);
 	});
 
 	overlayCanvas.addEventListener('mouseup', e => {
-		console.log('mouseup event');
-		console.log(e);
+		isDragging = false;
+	});
+
+	overlayCanvas.addEventListener('mousemove', e => {
+		if (!isDragging) {
+			return;
+		}
 
 		var rect = e.target.getBoundingClientRect();
 		var x = e.clientX - rect.left; //x position within the element.
 		var y = e.clientY - rect.top; //y position within the element.
-		console.log('Left? : ' + x + ' ; Top? : ' + y + '.');
+
+		// clear previous rect
+		if (topLeft && bottomRight) {
+			ctx.clearRect(
+				topLeft.x,
+				topLeft.y,
+				Math.abs(bottomRight.x - topLeft.x),
+				Math.abs(bottomRight.y - topLeft.y)
+			);
+		}
 
 		bottomRight = {
 			x,
 			y
 		};
 
-		var c = document.getElementById('cv1');
-		var ctx = c.getContext('2d');
+		//draw new rect
 		ctx.beginPath();
-
-		console.log('topLeft');
-		console.log(topLeft);
-
-		console.log('bottomRight');
-		console.log(bottomRight);
 
 		ctx.rect(
 			topLeft.x,
@@ -77,25 +84,24 @@ window.onload = async function() {
 			Math.abs(bottomRight.y - topLeft.y)
 		);
 		ctx.stroke();
-
-		e.preventDefault();
 	});
 
 	overlayCanvas.addEventListener('mousedown', e => {
-		console.log('mousedown event');
-		console.log(e);
+		isDragging = true;
 
 		var rect = e.target.getBoundingClientRect();
 		var x = e.clientX - rect.left; //x position within the element.
 		var y = e.clientY - rect.top; //y position within the element.
-		console.log('Left? : ' + x + ' ; Top? : ' + y + '.');
 
 		topLeft = {
 			x,
 			y
 		};
 
-		e.preventDefault();
+		bottomRight = {
+			x,
+			y
+		};
 	});
 
 	videoTag.addEventListener('loadedmetadata', event => {
