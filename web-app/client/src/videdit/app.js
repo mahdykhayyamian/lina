@@ -6,7 +6,7 @@ window.onload = async function() {
 
 	const overlayCanvas = document.querySelector('#cv1');
 
-	let topLeft, bottomRight;
+	let topLeft, bottomRight, dragStart, dragEnd;
 	let isDragging = false;
 
 	var c = document.getElementById('cv1');
@@ -60,18 +60,25 @@ window.onload = async function() {
 		var y = e.clientY - rect.top; //y position within the element.
 
 		// clear previous rect
-		if (topLeft && bottomRight) {
-			ctx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-		}
+		ctx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
-		bottomRight = {
+		dragEnd = {
 			x,
 			y
 		};
 
+		topLeft = {
+			x: Math.min(dragStart.x, dragEnd.x),
+			y: Math.min(dragStart.y, dragEnd.y)
+		};
+
+		bottomRight = {
+			x: Math.max(dragStart.x, dragEnd.x),
+			y: Math.max(dragStart.y, dragEnd.y)
+		};
+
 		//draw new rect
 		ctx.beginPath();
-
 		ctx.rect(
 			topLeft.x,
 			topLeft.y,
@@ -88,12 +95,12 @@ window.onload = async function() {
 		var x = e.clientX - rect.left; //x position within the element.
 		var y = e.clientY - rect.top; //y position within the element.
 
-		topLeft = {
+		dragStart = {
 			x,
 			y
 		};
 
-		bottomRight = {
+		dragEnd = {
 			x,
 			y
 		};
