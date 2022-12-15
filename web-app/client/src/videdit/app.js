@@ -61,12 +61,7 @@ window.onload = async function() {
 
 		// clear previous rect
 		if (topLeft && bottomRight) {
-			ctx.clearRect(
-				topLeft.x,
-				topLeft.y,
-				Math.abs(bottomRight.x - topLeft.x),
-				Math.abs(bottomRight.y - topLeft.y)
-			);
+			ctx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 		}
 
 		bottomRight = {
